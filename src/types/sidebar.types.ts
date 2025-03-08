@@ -3,7 +3,7 @@ type NavItem = {
     id: string;
     title: string;
     url: string;
-    icon: LucideIcon; // Consider using a more specific type if icons have a defined structure
+    icon: LucideIcon;
     isActive: boolean;
     subItems?: subItems[];
 };

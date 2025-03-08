@@ -35,12 +35,12 @@ const data: SidebarData = {
         {
           id: "rewards-points",
           title: "Rewards Points",
-          url: "/send-rewards/points",
+          url: "/dashboard/send-rewards/points",
         },
         {
           id: "rewards-codes",
           title: "Rewards Codes",
-          url: "/send-rewards/codes",
+          url: "/dashboard/send-rewards/codes",
         },
       ],
     },
@@ -177,6 +177,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 <Link
                   to={link.url}
                   className="hover:bg-sidebar-accent hover:text-sidebar-accent-foreground flex flex-col items-start gap-2 border-b p-4 text-sm leading-tight whitespace-nowrap last:border-b-0"
+                  key={link.id}
                 >
                   <div className="flex w-full items-center gap-2">
                     <span>{link.title}</span>{" "}

@@ -5,7 +5,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
-
 import {
   Form,
   FormControl,
@@ -18,32 +17,39 @@ import { useState } from "react";
 import { OtpModal } from "@/components/otp-modal";
 import { Link } from "react-router-dom";
 
-const loginFormSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters long.",
-  }),
-});
+const signupFormSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(8, "Password must be at least 8 characters long."),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"],
+  });
 
-const Login = () => {
+const Signup = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
 
-  const form = useForm<z.infer<typeof loginFormSchema>>({
-    resolver: zodResolver(loginFormSchema),
+  const form = useForm<z.infer<typeof signupFormSchema>>({
+    resolver: zodResolver(signupFormSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof loginFormSchema>) {
+  function onSubmit(values: z.infer<typeof signupFormSchema>) {
     console.log(values);
     setOpen(true);
   }
 
   function handleTogglePassword() {
-    setShowPassword((el) => !el);
+    setShowPassword((prev) => !prev);
   }
 
   return (
@@ -59,7 +65,29 @@ const Login = () => {
                 >
                   <div className="flex flex-col gap-6">
                     <div className="flex flex-col items-center text-center">
-                      <h1 className="text-2xl font-bold">Welcome back</h1>
+                      <h1 className="text-2xl font-bold">Create an Account</h1>
+                      <p className="text-balance text-muted-foreground">
+                        Sign up to start your journey
+                      </p>
+                    </div>
+                    <div className="grid gap-2">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Name</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="text"
+                                placeholder="Enter Name"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
                     <div className="grid gap-2">
                       <FormField
@@ -81,12 +109,6 @@ const Login = () => {
                       />
                     </div>
                     <div className="grid gap-2">
-                      <div className="flex items-center">
-                        <a
-                          href="#"
-                          className="ml-auto text-sm underline-offset-2 hover:underline"
-                        ></a>
-                      </div>
                       <FormField
                         control={form.control}
                         name="password"
@@ -118,16 +140,32 @@ const Login = () => {
                         )}
                       />
                     </div>
+                    <div className="grid gap-2">
+                      <FormField
+                        control={form.control}
+                        name="confirmPassword"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Confirm Password</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="password"
+                                placeholder="Confirm Password"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                     <Button type="submit" className="w-full cursor-pointer">
-                      Login
+                      Sign Up
                     </Button>
                     <div className="text-center text-sm">
-                      Don&apos;t have an account?
-                      <Link
-                        to="/signup"
-                        className="underline underline-offset-4 ml-2"
-                      >
-                        Sign up
+                      Already have an account?
+                      <Link to="/login" className="underline underline-offset-4 ml-2">
+                        Login
                       </Link>
                     </div>
                   </div>
@@ -149,4 +187,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
