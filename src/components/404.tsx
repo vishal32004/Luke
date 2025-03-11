@@ -22,13 +22,13 @@ export default function NotFound() {
         <div className="mx-auto w-full max-w-sm">
           <div className="flex justify-center gap-2">
             <Button asChild variant="outline">
-              <Link to="/">
+              <Link to="/vishal/Luke">
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Go back
               </Link>
             </Button>
             <Button asChild>
-              <Link to="/">
+              <Link to="/vishal/Luke">
                 <Home className="mr-2 h-4 w-4" />
                 Home
               </Link>

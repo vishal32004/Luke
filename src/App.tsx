@@ -13,10 +13,10 @@ const App = () => {
     <Router>
       <Suspense fallback={<Loader />}>
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Login />} />
-          <Route path="/dashboard/*" element={<Dashboard />} />
-          <Route path="/signup/*" element={<SignUp />} />
+          <Route path="/vishal/Luke/login" element={<Login />} />
+          <Route path="/vishal/Luke/" element={<Login />} />
+          <Route path="/vishal/Luke/dashboard/*" element={<Dashboard />} />
+          <Route path="/vishal/Luke/signup/*" element={<SignUp />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>

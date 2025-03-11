@@ -53,22 +53,24 @@ const Signup = () => {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-muted">
+    <div className="py-5 flex justify-center">
       <div className="w-full md:max-w-4xl">
-        <div className="flex flex-col gap-6">
-          <Card className="overflow-hidden">
-            <CardContent className="grid p-0 md:grid-cols-2">
+        <div className="flex flex-col gap-6 items-center">
+          <img
+            src="images/logo.jpeg"
+            alt="Lukit gifts"
+            height={100}
+            width={100}
+          />
+          <Card className="overflow-hidden w-lg">
+            <CardContent>
               <Form {...form}>
-                <form
-                  className="p-6 md:p-8"
-                  onSubmit={form.handleSubmit(onSubmit)}
-                >
+                <form onSubmit={form.handleSubmit(onSubmit)}>
                   <div className="flex flex-col gap-6">
                     <div className="flex flex-col items-center text-center">
-                      <h1 className="text-2xl font-bold">Create an Account</h1>
-                      <p className="text-balance text-muted-foreground">
-                        Sign up to start your journey
-                      </p>
+                      <h1 className="text-2xl font-bold text-first">
+                        Create an Account
+                      </h1>
                     </div>
                     <div className="grid gap-2">
                       <FormField
@@ -120,11 +122,13 @@ const Signup = () => {
                                 <Eye
                                   className="absolute right-2 top-[5px] cursor-pointer"
                                   onClick={handleTogglePassword}
+                                  color="#ff6b6b"
                                 />
                               ) : (
                                 <EyeOff
                                   className="absolute right-2 top-[5px] cursor-pointer"
                                   onClick={handleTogglePassword}
+                                  color="#ff6b6b"
                                 />
                               )}
                               <FormControl>
@@ -159,25 +163,24 @@ const Signup = () => {
                         )}
                       />
                     </div>
-                    <Button type="submit" className="w-full cursor-pointer">
+                    <Button
+                      type="submit"
+                      className="w-full cursor-pointer bg-first"
+                    >
                       Sign Up
                     </Button>
                     <div className="text-center text-sm">
                       Already have an account?
-                      <Link to="/login" className="underline underline-offset-4 ml-2">
+                      <Link
+                        to="/vishal/Luke/login"
+                        className="underline underline-offset-4 ml-2"
+                      >
                         Login
                       </Link>
                     </div>
                   </div>
                 </form>
               </Form>
-              <div className="relative hidden bg-muted md:block">
-                <img
-                  src="images/login.jpg"
-                  alt="Image"
-                  className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-                />
-              </div>
             </CardContent>
           </Card>
         </div>

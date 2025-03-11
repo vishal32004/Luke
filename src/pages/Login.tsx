@@ -47,11 +47,17 @@ const Login = () => {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-muted">
+    <div className="flex min-h-svh flex-col items-center justify-center">
       <div className="w-full md:max-w-4xl">
-        <div className="flex flex-col gap-6">
-          <Card className="overflow-hidden">
-            <CardContent className="grid p-0 md:grid-cols-2">
+        <div className="flex justify-center items-center gap-6 flex-col">
+          <img
+            src="images/logo.jpeg"
+            alt="Lukit gifts"
+            height={100}
+            width={100}
+          />
+          <Card className="overflow-hidden w-md">
+            <CardContent className="p-0">
               <Form {...form}>
                 <form
                   className="p-6 md:p-8"
@@ -59,7 +65,9 @@ const Login = () => {
                 >
                   <div className="flex flex-col gap-6">
                     <div className="flex flex-col items-center text-center">
-                      <h1 className="text-2xl font-bold">Welcome back</h1>
+                      <h1 className="text-2xl font-bold text-first">
+                        Welcome back
+                      </h1>
                     </div>
                     <div className="grid gap-2">
                       <FormField
@@ -98,11 +106,13 @@ const Login = () => {
                                 <Eye
                                   className="absolute right-2 top-[5px] cursor-pointer"
                                   onClick={handleTogglePassword}
+                                  color="#ff6b6b"
                                 />
                               ) : (
                                 <EyeOff
                                   className="absolute right-2 top-[5px] cursor-pointer"
                                   onClick={handleTogglePassword}
+                                  color="#ff6b6b"
                                 />
                               )}
                               <FormControl>
@@ -118,13 +128,16 @@ const Login = () => {
                         )}
                       />
                     </div>
-                    <Button type="submit" className="w-full cursor-pointer">
+                    <Button
+                      type="submit"
+                      className="w-full cursor-pointer bg-first"
+                    >
                       Login
                     </Button>
                     <div className="text-center text-sm">
                       Don&apos;t have an account?
                       <Link
-                        to="/signup"
+                        to="/vishal/Luke/signup"
                         className="underline underline-offset-4 ml-2"
                       >
                         Sign up
@@ -133,13 +146,6 @@ const Login = () => {
                   </div>
                 </form>
               </Form>
-              <div className="relative hidden bg-muted md:block">
-                <img
-                  src="images/login.jpg"
-                  alt="Image"
-                  className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-                />
-              </div>
             </CardContent>
           </Card>
         </div>

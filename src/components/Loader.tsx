@@ -15,7 +15,7 @@ export default function Loader() {
         {/* Pulsing text */}
         <div className="text-center space-y-2">
           <h2 className="text-xl font-medium animate-pulse">
-            Loading amazing content
+            Loading content
           </h2>
           <p className="text-muted-foreground text-sm">
             Please wait a moment...

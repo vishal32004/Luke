@@ -79,7 +79,7 @@ export const OtpModal = ({ open, setOpen }: OtpModalProps) => {
         <AlertDialogFooter>
           <AlertDialogAction
             onClick={(e) => validatePasskey(e)}
-            className="shad-primary-btn w-full"
+            className="shad-primary-btn bg-first w-full"
           >
             Submit
           </AlertDialogAction>
