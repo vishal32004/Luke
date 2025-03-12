@@ -6,7 +6,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Control } from "react-hook-form";
+import { Control, ControllerRenderProps } from "react-hook-form";
 import React from "react";
 import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
 import { FormFieldType } from "@/types/Form";
@@ -21,6 +21,8 @@ import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "./ui/checkbox";
 import { Textarea } from "./ui/textarea";
+import { format } from "date-fns";
+import { ColorPicker } from "./ui/color-picker";
 interface CustomProps {
   control: Control<any>;
   fieldType: FormFieldType;
@@ -35,7 +37,13 @@ interface CustomProps {
   children?: React.ReactNode;
 }
 
-const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
+const RenderField = ({
+  field,
+  props,
+}: {
+  field: ControllerRenderProps;
+  props: CustomProps;
+}) => {
   const { fieldType, placeholder } = props;
 
   switch (fieldType) {
@@ -57,13 +65,11 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
         <FormControl>
           <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>
-              <SelectTrigger className="shad-select-trigger">
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder={props.placeholder} />
               </SelectTrigger>
             </FormControl>
-            <SelectContent className="shad-select-content">
-              {props.children}
-            </SelectContent>
+            <SelectContent>{props.children}</SelectContent>
           </Select>
         </FormControl>
       );
@@ -76,11 +82,15 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
               <Button
                 variant={"outline"}
                 className={cn(
-                  "w-[240px] pl-3 text-left font-normal",
+                  "w-full pl-3 text-left font-normal",
                   !field.value && "text-muted-foreground"
                 )}
               >
-                {field.value ? field.value : <span>Pick a date</span>}
+                {field.value ? (
+                  format(field.value, "PPP")
+                ) : (
+                  <span>Pick a date</span>
+                )}
                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
               </Button>
             </FormControl>
@@ -130,6 +140,16 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
         </FormControl>
       );
 
+    case FormFieldType.COLOR_PICKER:
+      return (
+        <FormControl>
+          <ColorPicker
+            value={field.value}
+            onChange={field.onChange}
+            placeholder={props.placeholder}
+          />
+        </FormControl>
+      );
     default:
       break;
   }

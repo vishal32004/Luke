@@ -14,6 +14,7 @@ import {
   SidebarMenuSubItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { Link } from "react-router-dom";
 
 // This is sample data.
 const data = {
@@ -24,7 +25,7 @@ const data = {
       items: [
         {
           title: "Start New Campaign",
-          url: "#",
+          url: "/admin/create-new-campaign",
         },
         {
           title: "View Campaign",
@@ -194,7 +195,7 @@ export function AdminSidebar({
                     {item.items.map((item) => (
                       <SidebarMenuSubItem key={item.title} className="py-1">
                         <SidebarMenuSubButton asChild isActive={item.isActive}>
-                          <a href={item.url}>{item.title}</a>
+                          <Link to={item.url}>{item.title}</Link>
                         </SidebarMenuSubButton>
                       </SidebarMenuSubItem>
                     ))}

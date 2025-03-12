@@ -1,26 +1,32 @@
-import { Suspense, lazy } from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import "./App.css";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { Suspense } from "react";
 import Loader from "@/components/Loader";
+import routes from "@/routes";
+import { RouteConfig } from "@/types/routes";
+import "./App.css";
 
-const Login = lazy(() => import("./pages/Login"));
-const SignUp = lazy(() => import("./pages/SignUp"));
-const Dashboard = lazy(() => import("./pages/Dashboard"));
-const NotFound = lazy(() => import("@/components/404"));
+const createRoutes = (routes: RouteConfig[]) =>
+  routes.map((route, index) => {
+    if (route.children) {
+      return (
+        <Route key={index} path={route.path} element={route.element}>
+          {createRoutes(route.children)}
+        </Route>
+      );
+    }
+    return <Route key={index} path={route.path} element={route.element} />;
+  });
 
 const App = () => {
   return (
-    <Router>
+    <BrowserRouter>
       <Suspense fallback={<Loader />}>
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Login />} />
-          <Route path="/dashboard/*" element={<Dashboard />} />
-          <Route path="/signup/*" element={<SignUp />} />
-          <Route path="*" element={<NotFound />} />
+          {createRoutes(routes)}
+          <Route path="/test" element={<div>Test Route Works!</div>} />
         </Routes>
       </Suspense>
-    </Router>
+    </BrowserRouter>
   );
 };
 
