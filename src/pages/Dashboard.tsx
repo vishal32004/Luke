@@ -3,7 +3,8 @@ import { Edit, HelpCircle, IndianRupee, Plus, Settings } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Calendar } from "@/components/ui/calendar";
 import { useState } from "react";
-import { Chart } from "@/components/chart";
+// import { Chart } from "@/components/chart";
+import CreateNewCampaign from "./CreateNewCampaign";
 const name = "Vishal";
 const Dashboard = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -42,6 +43,9 @@ const Dashboard = () => {
   return (
     <>
       <Navbar />
+
+      <CreateNewCampaign />
+
       <section className="mt-10">
         <div className="container mx-auto">
           <div>
@@ -52,7 +56,7 @@ const Dashboard = () => {
           <div className="grid grid-cols-7 gap-5 items-end mt-5">
             <div className="grid grid-cols-3 grid-rows-2 gap-x-3 gap-y-4 col-span-5">
               {callActions.map((action) => (
-                <Link to={action.link} className="link-dash">
+                <Link to={action.link} className="link-dash" key={action.title}>
                   <div className="card bg-third px-8 py-6 rounded-2xl h-full flex items-center justify-center">
                     <div className="items-center justify-center flex-col gap-4 relative z-2 flex">
                       <action.icon
@@ -86,7 +90,7 @@ const Dashboard = () => {
         </div>
       </section>
 
-      <section className="mt-10">
+      {/* <section className="mt-10">
         <div className="container mx-auto">
           <div className="grid grid-cols-6 gap-4">
             <div className="col-span-2 row-span-2">
@@ -100,7 +104,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
     </>
   );
 };
