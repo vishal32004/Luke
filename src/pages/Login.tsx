@@ -137,7 +137,7 @@ const Login = () => {
                     <div className="text-center text-sm">
                       Don&apos;t have an account?
                       <Link
-                        to="/vishal/Luke/signup"
+                        to="/signup"
                         className="underline underline-offset-4 ml-2"
                       >
                         Sign up

@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom";
 import { ChevronDown, Settings, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,18 +10,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { SidebarTrigger } from "./ui/sidebar";
 
 export default function Navbar() {
   return (
     <nav className="border-b bg-background">
       <div className="flex h-16 items-center px-4 container mx-auto">
         <div className="flex items-center justify-between w-full">
-          <Link to="/" className="flex items-center gap-2">
-            <div className="h-7 w-7 rounded-md bg-primary flex items-center justify-center text-primary-foreground font-bold">
-              L
-            </div>
-            <span className="font-bold hidden md:inline-block">Luke Gifts</span>
-          </Link>
+          <SidebarTrigger className="cursor-pointer" />
           <div className="user-profile">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

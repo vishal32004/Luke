@@ -172,7 +172,7 @@ const Signup = () => {
                     <div className="text-center text-sm">
                       Already have an account?
                       <Link
-                        to="/vishal/Luke/login"
+                        to="/login"
                         className="underline underline-offset-4 ml-2"
                       >
                         Login
