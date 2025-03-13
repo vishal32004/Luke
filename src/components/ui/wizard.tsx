@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ChevronLeft, ChevronRight, Check, RefreshCw } from "lucide-react";
+import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface WizardContextValue {
@@ -17,8 +17,10 @@ interface WizardContextValue {
   validateStep: (step: number) => Promise<boolean>;
   setStepValidator: (step: number, validator: () => Promise<boolean>) => void;
   reset: () => void;
-  submittedData: any;
-  setSubmittedData: (data: any) => void;
+  submittedData: Record<string, unknown> | null;
+  setSubmittedData: React.Dispatch<
+    React.SetStateAction<Record<string, unknown> | null>
+  >;
 }
 
 const WizardContext = React.createContext<WizardContextValue | undefined>(
@@ -52,7 +54,10 @@ function Wizard({
   const [stepValidators, setStepValidators] = React.useState<{
     [key: number]: () => Promise<boolean>;
   }>({});
-  const [submittedData, setSubmittedData] = React.useState<any>(null);
+  const [submittedData, setSubmittedData] = React.useState<Record<
+    string,
+    unknown
+  > | null>(null);
 
   const registerStep = React.useCallback((step: number, isVisible: boolean) => {
     setVisibleSteps((prev) => {
@@ -175,9 +180,7 @@ function Wizard({
 
   return (
     <WizardContext.Provider value={value}>
-      <div className={cn("wizard-container", className)}>
-        {isComplete ? <WizardThankYou /> : children}
-      </div>
+      <div className={cn("wizard-container", className)}>{children}</div>
     </WizardContext.Provider>
   );
 }
@@ -385,82 +388,6 @@ function WizardButtons({
       >
         {isLoading ? "Loading..." : isLastStep ? completeText : nextText}
         {!isLastStep && !isLoading && <ChevronRight className="h-4 w-4" />}
-      </button>
-    </div>
-  );
-}
-
-function WizardThankYou() {
-  const { reset, submittedData } = useWizard();
-
-  return (
-    <div className="text-center py-8 space-y-6">
-      <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-        <Check className="h-8 w-8 text-green-600" />
-      </div>
-
-      <h2 className="text-2xl font-bold">Thank You!</h2>
-
-      <p className="text-muted-foreground">
-        Your project has been successfully set up. We'll be in touch soon!
-      </p>
-
-      {submittedData && (
-        <div className="mt-6 text-left bg-muted/50 p-4 rounded-md max-w-md mx-auto">
-          <h3 className="font-medium mb-2">Project Summary:</h3>
-          <div className="space-y-2">
-            <p>
-              <span className="font-medium">Name:</span>{" "}
-              {submittedData.projectDetails?.projectName}
-            </p>
-            <p>
-              <span className="font-medium">Type:</span>{" "}
-              <span className="capitalize">
-                {submittedData.projectDetails?.projectType}
-              </span>
-            </p>
-            <p>
-              <span className="font-medium">Contact:</span>{" "}
-              {submittedData.personalInfo?.email}
-            </p>
-
-            {submittedData.projectDetails?.projectType === "business" &&
-              submittedData.businessDetails && (
-                <div className="mt-2">
-                  <p>
-                    <span className="font-medium">Company:</span>{" "}
-                    {submittedData.businessDetails.companyName}
-                  </p>
-                  <p>
-                    <span className="font-medium">Industry:</span>{" "}
-                    {submittedData.businessDetails.industry}
-                  </p>
-                </div>
-              )}
-
-            {submittedData.projectDetails?.projectType === "nonprofit" &&
-              submittedData.nonprofitDetails && (
-                <div className="mt-2">
-                  <p>
-                    <span className="font-medium">Organization:</span>{" "}
-                    {submittedData.nonprofitDetails.organizationName}
-                  </p>
-                  <p>
-                    <span className="font-medium">Cause:</span>{" "}
-                    {submittedData.nonprofitDetails.cause}
-                  </p>
-                </div>
-              )}
-          </div>
-        </div>
-      )}
-
-      <button
-        onClick={reset}
-        className="mt-6 inline-flex items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-      >
-        <RefreshCw className="h-4 w-4" />
-        Start Over
       </button>
     </div>
   );

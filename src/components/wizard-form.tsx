@@ -1,5 +1,5 @@
 import * as React from "react";
-import type { UseFormReturn } from "react-hook-form";
+import type { UseFormReturn, FieldValues, Path } from "react-hook-form";
 import type { z } from "zod";
 
 import { Form } from "@/components/ui/form";
@@ -43,14 +43,14 @@ export function WizardForm<T extends z.ZodType>({
   );
 }
 
-interface WizardFormContentProps<T> {
+interface WizardFormContentProps<T extends FieldValues> {
   onSubmit: (values: T) => void;
   form: UseFormReturn<T>;
   stepFields: { [key: number]: string[] };
   children: React.ReactNode;
 }
 
-function WizardFormContent<T>({
+function WizardFormContent<T extends FieldValues>({
   onSubmit,
   form,
   stepFields,
@@ -77,7 +77,7 @@ function WizardFormContent<T>({
 
         // If there are fields to validate, trigger validation
         if (fieldsToValidate.length > 0) {
-          const isValid = await form.trigger(fieldsToValidate as any);
+          const isValid = await form.trigger(fieldsToValidate as Path<T>[]);
           console.log("Validation result:", isValid);
 
           if (!isValid) {
