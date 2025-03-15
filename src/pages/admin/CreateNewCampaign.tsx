@@ -87,14 +87,16 @@ const CreateNewCampaign = () => {
   };
 
   return (
-    <section className="mx-5 py-10">
+    <section className="flex justify-center mt-5 flex-col gap-y-5 items-center">
+      <div className="md:max-w-[80%] w-full">
+        <h1 className="text-3xl">Create New Campaign</h1>
+      </div>
       <WizardForm
         onSubmit={onSubmit}
-        className="max-w-2xl mx-auto"
+        className="md:max-w-[80%] w-full bg-white py-5 px-7 rounded-2xl"
         form={form}
         stepFields={stepFields}
       >
-        {/* Step 1: Campaign Information */}
         <WizardStep
           step={0}
           validator={() => validateStep(stepFields[0])}

@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { useState } from "react";
 import { OtpModal } from "@/components/otp-modal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const loginFormSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -28,6 +28,7 @@ const loginFormSchema = z.object({
 const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [open, setOpen] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -40,6 +41,9 @@ const Login = () => {
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
     console.log(values);
     setOpen(true);
+    setTimeout(() => {
+      navigate("/admin/dashboard"); // Redirect to /admin/dashboard
+    }, 1000); // Simulate a delay for the OTP modal or login process
   }
 
   function handleTogglePassword() {
@@ -106,13 +110,13 @@ const Login = () => {
                                 <Eye
                                   className="absolute right-2 top-[5px] cursor-pointer"
                                   onClick={handleTogglePassword}
-                                  color="#ff6b6b"
+                                  color="#22c55e"
                                 />
                               ) : (
                                 <EyeOff
                                   className="absolute right-2 top-[5px] cursor-pointer"
                                   onClick={handleTogglePassword}
-                                  color="#ff6b6b"
+                                  color="#22c55e"
                                 />
                               )}
                               <FormControl>

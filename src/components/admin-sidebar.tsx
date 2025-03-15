@@ -1,5 +1,15 @@
 import * as React from "react";
-import { Camera, Command } from "lucide-react";
+import {
+  Camera,
+  // Home,
+  BarChart2,
+  ShoppingCart,
+  DollarSign,
+  Users,
+  FileText,
+  Settings,
+  Command,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -26,7 +36,7 @@ const data = {
   navMain: [
     {
       title: "Campaign",
-      Icon: Camera,
+      Icon: Camera, // You can change this to a different icon
       url: "#",
       items: [
         {
@@ -35,14 +45,14 @@ const data = {
         },
         {
           title: "View Campaign",
-          url: "#",
+          url: "/admin/view-campaign",
         },
         {
           title: "Active Campaign",
           url: "#",
         },
         {
-          title: "Finished  Campaign",
+          title: "Finished Campaign",
           url: "#",
         },
         {
@@ -53,15 +63,15 @@ const data = {
     },
     {
       title: "Storefront",
-      Icon: Camera,
+      Icon: ShoppingCart, // Changed to ShoppingCart icon
       url: "#",
       items: [
         {
-          title: "Edit Storefront URL ",
-          url: "#",
+          title: "Edit Storefront URL",
+          url: "/admin/storefront",
         },
         {
-          title: "Edit Catalouge",
+          title: "Edit Catalogue",
           url: "#",
           isActive: true,
         },
@@ -81,7 +91,7 @@ const data = {
     },
     {
       title: "Reports",
-      Icon: Camera,
+      Icon: BarChart2, // Changed to BarChart2 icon
       url: "#",
       items: [
         {
@@ -100,7 +110,7 @@ const data = {
     },
     {
       title: "Product Level Reporting",
-      Icon: Camera,
+      Icon: FileText, // Changed to FileText icon
       url: "#",
       items: [
         {
@@ -115,7 +125,7 @@ const data = {
     },
     {
       title: "Funds Balance",
-      Icon: Camera,
+      Icon: DollarSign, // Changed to DollarSign icon
       url: "#",
       items: [
         {
@@ -127,15 +137,14 @@ const data = {
           url: "#",
         },
         {
-          title: "Transaction History ",
+          title: "Transaction History",
           url: "#",
         },
       ],
     },
-
     {
-      title: "7.	Admins ",
-      Icon: Camera,
+      title: "Admins",
+      Icon: Users, // Changed to Users icon
       url: "#",
       items: [
         {
@@ -152,10 +161,9 @@ const data = {
         },
       ],
     },
-
     {
       title: "Templates",
-      Icon: Camera,
+      Icon: Settings, // Changed to Settings icon
       url: "#",
       items: [
         {
@@ -221,7 +229,7 @@ export function AdminSidebar({
                         setOpen(true);
                       }}
                       isActive={activeItem?.title === item.title}
-                      className="px-2.5 md:px-2"
+                      className="px-2.5 md:px-2 cursor-pointer"
                     >
                       <item.Icon />
                       <span>{item.title}</span>
@@ -240,7 +248,7 @@ export function AdminSidebar({
       {/* This is the second sidebar */}
       {/* We disable collapsible and let it fill remaining space */}
       <Sidebar collapsible="none" className="hidden flex-1 md:flex">
-        <SidebarHeader className="gap-3.5 border-b p-4">
+        <SidebarHeader className="gap-3.5 border-b  py-[1.234rem]">
           <div className="flex w-full items-center justify-between">
             <div className="text-base font-medium text-foreground">
               {activeItem?.title}

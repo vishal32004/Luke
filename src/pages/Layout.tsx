@@ -15,7 +15,7 @@ const Layout = () => {
       <AdminSidebar />
       <SidebarInset>
         <Navbar />
-        <main>
+        <main className="bg-second h-full">
           <Outlet />
         </main>
       </SidebarInset>

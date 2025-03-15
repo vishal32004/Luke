@@ -22,12 +22,13 @@ interface WizardFormProps<T extends z.ZodType> {
 export function WizardForm<T extends z.ZodType>({
   onSubmit,
   children,
+  className,
   form,
   stepFields = {},
 }: WizardFormProps<T>) {
   return (
     <Form {...form}>
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={(e) => e.preventDefault()} className={className}>
         <Wizard totalSteps={React.Children.count(children)}>
           <WizardFormContent
             onSubmit={onSubmit}

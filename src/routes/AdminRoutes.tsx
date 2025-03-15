@@ -1,3 +1,5 @@
+import Storefront from "@/pages/admin/Storefront";
+import ViewCampaign from "@/pages/admin/ViewCampaign";
 import Layout from "@/pages/Layout";
 import { lazy } from "react";
 import { RouteObject } from "react-router-dom";
@@ -11,6 +13,8 @@ const adminRoutes: RouteObject = {
   children: [
     { path: "dashboard", element: <Dashboard /> },
     { path: "create-new-campaign", element: <CreateNewCampaign /> },
+    { path: "view-campaign", element: <ViewCampaign /> },
+    { path: "storefront", element: <Storefront /> },
   ],
 };
 

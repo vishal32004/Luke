@@ -1,100 +1,36 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 :root {
-  --color-first: #d82f5c;
-  --color-second: #ff9f9f;
-  --color-third: #f0f0f0;
-  --color-fourth: #fcfbfc;
+  --color-first: #22c55e;
+  --color-second: #f7f9fb;
 }
 
 body {
   font-family: "Poppins", sans-serif;
-  background-color: var(--color-fourth);
+  background: var(--color-second);
 }
 
 /* Background Colors */
 .bg-first {
   background-color: var(--color-first);
 }
+
 .bg-second {
   background-color: var(--color-second);
-}
-.bg-third {
-  background-color: var(--color-third);
-}
-.bg-fourth {
-  background-color: var(--color-fourth);
 }
 
 /* Text Colors */
 .text-first {
   color: var(--color-first);
 }
-.text-second {
-  color: var(--color-second);
-}
-.text-third {
-  color: var(--color-third);
-}
-.text-fourth {
-  color: var(--color-fourth);
-}
 
 /* Border Colors */
 .border-first {
   border: 1px solid var(--color-first);
 }
-.border-second {
-  border: 1px solid var(--color-second);
-}
-.border-third {
-  border: 1px solid var(--color-third);
-}
-.border-fourth {
-  border: 1px solid var(--color-fourth);
-}
 
 /* Text Shadows */
 .text-shadow-first {
   text-shadow: 2px 2px 4px var(--color-first);
-}
-.text-shadow-second {
-  text-shadow: 2px 2px 4px var(--color-second);
-}
-.text-shadow-third {
-  text-shadow: 2px 2px 4px var(--color-third);
-}
-.text-shadow-fourth {
-  text-shadow: 2px 2px 4px var(--color-fourth);
-}
-
-/* Box Shadows */
-.box-shadow-first {
-  box-shadow: 0 4px 6px rgba(var(--color-first), 0.2);
-}
-.box-shadow-second {
-  box-shadow: 0 4px 6px rgba(var(--color-second), 0.2);
-}
-.box-shadow-third {
-  box-shadow: 0 4px 6px rgba(var(--color-third), 0.2);
-}
-.box-shadow-fourth {
-  box-shadow: 0 4px 6px rgba(var(--color-fourth), 0.2);
-}
-
-/* Gradient Backgrounds */
-.bg-gradient-first {
-  background: linear-gradient(
-    to right,
-    var(--color-first),
-    var(--color-second)
-  );
-}
-.bg-gradient-second {
-  background: linear-gradient(
-    to right,
-    var(--color-third),
-    var(--color-fourth)
-  );
 }
 
 .cal-body,
@@ -127,4 +63,8 @@ body {
 
 .link-dash .card:hover {
   color: #fff;
+}
+
+.shadow-1 {
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
