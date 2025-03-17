@@ -1,3 +1,4 @@
+import Admin from "@/pages/admin/Admin";
 import Storefront from "@/pages/admin/Storefront";
 import ViewCampaign from "@/pages/admin/ViewCampaign";
 import Layout from "@/pages/Layout";
@@ -15,6 +16,7 @@ const adminRoutes: RouteObject = {
     { path: "create-new-campaign", element: <CreateNewCampaign /> },
     { path: "view-campaign", element: <ViewCampaign /> },
     { path: "storefront", element: <Storefront /> },
+    { path: "admins", element: <Admin /> },
   ],
 };
 

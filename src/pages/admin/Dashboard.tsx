@@ -1,5 +1,12 @@
 import { useState } from "react";
-import { Edit, HelpCircle, IndianRupee, Plus, Settings } from "lucide-react";
+import {
+  Edit,
+  HelpCircle,
+  IndianRupee,
+  Plus,
+  Settings,
+  UserCheck2,
+} from "lucide-react";
 import { Link } from "react-router-dom";
 import { Calendar } from "@/components/ui/calendar";
 const name = "Vishal";
@@ -14,7 +21,7 @@ const Dashboard = () => {
     },
     {
       title: "View / Edit Storefront",
-      link: "#",
+      link: "/admin/storefront",
       icon: Edit,
     },
     {
@@ -26,6 +33,11 @@ const Dashboard = () => {
       title: "Helpdesk",
       link: "#",
       icon: HelpCircle,
+    },
+    {
+      title: "Admins",
+      link: "/admin/admins",
+      icon: UserCheck2,
     },
     {
       title: "Settings",
