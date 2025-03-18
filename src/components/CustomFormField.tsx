@@ -9,20 +9,33 @@ import { Input } from "@/components/ui/input";
 import { Control, ControllerRenderProps } from "react-hook-form";
 import React from "react";
 import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
+
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FormFieldType } from "@/types/Form";
 import { Calendar } from "./ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { CalendarIcon } from "lucide-react";
+
+import { CalendarIcon, LucideIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "./ui/checkbox";
 import { Textarea } from "./ui/textarea";
 import { format } from "date-fns";
 import { ColorPicker } from "./ui/color-picker";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+import { Combobox } from "./ui/combobox";
+import { QuantityController } from "./QuantityController";
+
+type radioOptionType = {
+  label: string;
+  icon: LucideIcon;
+};
+
 interface CustomProps {
   control: Control<any>;
   fieldType: FormFieldType;
@@ -35,6 +48,11 @@ interface CustomProps {
   dateFormat?: string;
   showTimeSelect?: boolean;
   children?: React.ReactNode;
+  radioOptions?: radioOptionType[];
+  radioGridClass?: string;
+  comboboxOption?: { label: string; value: string }[];
+  min?: number;
+  max?: number;
 }
 
 const RenderField = ({
@@ -150,6 +168,56 @@ const RenderField = ({
           />
         </FormControl>
       );
+    case FormFieldType.RADIO:
+      return (
+        <FormControl>
+          <RadioGroup
+            onValueChange={field.onChange}
+            defaultValue={field.value}
+            className={cn("grid", props.radioGridClass)}
+          >
+            {props.radioOptions?.map((option: radioOptionType) => (
+              <FormItem
+                className="flex items-center space-x-3 space-y-0 card-radio"
+                key={option.label}
+              >
+                <FormControl>
+                  <RadioGroupItem value={option.label} className="hidden" />
+                </FormControl>
+                <FormLabel className="font-normal text-center text-md  h-full p-4 border rounded-lg cursor-pointer hover:bg-gray-100 flex flex-col items-center justify-center w-full">
+                  <option.icon />
+                  {option.label}
+                </FormLabel>
+              </FormItem>
+            ))}
+          </RadioGroup>
+        </FormControl>
+      );
+    case FormFieldType.COMBOBOX:
+      return (
+        <FormControl>
+          <Combobox
+            value={field.value}
+            onChange={field.onChange}
+            options={props.comboboxOption as { label: string; value: string }[]}
+            placeholder={props.placeholder}
+            searchPlaceholder="Search"
+          />
+        </FormControl>
+      );
+    case FormFieldType.QUANTITY_CONTROLLER:
+      return (
+        <FormControl>
+          <QuantityController
+            value={field.value || 1}
+            onIncrement={() => field.onChange(field.value + 1)}
+            onDecrement={() => field.onChange(field.value - 1)}
+            onChange={(value) => field.onChange(value)}
+            min={1}
+            max={99}
+          />
+        </FormControl>
+      );
     default:
       break;
   }
@@ -167,7 +235,7 @@ export default function CustomFormField(props: CustomProps) {
             <FormLabel>{label}</FormLabel>
           )}
           <RenderField field={field} props={props} />
-          <FormMessage className="shad-error" />
+          <FormMessage className="text-red-400" />
         </FormItem>
       )}
     />

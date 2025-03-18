@@ -1,91 +1,207 @@
-import { z } from "zod";
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import { WizardForm } from "@/components/wizard-form";
 import { WizardStep } from "@/components/ui/wizard";
 import { SelectItem } from "@/components/ui/select";
 import CustomFormField from "@/components/CustomFormField";
-import { campaignSchema, FormFieldType } from "@/types/Form";
+import { FormFieldType } from "@/types/Form";
+import {
+  Award,
+  BarChart,
+  BookOpen,
+  Briefcase,
+  Clipboard,
+  Code,
+  Cpu,
+  DollarSign,
+  FlaskConical,
+  Globe,
+  Handshake,
+  Hash,
+  Headphones,
+  Heart,
+  Link,
+  Link2Icon,
+  Megaphone,
+  Mic,
+  Scale,
+  Search,
+  Settings,
+  ShoppingCart,
+  UserCircle,
+  UserPlus,
+  Users,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
-// Define the default values for the form
+const formSchema = z
+  .object({
+    campaignName: z.string().min(2, {
+      message: "Campaign name is required",
+    }),
+    description: z.string().min(2, {
+      message: "Description must be at least 2 characters.",
+    }),
+    forWho: z.string().min(2, { message: "Please Select at least one Option" }),
+    EventMainCategory: z
+      .string()
+      .min(2, { message: "Please Select at least one Option" }),
+    event: z.string().min(2, { message: "Please Select at least one Option" }),
+    distributionType: z
+      .string()
+      .min(2, { message: "Please Select at least one Option" }),
+    recipients: z
+      .string()
+      .min(2, { message: "Please Select at least one Option" }),
+    bulkBuyingQty: z
+      .string()
+      .min(1, { message: "Please Enter A valid Quantity" }),
+    rewardType: z
+      .string()
+      .min(2, { message: "Please Select at least one Option" }),
+    points: z.string().min(1, { message: "Please Enter A Valid Option" }),
+    valueCodes: z.string().min(2, { message: "Please Enter A Valid Option" }),
+    quantity: z.number().min(1, { message: "Please Enter the Quantity" }),
+    link: z.string().min(2, {
+      message: "A valid Link",
+    }),
+    scheduledDate: z.date(),
+    personalMessage: z.string().min(2, {
+      message: "Too Small",
+    }),
+    eventAddress: z.string().min(2, {
+      message: "Please Add A Valid Address",
+    }),
+    eventDate: z.date(),
+    startDate: z.date(),
+    endDate: z.date(),
+    sendReminderAfterInitialGift: z.boolean(),
+    sendReminderBeforeExpiration: z.boolean(),
+  })
+  .refine(
+    (data) => {
+      if (data.distributionType === "Bulk Order") {
+        return !!data.bulkBuyingQty;
+      }
+      return true;
+    },
+    {
+      message: "Bulk Buying Quantity is required",
+      path: ["bulkBuyingQty"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.distributionType === "Online Gift Distribution") {
+        return !!data.recipients;
+      }
+      return true;
+    },
+    {
+      message: "Recipients are required",
+      path: ["recipients"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.rewardType === "Value of Points") {
+        return !!data.points;
+      }
+      return true;
+    },
+    {
+      message: "Points are required",
+      path: ["points"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.rewardType === "Bulk Order at Registered office / Event Place") {
+        return !!data.eventAddress && !!data.eventDate;
+      }
+      return true;
+    },
+    {
+      message: "Event Address & Date are required",
+      path: ["eventAddress", "eventDate"],
+    }
+  );
+
 const defaultValues = {
   campaignName: "",
   description: "",
-  for: "internal team" as const,
-  selectEvent: "birthday" as const,
-  addEvent: "",
-  onlineOrBulk: "Bulk" as const,
-  recipients: "0",
-  recipientsQty: "0",
-  bulkBuyingQty: 0,
-  rewardType: "code" as const,
-  bulkOrderAddress: "",
+  forWho: "",
+  EventMainCategory: "",
+  event: "",
+  distributionType: "",
+  recipients: "",
+  bulkBuyingQty: "",
+  rewardType: "",
+  points: "",
+  valueCodes: "",
+  quantity: 0,
+  link: "",
+  scheduledDate: new Date(),
+  personalMessage: "",
+  eventAddress: "",
   eventDate: new Date(),
-  selectProduct: "",
-  customizeCatalog: false,
-  customizeLandingPageTemplate: false,
-  customizeEmailTemplate: false,
-  customizeSmsTemplate: false,
   startDate: new Date(),
   endDate: new Date(),
   sendReminderAfterInitialGift: false,
   sendReminderBeforeExpiration: false,
-  fundUtilization: "",
 };
 
 const CreateNewCampaign = () => {
-  const form = useForm<z.infer<typeof campaignSchema>>({
-    resolver: zodResolver(campaignSchema),
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues,
-    mode: "onChange",
   });
 
-  const event = useWatch({ control: form.control, name: "selectEvent" });
-  const recipients = useWatch({ control: form.control, name: "recipients" });
-  const isBulk = useWatch({ control: form.control, name: "onlineOrBulk" });
+  const [distributionType, rewardType] = form.watch([
+    "distributionType",
+    "rewardType",
+  ]);
 
-  const onSubmit = (values: z.infer<typeof campaignSchema>) => {
-    console.log("Form submitted successfully:", values);
+  const onSubmit = () => {
+    console.log("Form submitted successfully:");
   };
 
   const validateStep = async (stepFields: string[]) => {
     const result = await form.trigger(
-      stepFields as (keyof z.infer<typeof campaignSchema>)[]
+      stepFields as (keyof z.infer<typeof formSchema>)[]
     );
     return result;
   };
 
   const stepFields = {
-    0: [
-      "campaignName",
-      "description",
-      "for",
-      "selectEvent",
-      event === "other" ? "addEvent" : "",
-    ],
-    1: [
-      "onlineOrBulk",
-      isBulk === "Online" ? "recipients" : "",
-      recipients === "Other" ? "recipientsQty" : "",
-      isBulk === "Bulk" ? "bulkBuyingQty" : "",
-      "rewardType",
-    ],
-    2: ["bulkOrderAddress", "eventDate", "selectProduct"],
-    3: [
-      "customizeCatalog",
-      "customizeLandingPageTemplate",
-      "customizeEmailTemplate",
-      "customizeSmsTemplate",
-    ],
-    4: [
+    0: ["campaignName", "description"],
+    1: ["forWho"],
+    2: ["EventMainCategory"],
+    3: ["event"],
+    4: ["distributionType"],
+    5: [distributionType === "Bulk Order" ? "bulkBuyingQty" : "recipients"],
+    6: [] as string[],
+    11: [
       "startDate",
       "endDate",
       "sendReminderAfterInitialGift",
       "sendReminderBeforeExpiration",
-      "fundUtilization",
     ],
   };
 
+  stepFields[6] = (() => {
+    const fields = ["rewardType"];
+    if (rewardType === "Value Of Points") fields.push("points");
+    if (rewardType === "Value Of Code") fields.push("valueCodes");
+    if (rewardType === "Create Reward Link") fields.push("link");
+    if (distributionType === "Bulk Order") {
+      fields.push("eventAddress", "eventDate");
+    }
+    return fields;
+  })();
+
+  console.log(stepFields[6], "hellow world");
   return (
     <section className="flex justify-center mt-5 flex-col gap-y-5 items-center">
       <div className="md:max-w-[80%] w-full">
@@ -104,151 +220,381 @@ const CreateNewCampaign = () => {
         >
           <div className="space-y-6">
             <h2 className="text-xl font-semibold">Campaign Information</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <CustomFormField
-                control={form.control}
-                name="campaignName"
-                fieldType={FormFieldType.INPUT}
-                label="Campaign Name"
-                placeholder="Enter campaign name"
-              />
-              <CustomFormField
-                control={form.control}
-                name="description"
-                fieldType={FormFieldType.INPUT}
-                label="Description"
-                placeholder="Enter description"
-              />
-              <CustomFormField
-                control={form.control}
-                name="for"
-                fieldType={FormFieldType.SELECT}
-                label="For"
-                placeholder="Select an option"
-              >
-                <SelectItem value="internal team">Internal Team</SelectItem>
-                <SelectItem value="external client">External Client</SelectItem>
-                <SelectItem value="channel partners">
-                  Channel Partners
-                </SelectItem>
-                <SelectItem value="others">Others</SelectItem>
-              </CustomFormField>
-              <CustomFormField
-                control={form.control}
-                name="selectEvent"
-                fieldType={FormFieldType.SELECT}
-                label="Select Event"
-                placeholder="Select an Event"
-              >
-                <SelectItem value="birthday">Birthday</SelectItem>
-                <SelectItem value="annual-event">Annual Event</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
-              </CustomFormField>
-              {event === "other" && (
-                <CustomFormField
-                  control={form.control}
-                  name="addEvent"
-                  fieldType={FormFieldType.INPUT}
-                  label="Add Event"
-                  placeholder="Enter event name"
-                />
-              )}
-            </div>
+
+            <CustomFormField
+              control={form.control}
+              name="campaignName"
+              fieldType={FormFieldType.INPUT}
+              label="Campaign Name"
+              placeholder="Enter campaign name"
+            />
+            <CustomFormField
+              control={form.control}
+              name="description"
+              fieldType={FormFieldType.TEXTAREA}
+              label="Description"
+              placeholder="Enter description"
+            />
           </div>
         </WizardStep>
 
-        {/* Step 2: Distribution & Rewards */}
         <WizardStep
           step={1}
           validator={() => validateStep(stepFields[1])}
           fieldNames={stepFields[1]}
         >
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold">Distribution & Rewards</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <CustomFormField
-                control={form.control}
-                name="onlineOrBulk"
-                fieldType={FormFieldType.SELECT}
-                label="Online Gift Distribution / Bulk Order"
-                placeholder="Select an option"
-              >
-                <SelectItem value="Online">Online</SelectItem>
-                <SelectItem value="Bulk">Bulk Order</SelectItem>
-              </CustomFormField>
-              {isBulk === "Online" && (
-                <>
-                  <CustomFormField
-                    control={form.control}
-                    name="recipients"
-                    fieldType={FormFieldType.SELECT}
-                    label="Select / Add Recipients (Qty)"
-                    placeholder="Select an option"
-                  >
-                    <SelectItem value="vishal">Vishal</SelectItem>
-                    <SelectItem value="Other">Enter Quantity</SelectItem>
-                  </CustomFormField>
-                  {recipients === "Other" && (
-                    <CustomFormField
-                      control={form.control}
-                      name="recipientsQty"
-                      fieldType={FormFieldType.INPUT}
-                      label="Recipients Quantity"
-                      placeholder="Enter Quantity"
-                    />
-                  )}
-                </>
-              )}
-              {isBulk === "Bulk" && (
-                <CustomFormField
-                  control={form.control}
-                  name="bulkBuyingQty"
-                  fieldType={FormFieldType.INPUT}
-                  label="Bulk Quantity"
-                  placeholder="Enter Bulk Quantity"
-                />
-              )}
-              <CustomFormField
-                control={form.control}
-                name="rewardType"
-                fieldType={FormFieldType.SELECT}
-                label="Reward Type"
-                placeholder="Select an option"
-              >
-                {isBulk === "Online" ? (
-                  <>
-                    <SelectItem value="code">Value Of A Code</SelectItem>
-                    <SelectItem value="points">Value Of Points</SelectItem>
-                    <SelectItem value="link">Create Reward Link</SelectItem>
-                  </>
-                ) : (
-                  <SelectItem value="bulk-order-place">
-                    Bulk Order at Registered office / Event Place
-                  </SelectItem>
-                )}
-              </CustomFormField>
-            </div>
+            <h2 className="text-xl font-semibold">For Who</h2>
+            <CustomFormField
+              control={form.control}
+              name="forWho"
+              fieldType={FormFieldType.RADIO}
+              label="For"
+              radioGridClass="grid-cols-4"
+              radioOptions={[
+                {
+                  label: "Internal Team",
+                  icon: UserCircle,
+                },
+                {
+                  label: "External Client",
+                  icon: Briefcase,
+                },
+                {
+                  label: "Channel Partners",
+                  icon: Handshake,
+                },
+                {
+                  label: "Others",
+                  icon: Search,
+                },
+              ]}
+            />
           </div>
         </WizardStep>
 
-        {/* Step 3: Bulk Order Details */}
-        {isBulk === "Online" && (
-          <WizardStep
-            step={3}
-            validator={() => validateStep(stepFields[3])}
-            fieldNames={stepFields[3]}
-          >
-            <div className="space-y-6">
-              <h2 className="text-xl font-semibold">Customization</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Customize Catalog - Filters */}
+        <WizardStep
+          step={2}
+          validator={() => validateStep(stepFields[2])}
+          fieldNames={stepFields[2]}
+        >
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold">Event Type</h2>
+            <CustomFormField
+              control={form.control}
+              name="EventMainCategory"
+              fieldType={FormFieldType.RADIO}
+              label="Event Type"
+              radioGridClass="grid-cols-3"
+              radioOptions={[
+                {
+                  label: "HR (Human Resources)",
+                  icon: UserCircle,
+                },
+                {
+                  label: "L&D (Learning and Development)",
+                  icon: BookOpen,
+                },
+                {
+                  label: "Sales",
+                  icon: Briefcase,
+                },
+                {
+                  label: "Marketing",
+                  icon: Megaphone,
+                },
+                {
+                  label: "IT (Information Technology)",
+                  icon: Cpu,
+                },
+                {
+                  label: "Finance",
+                  icon: DollarSign,
+                },
+                {
+                  label: "Operations",
+                  icon: Settings,
+                },
+                {
+                  label: "Customer Support",
+                  icon: Headphones,
+                },
+                {
+                  label: "R&D (Research and Development)",
+                  icon: FlaskConical,
+                },
+                {
+                  label: "Administration",
+                  icon: Clipboard,
+                },
+                {
+                  label: "Legal and Compliance",
+                  icon: Scale,
+                },
+                {
+                  label: "Corporate Social Responsibility (CSR)",
+                  icon: Heart,
+                },
+              ]}
+            />
+          </div>
+        </WizardStep>
+
+        <WizardStep
+          step={3}
+          validator={() => validateStep(stepFields[3])}
+          fieldNames={stepFields[3]}
+        >
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold">Event</h2>
+            <CustomFormField
+              control={form.control}
+              name="event"
+              fieldType={FormFieldType.RADIO}
+              label="Event"
+              radioGridClass="grid-cols-3"
+              radioOptions={[
+                {
+                  label: "Recruitment Drive",
+                  icon: Users,
+                },
+                {
+                  label: "New Hire Onboarding Session",
+                  icon: UserPlus,
+                },
+                {
+                  label: "Employee Town Hall",
+                  icon: Mic,
+                },
+                {
+                  label: "Team-Building Retreat",
+                  icon: Users,
+                },
+                {
+                  label: "Diversity and Inclusion Workshop",
+                  icon: Globe,
+                },
+                {
+                  label: "Leadership Development Program",
+                  icon: Award,
+                },
+                {
+                  label: "Employee Wellness Fair",
+                  icon: Heart,
+                },
+                {
+                  label: "Performance Review Kickoff Meeting",
+                  icon: BarChart,
+                },
+              ]}
+            />
+          </div>
+        </WizardStep>
+
+        <WizardStep
+          step={4}
+          validator={() => validateStep(stepFields[4])}
+          fieldNames={stepFields[4]}
+        >
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold">Distribution Type</h2>
+            <CustomFormField
+              control={form.control}
+              name="distributionType"
+              fieldType={FormFieldType.RADIO}
+              label="Distribution Type"
+              radioGridClass="grid-cols-2"
+              radioOptions={[
+                {
+                  label: "Online Gift Distribution",
+                  icon: Link,
+                },
+                {
+                  label: "Bulk Order",
+                  icon: ShoppingCart,
+                },
+              ]}
+            />
+          </div>
+        </WizardStep>
+
+        <WizardStep
+          step={5}
+          validator={() => validateStep(stepFields[5])}
+          fieldNames={stepFields[5]}
+        >
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold">Receipients</h2>
+
+            {distributionType !== "Bulk Order" ? (
+              <>
                 <CustomFormField
                   control={form.control}
-                  name="customizeCatalog"
-                  fieldType={FormFieldType.CHECKBOX}
-                  label="Customize Catalog"
+                  name="recipients"
+                  fieldType={FormFieldType.COMBOBOX}
+                  label="Select / Add Recipients (Qty)"
+                  placeholder="Select an option"
+                  comboboxOption={[{ label: "Vishal", value: "vishal" }]}
                 />
-                {form.watch("customizeCatalog") && (
+
+                <div>
+                  <h2>Email</h2>
+                  <p>vishal@gmail.com</p>
+                </div>
+
+                <div>
+                  <h2>Designation</h2>
+                  <p>Driver</p>
+                </div>
+                <div>
+                  <h2>Phone</h2>
+                  <p>1234567890</p>
+                </div>
+
+                <div>
+                  <h2>Email</h2>
+                  <p>vishal@gmail.com</p>
+                </div>
+              </>
+            ) : (
+              <CustomFormField
+                control={form.control}
+                name="bulkBuyingQty"
+                fieldType={FormFieldType.INPUT}
+                label="Bulk Quantity"
+                placeholder="Enter Bulk Quantity"
+              />
+            )}
+          </div>
+        </WizardStep>
+
+        <WizardStep
+          step={6}
+          validator={() => validateStep(stepFields[6])}
+          fieldNames={stepFields[6]}
+        >
+          <div className="space-y-6">
+            <h2 className="text-xl font-semibold">Reward Type</h2>
+            {distributionType !== "Bulk Order" ? (
+              <>
+                <CustomFormField
+                  control={form.control}
+                  name="rewardType"
+                  fieldType={FormFieldType.RADIO}
+                  label="Reward Type"
+                  radioGridClass="grid-cols-3"
+                  radioOptions={[
+                    {
+                      label: "Value Of Code",
+                      icon: Code,
+                    },
+                    {
+                      label: "Value Of Points",
+                      icon: Hash,
+                    },
+                    {
+                      label: "Create Reward Link",
+                      icon: Link2Icon,
+                    },
+                  ]}
+                />
+
+                {rewardType === "Value Of Points" && (
+                  <>
+                    <CustomFormField
+                      control={form.control}
+                      name="points"
+                      fieldType={FormFieldType.INPUT}
+                      label="Points"
+                      placeholder="Enter Value Of Points"
+                    />
+                    <p>note; 1 Reward Points = INR 1.00</p>
+
+                    <p>
+                      total <span>{600}</span>
+                    </p>
+                  </>
+                )}
+
+                {rewardType === "Value Of Code" && (
+                  <>
+                    <CustomFormField
+                      control={form.control}
+                      name="valueCodes"
+                      fieldType={FormFieldType.INPUT}
+                      label="Codes"
+                      placeholder="Enter Value Of Code"
+                    />
+
+                    <CustomFormField
+                      control={form.control}
+                      name="quantity"
+                      label="Quantity"
+                      fieldType={FormFieldType.QUANTITY_CONTROLLER}
+                      min={1}
+                      max={10}
+                    />
+                  </>
+                )}
+
+                {rewardType === "Create Reward Link" && (
+                  <>
+                    <CustomFormField
+                      control={form.control}
+                      name="link"
+                      fieldType={FormFieldType.INPUT}
+                      label="Link"
+                      placeholder="Link"
+                    />
+                    <Button>Regernate</Button>
+                  </>
+                )}
+                <p>show advaned details</p>
+
+                <CustomFormField
+                  control={form.control}
+                  name="scheduledDate"
+                  fieldType={FormFieldType.DATE_PICKER}
+                  label="Scheduled Date"
+                  placeholder="Scheduled Date"
+                />
+                <p>Reward amount will be deducted on scheduled date.</p>
+
+                <CustomFormField
+                  control={form.control}
+                  name="personalMessage"
+                  fieldType={FormFieldType.TEXTAREA}
+                  label="personal Message"
+                  placeholder="Enter description"
+                />
+              </>
+            ) : (
+              <>
+                <CustomFormField
+                  control={form.control}
+                  name="eventAddress"
+                  fieldType={FormFieldType.TEXTAREA}
+                  label="Event address"
+                  placeholder="Event address"
+                />
+                <CustomFormField
+                  control={form.control}
+                  name="eventDate"
+                  fieldType={FormFieldType.DATE_PICKER}
+                  label="Event Date"
+                  placeholder="Event Date"
+                />
+              </>
+            )}
+          </div>
+        </WizardStep>
+
+        {distributionType !== "Bulk Order" && (
+          <>
+            <WizardStep step={7}>
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold">Customization</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="col-span-2 space-y-4">
                     <CustomFormField
                       control={form.control}
@@ -265,8 +611,16 @@ const CreateNewCampaign = () => {
                       control={form.control}
                       name="priceRange"
                       fieldType={FormFieldType.INPUT}
-                      label="Price Range"
-                      placeholder="Enter price range (e.g., 10-100)"
+                      label="from"
+                      placeholder="from price range (e.g., 10-100)"
+                    />
+
+                    <CustomFormField
+                      control={form.control}
+                      name="priceRange"
+                      fieldType={FormFieldType.INPUT}
+                      label="to"
+                      placeholder="to price range (e.g., 10-100)"
                     />
                     <CustomFormField
                       control={form.control}
@@ -284,16 +638,14 @@ const CreateNewCampaign = () => {
                       <SelectItem value="popularity">Popularity</SelectItem>
                     </CustomFormField>
                   </div>
-                )}
+                </div>
+              </div>
+            </WizardStep>
 
-                {/* Customize Landing Page Template */}
-                <CustomFormField
-                  control={form.control}
-                  name="customizeLandingPageTemplate"
-                  fieldType={FormFieldType.CHECKBOX}
-                  label="Customize Landing Page Template"
-                />
-                {form.watch("customizeLandingPageTemplate") && (
+            <WizardStep step={8}>
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold">Customization</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="col-span-2 space-y-4">
                     <CustomFormField
                       control={form.control}
@@ -316,16 +668,14 @@ const CreateNewCampaign = () => {
                       placeholder="Enter button text"
                     />
                   </div>
-                )}
+                </div>
+              </div>
+            </WizardStep>
 
-                {/* Customize Email Template */}
-                <CustomFormField
-                  control={form.control}
-                  name="customizeEmailTemplate"
-                  fieldType={FormFieldType.CHECKBOX}
-                  label="Customize Email Template"
-                />
-                {form.watch("customizeEmailTemplate") && (
+            <WizardStep step={9}>
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold">Customization</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="col-span-2 space-y-4">
                     <CustomFormField
                       control={form.control}
@@ -349,16 +699,14 @@ const CreateNewCampaign = () => {
                       placeholder="Enter footer text"
                     />
                   </div>
-                )}
+                </div>
+              </div>
+            </WizardStep>
 
-                {/* Customize SMS Template */}
-                <CustomFormField
-                  control={form.control}
-                  name="customizeSmsTemplate"
-                  fieldType={FormFieldType.CHECKBOX}
-                  label="Customize SMS Template"
-                />
-                {form.watch("customizeSmsTemplate") && (
+            <WizardStep step={10}>
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold">Customization</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="col-span-2 space-y-4">
                     <CustomFormField
                       control={form.control}
@@ -375,37 +723,29 @@ const CreateNewCampaign = () => {
                       placeholder="Enter call-to-action text"
                     />
                   </div>
-                )}
+                </div>
               </div>
-            </div>
-          </WizardStep>
-        )}
+            </WizardStep>
 
-        {/* Step 4: Schedule & Funds */}
-        <WizardStep
-          step={4}
-          validator={() => validateStep(stepFields[4])}
-          fieldNames={stepFields[4]}
-        >
-          <div className="space-y-6">
-            <h2 className="text-xl font-semibold">Schedule & Funds</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <CustomFormField
-                control={form.control}
-                name="startDate"
-                fieldType={FormFieldType.DATE_PICKER}
-                label="Start Date"
-                placeholder="Select start date"
-              />
-              <CustomFormField
-                control={form.control}
-                name="endDate"
-                fieldType={FormFieldType.DATE_PICKER}
-                label="End Date"
-                placeholder="Select end date"
-              />
-              {isBulk === "Online" && (
-                <>
+            <WizardStep step={11}>
+              <div className="space-y-6">
+                <h2 className="text-xl font-semibold">Schedule & Funds</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <CustomFormField
+                    control={form.control}
+                    name="startDate"
+                    fieldType={FormFieldType.DATE_PICKER}
+                    label="Start Date"
+                    placeholder="Select start date"
+                  />
+                  <CustomFormField
+                    control={form.control}
+                    name="endDate"
+                    fieldType={FormFieldType.DATE_PICKER}
+                    label="End Date"
+                    placeholder="Select end date"
+                  />
+
                   <CustomFormField
                     control={form.control}
                     name="sendReminderAfterInitialGift"
@@ -418,18 +758,11 @@ const CreateNewCampaign = () => {
                     fieldType={FormFieldType.CHECKBOX}
                     label="Send a Reminder Before Expiration"
                   />
-                </>
-              )}
-              <CustomFormField
-                control={form.control}
-                name="fundUtilization"
-                fieldType={FormFieldType.TEXTAREA}
-                label="Fund Utilization / Add Funds"
-                placeholder="Add funds details"
-              />
-            </div>
-          </div>
-        </WizardStep>
+                </div>
+              </div>
+            </WizardStep>
+          </>
+        )}
       </WizardForm>
     </section>
   );

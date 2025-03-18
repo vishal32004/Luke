@@ -68,3 +68,12 @@ body {
 .shadow-1 {
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
+
+.card-radio:has(button[data-state="checked"]) label {
+  background-color: var(--color-first);
+  color: #fff;
+}
+
+.card-radio label {
+  transition: all ease-in-out 0.3s;
+}

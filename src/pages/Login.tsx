@@ -73,65 +73,58 @@ const Login = () => {
                         Welcome back
                       </h1>
                     </div>
-                    <div className="grid gap-2">
-                      <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
+
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input
+                              type="email"
+                              placeholder="Enter Email"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Password</FormLabel>
+                          <div className="relative">
+                            {showPassword ? (
+                              <Eye
+                                className="absolute right-2 top-[5px] cursor-pointer"
+                                onClick={handleTogglePassword}
+                                color="#22c55e"
+                              />
+                            ) : (
+                              <EyeOff
+                                className="absolute right-2 top-[5px] cursor-pointer"
+                                onClick={handleTogglePassword}
+                                color="#22c55e"
+                              />
+                            )}
                             <FormControl>
                               <Input
-                                type="email"
-                                placeholder="Enter Email"
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Enter Password"
                                 {...field}
                               />
                             </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    <div className="grid gap-2">
-                      <div className="flex items-center">
-                        <a
-                          href="#"
-                          className="ml-auto text-sm underline-offset-2 hover:underline"
-                        ></a>
-                      </div>
-                      <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password</FormLabel>
-                            <div className="relative">
-                              {showPassword ? (
-                                <Eye
-                                  className="absolute right-2 top-[5px] cursor-pointer"
-                                  onClick={handleTogglePassword}
-                                  color="#22c55e"
-                                />
-                              ) : (
-                                <EyeOff
-                                  className="absolute right-2 top-[5px] cursor-pointer"
-                                  onClick={handleTogglePassword}
-                                  color="#22c55e"
-                                />
-                              )}
-                              <FormControl>
-                                <Input
-                                  type={showPassword ? "text" : "password"}
-                                  placeholder="Enter Password"
-                                  {...field}
-                                />
-                              </FormControl>
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
                     <Button
                       type="submit"
                       className="w-full cursor-pointer bg-first"
