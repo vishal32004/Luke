@@ -16,12 +16,12 @@ const Dashboard = () => {
   const callActions = [
     {
       title: "Start New Campaign / View Campaign",
-      link: "/admin/create-new-campaign",
+      link: "/create-new-campaign",
       icon: Plus,
     },
     {
       title: "View / Edit Storefront",
-      link: "/admin/storefront",
+      link: "/storefront",
       icon: Edit,
     },
     {
@@ -36,7 +36,7 @@ const Dashboard = () => {
     },
     {
       title: "Admins",
-      link: "/admin/admins",
+      link: "/admins",
       icon: UserCheck2,
     },
     {

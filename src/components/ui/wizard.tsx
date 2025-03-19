@@ -76,7 +76,6 @@ function Wizard({
     },
     []
   );
-
   const validateStep = React.useCallback(
     async (step: number) => {
       const validator = stepValidators[step];
@@ -290,6 +289,7 @@ function WizardButtons({
     try {
       if (isLastStep) {
         const isValid = await validateStep(currentStep);
+        console.log(currentStep,"dsdsfsdf")
         console.log("Last step validation result:", isValid);
 
         if (isValid && onComplete) {

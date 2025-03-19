@@ -3,6 +3,9 @@ import { Suspense } from "react";
 import Loader from "@/components/Loader";
 import routes from "@/routes";
 import { RouteConfig } from "@/types/routes";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { AdminSidebar } from "@/components/admin-sidebar";
+import Navbar from "@/components/admin-navbar";
 import "./App.css";
 
 const createRoutes = (routes: RouteConfig[]) =>
@@ -20,12 +23,26 @@ const createRoutes = (routes: RouteConfig[]) =>
 const App = () => {
   return (
     <BrowserRouter>
-      <Suspense fallback={<Loader />}>
-        <Routes>
-          {createRoutes(routes)}
-          <Route path="/test" element={<div>Test Route Works!</div>} />
-        </Routes>
-      </Suspense>
+      <SidebarProvider
+        style={
+          {
+            "--sidebar-width": "300px",
+          } as React.CSSProperties
+        }
+      >
+        <AdminSidebar />
+        <SidebarInset>
+          <Navbar />
+          <main className="bg-second h-full">
+            <Suspense fallback={<Loader />}>
+              <Routes>
+                {createRoutes(routes)}
+                <Route path="/test" element={<div>Test Route Works!</div>} />
+              </Routes>
+            </Suspense>
+          </main>
+        </SidebarInset>
+      </SidebarProvider>
     </BrowserRouter>
   );
 };

@@ -41,11 +41,11 @@ const data = {
       items: [
         {
           title: "Start New Campaign",
-          url: "/admin/create-new-campaign",
+          url: "/create-new-campaign",
         },
         {
           title: "View Campaign",
-          url: "/admin/view-campaign",
+          url: "/view-campaign",
         },
         {
           title: "Active Campaign",
@@ -68,7 +68,7 @@ const data = {
       items: [
         {
           title: "Edit Storefront URL",
-          url: "/admin/storefront",
+          url: "/storefront",
         },
         {
           title: "Edit Catalogue",
@@ -145,7 +145,7 @@ const data = {
     {
       title: "Admins",
       Icon: Users, // Changed to Users icon
-      url: "/admin/admins",
+      url: "/admins",
       items: [
         {
           title: "All Admins",
@@ -204,7 +204,7 @@ export function AdminSidebar({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
-                <a href="/admin/dashboard">
+                <a href="/">
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                     <Command className="size-4" />
                   </div>

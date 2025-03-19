@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { WizardForm } from "@/components/wizard-form";
 import { WizardStep } from "@/components/ui/wizard";
-import { SelectItem } from "@/components/ui/select";
 import CustomFormField from "@/components/CustomFormField";
 import { FormFieldType } from "@/types/Form";
 import {
@@ -34,6 +33,9 @@ import {
 import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { CustomTable } from "@/components/table";
+import { calculateTotal } from "@/lib/helper";
+import { CatalogSection } from "@/components/ProductFilter";
 
 const formSchema = z
   .object({
@@ -66,6 +68,7 @@ const formSchema = z
     link: z.string().min(2, {
       message: "A valid Link",
     }),
+    advanedDetails: z.boolean().optional(),
     scheduledDate: z.date(),
     personalMessage: z.string().min(2, {
       message: "Too Small",
@@ -140,8 +143,9 @@ const defaultValues = {
   rewardType: "",
   points: "",
   valueCodes: "",
-  quantity: 0,
+  quantity: 1,
   link: "",
+  AdvanedDetails: false,
   scheduledDate: new Date(),
   personalMessage: "",
   eventAddress: "",
@@ -158,19 +162,19 @@ const CreateNewCampaign = () => {
     defaultValues,
   });
 
-  const [distributionType, rewardType] = form.watch([
-    "distributionType",
-    "rewardType",
-  ]);
+  const [distributionType, rewardType, showAdvancedDetails, points] =
+    form.watch(["distributionType", "rewardType", "advanedDetails", "points"]);
 
-  const onSubmit = () => {
-    console.log("Form submitted successfully:");
+  const onSubmit = (data: z.infer<typeof formSchema>) => {
+    console.log(data, "testing data");
   };
 
   const validateStep = async (stepFields: string[]) => {
+    console.log(stepFields, "stepfield");
     const result = await form.trigger(
       stepFields as (keyof z.infer<typeof formSchema>)[]
     );
+    console.log(result);
     return result;
   };
 
@@ -191,17 +195,21 @@ const CreateNewCampaign = () => {
   };
 
   stepFields[6] = (() => {
-    const fields = ["rewardType"];
+    const fields = [];
+
+    if (distributionType === "Bulk Order") {
+      fields.push("eventAddress", "eventDate");
+      return fields;
+    } else {
+      fields.push("rewardType");
+    }
+
     if (rewardType === "Value Of Points") fields.push("points");
     if (rewardType === "Value Of Code") fields.push("valueCodes");
     if (rewardType === "Create Reward Link") fields.push("link");
-    if (distributionType === "Bulk Order") {
-      fields.push("eventAddress", "eventDate");
-    }
+
     return fields;
   })();
-
-  console.log(stepFields[6], "hellow world");
   return (
     <section className="flex justify-center mt-5 flex-col gap-y-5 items-center">
       <div className="md:max-w-[80%] w-full">
@@ -437,24 +445,29 @@ const CreateNewCampaign = () => {
                   comboboxOption={[{ label: "Vishal", value: "vishal" }]}
                 />
 
-                <div>
-                  <h2>Email</h2>
-                  <p>vishal@gmail.com</p>
-                </div>
-
-                <div>
-                  <h2>Designation</h2>
-                  <p>Driver</p>
-                </div>
-                <div>
-                  <h2>Phone</h2>
-                  <p>1234567890</p>
-                </div>
-
-                <div>
-                  <h2>Email</h2>
-                  <p>vishal@gmail.com</p>
-                </div>
+                <CustomTable
+                  columns={[
+                    {
+                      key: "name",
+                      header: "Name",
+                    },
+                    {
+                      key: "email",
+                      header: "Email",
+                    },
+                    {
+                      key: "Phone Number",
+                      header: "Number",
+                    },
+                  ]}
+                  data={[
+                    {
+                      name: "Vishal",
+                      email: "vishal@gmail.com",
+                      "Phone Number": "1234567890",
+                    },
+                  ]}
+                />
               </>
             ) : (
               <CustomFormField
@@ -499,32 +512,17 @@ const CreateNewCampaign = () => {
                   ]}
                 />
 
-                {rewardType === "Value Of Points" && (
-                  <>
-                    <CustomFormField
-                      control={form.control}
-                      name="points"
-                      fieldType={FormFieldType.INPUT}
-                      label="Points"
-                      placeholder="Enter Value Of Points"
-                    />
-                    <p>note; 1 Reward Points = INR 1.00</p>
-
-                    <p>
-                      total <span>{600}</span>
-                    </p>
-                  </>
-                )}
-
                 {rewardType === "Value Of Code" && (
-                  <>
-                    <CustomFormField
-                      control={form.control}
-                      name="valueCodes"
-                      fieldType={FormFieldType.INPUT}
-                      label="Codes"
-                      placeholder="Enter Value Of Code"
-                    />
+                  <div className="grid grid-cols-3 gap-5">
+                    <div className="col-span-2">
+                      <CustomFormField
+                        control={form.control}
+                        name="valueCodes"
+                        fieldType={FormFieldType.INPUT}
+                        label="Value Of Code"
+                        placeholder="Enter Value Of Code (In Ruppee)"
+                      />
+                    </div>
 
                     <CustomFormField
                       control={form.control}
@@ -534,39 +532,68 @@ const CreateNewCampaign = () => {
                       min={1}
                       max={10}
                     />
-                  </>
+                  </div>
+                )}
+
+                {rewardType === "Value Of Points" && (
+                  <div className="grid grid-cols-3 items-center gap-2">
+                    <div className="flex flex-col col-span-2">
+                      <CustomFormField
+                        control={form.control}
+                        name="points"
+                        fieldType={FormFieldType.INPUT}
+                        label="Points"
+                        placeholder="Enter Value Of Points"
+                      />
+                      <p>Note: 1 Reward Points = INR 1.00</p>
+                    </div>
+                    <p className="w-full text-center bg-first text-white rounded-md px-3 py-2">
+                      Total: <span>{calculateTotal(+points)}</span>
+                    </p>
+                  </div>
                 )}
 
                 {rewardType === "Create Reward Link" && (
+                  <div className="grid grid-cols-3 gap-3 items-center">
+                    <div className="col-span-2">
+                      <CustomFormField
+                        control={form.control}
+                        name="link"
+                        fieldType={FormFieldType.INPUT}
+                        label="Link"
+                        placeholder="Link"
+                      />
+                    </div>
+                    <Button>Regenerate</Button>
+                  </div>
+                )}
+
+                <CustomFormField
+                  control={form.control}
+                  name="advanedDetails"
+                  fieldType={FormFieldType.CHECKBOX}
+                  label="Show Advanced Details"
+                />
+                {showAdvancedDetails && (
                   <>
                     <CustomFormField
                       control={form.control}
-                      name="link"
-                      fieldType={FormFieldType.INPUT}
-                      label="Link"
-                      placeholder="Link"
+                      name="scheduledDate"
+                      fieldType={FormFieldType.DATE_PICKER}
+                      label="Scheduled Date"
+                      placeholder="Scheduled Date"
                     />
-                    <Button>Regernate</Button>
+                    <p>Reward amount will be deducted on scheduled date.</p>
+
+                    <CustomFormField
+                      control={form.control}
+                      name="personalMessage"
+                      fieldType={FormFieldType.TEXTAREA}
+                      label="Personal Message"
+                      placeholder="Enter description"
+                    />
                   </>
                 )}
-                <p>show advaned details</p>
-
-                <CustomFormField
-                  control={form.control}
-                  name="scheduledDate"
-                  fieldType={FormFieldType.DATE_PICKER}
-                  label="Scheduled Date"
-                  placeholder="Scheduled Date"
-                />
-                <p>Reward amount will be deducted on scheduled date.</p>
-
-                <CustomFormField
-                  control={form.control}
-                  name="personalMessage"
-                  fieldType={FormFieldType.TEXTAREA}
-                  label="personal Message"
-                  placeholder="Enter description"
-                />
               </>
             ) : (
               <>
@@ -593,52 +620,7 @@ const CreateNewCampaign = () => {
           <>
             <WizardStep step={7}>
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold">Customization</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="col-span-2 space-y-4">
-                    <CustomFormField
-                      control={form.control}
-                      name="catalogCategory"
-                      fieldType={FormFieldType.SELECT}
-                      label="Category"
-                      placeholder="Select category"
-                    >
-                      <SelectItem value="electronics">Electronics</SelectItem>
-                      <SelectItem value="apparel">Apparel</SelectItem>
-                      <SelectItem value="food">Food</SelectItem>
-                    </CustomFormField>
-                    <CustomFormField
-                      control={form.control}
-                      name="priceRange"
-                      fieldType={FormFieldType.INPUT}
-                      label="from"
-                      placeholder="from price range (e.g., 10-100)"
-                    />
-
-                    <CustomFormField
-                      control={form.control}
-                      name="priceRange"
-                      fieldType={FormFieldType.INPUT}
-                      label="to"
-                      placeholder="to price range (e.g., 10-100)"
-                    />
-                    <CustomFormField
-                      control={form.control}
-                      name="sortBy"
-                      fieldType={FormFieldType.SELECT}
-                      label="Sort By"
-                      placeholder="Select sorting option"
-                    >
-                      <SelectItem value="priceLowToHigh">
-                        Price: Low to High
-                      </SelectItem>
-                      <SelectItem value="priceHighToLow">
-                        Price: High to Low
-                      </SelectItem>
-                      <SelectItem value="popularity">Popularity</SelectItem>
-                    </CustomFormField>
-                  </div>
-                </div>
+                <CatalogSection />
               </div>
             </WizardStep>
 

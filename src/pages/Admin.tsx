@@ -1,6 +1,13 @@
-import { adminColumns, columns } from "@/components/admin-columns";
 import { DataTable } from "@/components/data-table";
-const admin: adminColumns[] = [
+import { getColumns } from "@/components/getColumn";
+type Admin = {
+  id: string;
+  name: string;
+  email: string;
+  status: "Active" | "Inactive";
+};
+
+const admin: Admin[] = [
   {
     id: "admin001",
     name: "Alice Johnson",
@@ -32,6 +39,26 @@ const admin: adminColumns[] = [
     status: "Active",
   },
 ];
+
+const columns = getColumns<Admin>(
+  [
+    {
+      accessorKey: "name",
+      header: "Name",
+    },
+    {
+      accessorKey: "email",
+      header: "Email",
+    },
+    {
+      accessorKey: "status",
+      header: "Status",
+    },
+  ],
+  (row) => {
+    console.log("Selected admin: ", row);
+  }
+);
 
 const Admin = () => {
   return (
