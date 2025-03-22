@@ -24,6 +24,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { NavUser } from "./nav-user";
+import { Link } from "react-router-dom";
 
 // This is sample data
 
@@ -36,7 +37,7 @@ const data = {
   navMain: [
     {
       title: "Campaign",
-      Icon: Camera, // You can change this to a different icon
+      Icon: Camera,
       url: "#",
       items: [
         {
@@ -47,23 +48,11 @@ const data = {
           title: "View Campaign",
           url: "/view-campaign",
         },
-        {
-          title: "Active Campaign",
-          url: "#",
-        },
-        {
-          title: "Finished Campaign",
-          url: "#",
-        },
-        {
-          title: "Top Campaign",
-          url: "#",
-        },
       ],
     },
     {
       title: "Storefront",
-      Icon: ShoppingCart, // Changed to ShoppingCart icon
+      Icon: ShoppingCart,
       url: "#",
       items: [
         {
@@ -204,11 +193,11 @@ export function AdminSidebar({
           <SidebarMenu>
             <SidebarMenuItem>
               <SidebarMenuButton size="lg" asChild className="md:h-8 md:p-0">
-                <a href="/">
+                <Link to="/">
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                     <Command className="size-4" />
                   </div>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -229,7 +218,7 @@ export function AdminSidebar({
                         setOpen(true);
                       }}
                       isActive={activeItem?.title === item.title}
-                      className="px-2.5 md:px-2 cursor-pointer"
+                      className="px-4 md:px-2 cursor-pointer"
                     >
                       <item.Icon />
                       <span>{item.title}</span>
@@ -256,18 +245,18 @@ export function AdminSidebar({
           </div>
         </SidebarHeader>
         <SidebarContent>
-          <SidebarGroup className="px-0">
+          <SidebarGroup className="p-0">
             <SidebarGroupContent>
               {activeItem?.items?.map((subItem) => (
-                <a
-                  href={subItem.url}
+                <Link
+                  to={subItem.url}
                   key={subItem.title}
                   className="flex flex-col items-start gap-2 whitespace-nowrap border-b p-4 text-sm leading-tight last:border-b-0 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                 >
                   <div className="flex w-full items-center gap-2">
                     <span>{subItem.title}</span>
                   </div>
-                </a>
+                </Link>
               ))}
             </SidebarGroupContent>
           </SidebarGroup>

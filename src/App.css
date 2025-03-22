@@ -77,3 +77,7 @@ body {
 .card-radio label {
   transition: all ease-in-out 0.3s;
 }
+
+button {
+  cursor: pointer;
+}

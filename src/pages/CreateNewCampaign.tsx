@@ -36,6 +36,7 @@ import { z } from "zod";
 import { CustomTable } from "@/components/table";
 import { calculateTotal } from "@/lib/helper";
 import { CatalogSection } from "@/components/ProductFilter";
+import Payment from "@/components/Payment";
 
 const formSchema = z
   .object({
@@ -162,8 +163,14 @@ const CreateNewCampaign = () => {
     defaultValues,
   });
 
-  const [distributionType, rewardType, showAdvancedDetails, points] =
-    form.watch(["distributionType", "rewardType", "advanedDetails", "points"]);
+  const [distributionType, rewardType, showAdvancedDetails, points, recipient] =
+    form.watch([
+      "distributionType",
+      "rewardType",
+      "advanedDetails",
+      "points",
+      "recipients",
+    ]);
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data, "testing data");
@@ -211,13 +218,13 @@ const CreateNewCampaign = () => {
     return fields;
   })();
   return (
-    <section className="flex justify-center mt-5 flex-col gap-y-5 items-center">
+    <section className="flex justify-center my-7 flex-col gap-y-5 items-center ">
       <div className="md:max-w-[80%] w-full">
-        <h1 className="text-3xl">Create New Campaign</h1>
+        <h1 className="text-3xl text-center">Create New Campaign</h1>
       </div>
       <WizardForm
         onSubmit={onSubmit}
-        className="md:max-w-[80%] w-full bg-white py-5 px-7 rounded-2xl"
+        className="md:max-w-[90%] w-full bg-white py-10 px-5 rounded-2xl shadow-1"
         form={form}
         stepFields={stepFields}
       >
@@ -227,8 +234,6 @@ const CreateNewCampaign = () => {
           fieldNames={stepFields[0]}
         >
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold">Campaign Information</h2>
-
             <CustomFormField
               control={form.control}
               name="campaignName"
@@ -252,7 +257,6 @@ const CreateNewCampaign = () => {
           fieldNames={stepFields[1]}
         >
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold">For Who</h2>
             <CustomFormField
               control={form.control}
               name="forWho"
@@ -287,7 +291,6 @@ const CreateNewCampaign = () => {
           fieldNames={stepFields[2]}
         >
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold">Event Type</h2>
             <CustomFormField
               control={form.control}
               name="EventMainCategory"
@@ -354,7 +357,6 @@ const CreateNewCampaign = () => {
           fieldNames={stepFields[3]}
         >
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold">Event</h2>
             <CustomFormField
               control={form.control}
               name="event"
@@ -405,7 +407,6 @@ const CreateNewCampaign = () => {
           fieldNames={stepFields[4]}
         >
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold">Distribution Type</h2>
             <CustomFormField
               control={form.control}
               name="distributionType"
@@ -432,8 +433,6 @@ const CreateNewCampaign = () => {
           fieldNames={stepFields[5]}
         >
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold">Receipients</h2>
-
             {distributionType !== "Bulk Order" ? (
               <>
                 <CustomFormField
@@ -445,29 +444,31 @@ const CreateNewCampaign = () => {
                   comboboxOption={[{ label: "Vishal", value: "vishal" }]}
                 />
 
-                <CustomTable
-                  columns={[
-                    {
-                      key: "name",
-                      header: "Name",
-                    },
-                    {
-                      key: "email",
-                      header: "Email",
-                    },
-                    {
-                      key: "Phone Number",
-                      header: "Number",
-                    },
-                  ]}
-                  data={[
-                    {
-                      name: "Vishal",
-                      email: "vishal@gmail.com",
-                      "Phone Number": "1234567890",
-                    },
-                  ]}
-                />
+                {recipient && (
+                  <CustomTable
+                    columns={[
+                      {
+                        key: "name",
+                        header: "Name",
+                      },
+                      {
+                        key: "email",
+                        header: "Email",
+                      },
+                      {
+                        key: "Phone Number",
+                        header: "Number",
+                      },
+                    ]}
+                    data={[
+                      {
+                        name: "Vishal",
+                        email: "vishal@gmail.com",
+                        "Phone Number": "1234567890",
+                      },
+                    ]}
+                  />
+                )}
               </>
             ) : (
               <CustomFormField
@@ -487,7 +488,6 @@ const CreateNewCampaign = () => {
           fieldNames={stepFields[6]}
         >
           <div className="space-y-6">
-            <h2 className="text-xl font-semibold">Reward Type</h2>
             {distributionType !== "Bulk Order" ? (
               <>
                 <CustomFormField
@@ -626,7 +626,7 @@ const CreateNewCampaign = () => {
 
             <WizardStep step={8}>
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold">Customization</h2>
+                <h2 className="font-bold">Landing Page</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="col-span-2 space-y-4">
                     <CustomFormField
@@ -656,7 +656,7 @@ const CreateNewCampaign = () => {
 
             <WizardStep step={9}>
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold">Customization</h2>
+                <h2 className="font-bold">Email Customization</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="col-span-2 space-y-4">
                     <CustomFormField
@@ -687,7 +687,7 @@ const CreateNewCampaign = () => {
 
             <WizardStep step={10}>
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold">Customization</h2>
+                <h2 className="font-bold">SMS Content Customization</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="col-span-2 space-y-4">
                     <CustomFormField
@@ -742,6 +742,9 @@ const CreateNewCampaign = () => {
                   />
                 </div>
               </div>
+            </WizardStep>
+            <WizardStep step={12}>
+              <Payment />
             </WizardStep>
           </>
         )}

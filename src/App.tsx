@@ -7,6 +7,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AdminSidebar } from "@/components/admin-sidebar";
 import Navbar from "@/components/admin-navbar";
 import "./App.css";
+import Footer from "./components/footer";
 
 const createRoutes = (routes: RouteConfig[]) =>
   routes.map((route, index) => {
@@ -26,7 +27,7 @@ const App = () => {
       <SidebarProvider
         style={
           {
-            "--sidebar-width": "300px",
+            "--sidebar-width": "275px",
           } as React.CSSProperties
         }
       >
@@ -41,6 +42,7 @@ const App = () => {
               </Routes>
             </Suspense>
           </main>
+          <Footer />
         </SidebarInset>
       </SidebarProvider>
     </BrowserRouter>

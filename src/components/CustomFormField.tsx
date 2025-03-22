@@ -232,7 +232,7 @@ export default function CustomFormField(props: CustomProps) {
       render={({ field }) => (
         <FormItem className="flex-1">
           {fieldType !== FormFieldType.CHECKBOX && label && (
-            <FormLabel>{label}</FormLabel>
+            <FormLabel className="mb-1">{label}</FormLabel>
           )}
           <RenderField field={field} props={props} />
           <FormMessage className="text-red-400" />

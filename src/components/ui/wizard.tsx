@@ -289,7 +289,7 @@ function WizardButtons({
     try {
       if (isLastStep) {
         const isValid = await validateStep(currentStep);
-        console.log(currentStep,"dsdsfsdf")
+        console.log(currentStep, "dsdsfsdf");
         console.log("Last step validation result:", isValid);
 
         if (isValid && onComplete) {
@@ -310,13 +310,13 @@ function WizardButtons({
   };
 
   return (
-    <div className={cn("flex justify-between mt-8", className)}>
+    <div className={cn("flex justify-center mt-8 gap-5", className)}>
       <button
         type="button"
         onClick={prevStep}
         className={cn(
           "flex items-center gap-1 rounded-md px-4 py-2 text-sm font-medium transition-colors",
-          isFirstStep ? "invisible" : "bg-muted hover:bg-muted/80"
+          isFirstStep ? "hidden" : "bg-muted hover:bg-muted/80"
         )}
         disabled={isFirstStep || isLoading}
       >
