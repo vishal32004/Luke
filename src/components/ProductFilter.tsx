@@ -184,26 +184,56 @@ interface ProductListProps {
 }
 
 const ProductList: React.FC<ProductListProps> = ({ products }) => {
+  const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
+  const toggleSelect = (productId: string) => {
+    setSelectedProducts((prevSelected) =>
+      prevSelected.includes(productId)
+        ? prevSelected.filter((id) => id !== productId)
+        : [...prevSelected, productId]
+    );
+  };
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {products.map((product) => (
-        <Card key={product.id} className="hover:shadow-lg transition-shadow">
-          <CardContent className="p-4">
-            <img
-              src={product.imageUrl}
-              alt={product.name}
-              className="w-full h-48 object-cover rounded-md"
-            />
-            <h3 className="text-lg font-semibold mt-2">{product.name}</h3>
-            <p className="text-sm text-gray-600">{product.category}</p>
-            <p className="text-lg font-bold text-gray-800">${product.price}</p>
-          </CardContent>
-          <CardFooter className="flex justify-between items-center">
-            <Button variant="outline">Add to Cart</Button>
-            <Button>Buy Now</Button>
-          </CardFooter>
-        </Card>
-      ))}
+      {products.map((product) => {
+        const isSelected = selectedProducts.includes(product.id);
+        return (
+          <Card
+            key={product.id}
+            className={`hover:shadow-lg transition-shadow relative ${
+              isSelected ? "border-2 border-blue-500" : ""
+            }`}
+          >
+            <CardContent className="p-4">
+              <img
+                src={product.imageUrl}
+                alt={product.name}
+                className="w-full h-48 object-cover rounded-md"
+              />
+              <h3 className="text-lg font-semibold mt-2">{product.name}</h3>
+              <p className="text-sm text-gray-600">{product.category}</p>
+              <p className="text-lg font-bold text-gray-800">
+                ${product.price}
+              </p>
+            </CardContent>
+            <CardFooter className="flex justify-between items-center">
+              <Button
+                variant="outline"
+                onClick={() => toggleSelect(product.id)}
+              >
+                {isSelected ? "Deselect" : "Select"}
+              </Button>
+              {isSelected && (
+                <input
+                  type="checkbox"
+                  checked={true}
+                  readOnly
+                  className="w-5 h-5 text-blue-600"
+                />
+              )}
+            </CardFooter>
+          </Card>
+        );
+      })}
     </div>
   );
 };

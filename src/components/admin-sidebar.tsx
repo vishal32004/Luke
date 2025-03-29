@@ -157,11 +157,11 @@ const data = {
       items: [
         {
           title: "All Templates",
-          url: "#",
+          url: "/email-template",
         },
         {
-          title: "Categories",
-          url: "#",
+          title: "Email",
+          url: "/email-template",
         },
       ],
     },

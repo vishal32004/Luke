@@ -30,7 +30,6 @@ import {
   UserPlus,
   Users,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { CustomTable } from "@/components/table";
@@ -57,6 +56,7 @@ const formSchema = z
     recipients: z
       .string()
       .min(2, { message: "Please Select at least one Option" }),
+    addRecipients: z.boolean(),
     bulkBuyingQty: z
       .string()
       .min(1, { message: "Please Enter A valid Quantity" }),
@@ -163,14 +163,21 @@ const CreateNewCampaign = () => {
     defaultValues,
   });
 
-  const [distributionType, rewardType, showAdvancedDetails, points, recipient] =
-    form.watch([
-      "distributionType",
-      "rewardType",
-      "advanedDetails",
-      "points",
-      "recipients",
-    ]);
+  const [
+    distributionType,
+    rewardType,
+    showAdvancedDetails,
+    points,
+    recipient,
+    addRecipients,
+  ] = form.watch([
+    "distributionType",
+    "rewardType",
+    "advanedDetails",
+    "points",
+    "recipients",
+    "addRecipients",
+  ]);
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     console.log(data, "testing data");
@@ -213,7 +220,7 @@ const CreateNewCampaign = () => {
 
     if (rewardType === "Value Of Points") fields.push("points");
     if (rewardType === "Value Of Code") fields.push("valueCodes");
-    if (rewardType === "Create Reward Link") fields.push("link");
+    // if (rewardType === "Create Reward Link") fields.push("link");
 
     return fields;
   })();
@@ -469,6 +476,31 @@ const CreateNewCampaign = () => {
                     ]}
                   />
                 )}
+                <CustomFormField
+                  control={form.control}
+                  name="addRecipients"
+                  fieldType={FormFieldType.CHECKBOX}
+                  label="Add recipient"
+                />
+
+                {addRecipients && (
+                  <>
+                    <CustomFormField
+                      control={form.control}
+                      name="recipientName"
+                      fieldType={FormFieldType.INPUT}
+                      label="Recipient Name"
+                      placeholder="Enter Recipient name"
+                    />
+                    <CustomFormField
+                      control={form.control}
+                      name="recipientEmail"
+                      fieldType={FormFieldType.INPUT}
+                      label="Recipient Email"
+                      placeholder="Enter Recipient Email"
+                    />
+                  </>
+                )}
               </>
             ) : (
               <CustomFormField
@@ -553,7 +585,7 @@ const CreateNewCampaign = () => {
                   </div>
                 )}
 
-                {rewardType === "Create Reward Link" && (
+                {/* {rewardType === "Create Reward Link" && (
                   <div className="grid grid-cols-3 gap-3 items-center">
                     <div className="col-span-2">
                       <CustomFormField
@@ -566,7 +598,7 @@ const CreateNewCampaign = () => {
                     </div>
                     <Button>Regenerate</Button>
                   </div>
-                )}
+                )} */}
 
                 <CustomFormField
                   control={form.control}

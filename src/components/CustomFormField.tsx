@@ -9,11 +9,9 @@ import { Input } from "@/components/ui/input";
 import { Control, ControllerRenderProps } from "react-hook-form";
 import React from "react";
 import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
-
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { FormFieldType } from "@/types/Form";
 import { Calendar } from "./ui/calendar";
-
 import { CalendarIcon, LucideIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { cn } from "@/lib/utils";
@@ -21,21 +19,17 @@ import { Checkbox } from "./ui/checkbox";
 import { Textarea } from "./ui/textarea";
 import { format } from "date-fns";
 import { ColorPicker } from "./ui/color-picker";
-
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
 import { Combobox } from "./ui/combobox";
 import { QuantityController } from "./QuantityController";
-
 type radioOptionType = {
   label: string;
   icon: LucideIcon;
 };
-
 interface CustomProps {
   control: Control<any>;
   fieldType: FormFieldType;

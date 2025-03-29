@@ -6,6 +6,7 @@ import CreateNewCampaign from "@/pages/CreateNewCampaign";
 import ViewCampaign from "@/pages/ViewCampaign";
 import Storefront from "@/pages/Storefront";
 import Admin from "@/pages/Admin";
+import EmailTemplatesGallery from "@/pages/Email-template";
 
 const routes: RouteConfig[] = [
   ...authRoutes,
@@ -28,6 +29,10 @@ const routes: RouteConfig[] = [
   {
     path: "/admins",
     element: <Admin />,
+  },
+  {
+    path: "/email-template",
+    element: <EmailTemplatesGallery />,
   },
   { path: "*", element: <NotFound /> },
 ];
