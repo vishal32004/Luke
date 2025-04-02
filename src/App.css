@@ -81,3 +81,20 @@ body {
 button {
   cursor: pointer;
 }
+
+.email-banner-img:hover + .edit,
+.editable-content .edit,
+.edit:hover {
+  visibility: visible;
+}
+.edit {
+  position: absolute;
+  right: 2%;
+  top: 2%;
+  background-color: #22c55e;
+  color: white;
+  padding: 10px;
+  visibility: hidden;
+  cursor: pointer;
+  border-radius: 50%;
+}

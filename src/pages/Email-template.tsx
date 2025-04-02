@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { EmailTemplateCard } from "@/components/email-template-card";
 import { CategorySidebar } from "@/components/category-sidebar";
@@ -17,7 +15,6 @@ export default function EmailTemplatesGallery() {
     null
   );
 
-  // Filter templates based on selected category and sub-category
   const filteredTemplates = (() => {
     let filtered = templates;
 
@@ -48,7 +45,6 @@ export default function EmailTemplatesGallery() {
     setIsPreviewOpen(true);
   };
 
-  // Handle category selection
   const handleCategorySelect = (categoryName: string) => {
     setSelectedCategory(categoryName);
     setSelectedSubCategory(null);
@@ -66,7 +62,6 @@ export default function EmailTemplatesGallery() {
   // Handle template save
   const handleTemplateSave = (updatedTemplate: Partial<Template>) => {
     console.log("Template saved:", updatedTemplate);
-    // Here you would typically update the template in your database
   };
 
   return (

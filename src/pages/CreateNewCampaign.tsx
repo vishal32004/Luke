@@ -12,6 +12,7 @@ import {
   Code,
   Cpu,
   DollarSign,
+  Eye,
   FlaskConical,
   Globe,
   Handshake,
@@ -36,6 +37,8 @@ import { CustomTable } from "@/components/table";
 import { calculateTotal } from "@/lib/helper";
 import { CatalogSection } from "@/components/ProductFilter";
 import Payment from "@/components/Payment";
+import { Button } from "@/components/ui/button";
+import { templates } from "@/data/email-templates";
 
 const formSchema = z
   .object({
@@ -689,30 +692,34 @@ const CreateNewCampaign = () => {
             <WizardStep step={9}>
               <div className="space-y-6">
                 <h2 className="font-bold">Email Customization</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="col-span-2 space-y-4">
-                    <CustomFormField
-                      control={form.control}
-                      name="emailSubject"
-                      fieldType={FormFieldType.INPUT}
-                      label="Subject Line"
-                      placeholder="Enter subject line"
-                    />
-                    <CustomFormField
-                      control={form.control}
-                      name="emailBody"
-                      fieldType={FormFieldType.TEXTAREA}
-                      label="Body Content"
-                      placeholder="Enter email content"
-                    />
-                    <CustomFormField
-                      control={form.control}
-                      name="emailFooter"
-                      fieldType={FormFieldType.INPUT}
-                      label="Footer Text"
-                      placeholder="Enter footer text"
-                    />
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                  {templates.slice(0, 6).map((template) => (
+                    <div className="bg-white rounded-lg overflow-hidden shadow-sm group relative">
+                      <div className="relative h-40">
+                        <img
+                          src={template.imageUrl || "/placeholder.svg"}
+                          alt={template.title}
+                          className="object-cover w-full max-h-full"
+                        />
+                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <Button
+                            variant="secondary"
+                            size="sm"
+                            className="flex items-center gap-1"
+                          >
+                            <Eye className="h-4 w-4" />
+                            Preview
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="p-2 text-center">
+                        <h3 className="text-sm">{template.title}</h3>
+                        <p className="text-xs text-gray-500">
+                          {template.subCategory}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </WizardStep>

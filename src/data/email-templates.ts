@@ -21,7 +21,7 @@ export const templates: Template[] = [
     title: "Birthday-1",
     category: "Birthday",
     subCategory: "Personal",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Happy Birthday! Wishing you a fantastic day filled with joy and celebration.",
   },
   {
@@ -29,7 +29,7 @@ export const templates: Template[] = [
     title: "Birthday-2",
     category: "Birthday",
     subCategory: "Professional",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Happy Birthday! The entire team wishes you a wonderful day and a successful year ahead.",
   },
   {
@@ -37,7 +37,7 @@ export const templates: Template[] = [
     title: "Birthday-3",
     category: "Birthday",
     subCategory: "Personal",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Sending you the warmest birthday wishes on your special day!",
   },
   {
@@ -45,7 +45,7 @@ export const templates: Template[] = [
     title: "Birthday-4",
     category: "Birthday",
     subCategory: "Professional",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Happy Birthday from all of us! We appreciate your contributions to our team.",
   },
   {
@@ -53,7 +53,7 @@ export const templates: Template[] = [
     title: "Birthday-5",
     category: "Birthday",
     subCategory: "Personal",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Wishing you a day filled with happiness and a year filled with joy!",
   },
   {
@@ -61,7 +61,7 @@ export const templates: Template[] = [
     title: "Birthday-6",
     category: "Birthday",
     subCategory: "Professional",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Happy Birthday! We're grateful to have you as part of our team.",
   },
   {
@@ -69,7 +69,7 @@ export const templates: Template[] = [
     title: "Anniversary-1",
     category: "Anniversary",
     subCategory: "Work",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Congratulations on your work anniversary! Thank you for your dedication.",
   },
   {
@@ -77,7 +77,7 @@ export const templates: Template[] = [
     title: "Anniversary-2",
     category: "Anniversary",
     subCategory: "Company",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Happy Company Anniversary! We've come so far together.",
   },
   {
@@ -85,7 +85,7 @@ export const templates: Template[] = [
     title: "Anniversary-3",
     category: "Anniversary",
     subCategory: "Work",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Celebrating another year of your valuable contributions to our team!",
   },
   {
@@ -93,7 +93,7 @@ export const templates: Template[] = [
     title: "Anniversary-4",
     category: "Anniversary",
     subCategory: "Company",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Happy Anniversary to our amazing company! Here's to many more years of success.",
   },
   {
@@ -101,7 +101,7 @@ export const templates: Template[] = [
     title: "Anniversary-5",
     category: "Anniversary",
     subCategory: "Work",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Congratulations on your work anniversary! Your dedication inspires us all.",
   },
   {
@@ -109,7 +109,7 @@ export const templates: Template[] = [
     title: "Anniversary-6",
     category: "Anniversary",
     subCategory: "Company",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Celebrating our company's journey and looking forward to a bright future together.",
   },
   {
@@ -117,7 +117,7 @@ export const templates: Template[] = [
     title: "Milestone-1",
     category: "Milestone",
     subCategory: "Achievement",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Congratulations on reaching this important milestone! Your hard work has paid off.",
   },
   {
@@ -125,7 +125,7 @@ export const templates: Template[] = [
     title: "Milestone-2",
     category: "Milestone",
     subCategory: "Career",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Celebrating your career milestone! Your journey inspires us all.",
   },
   {
@@ -133,7 +133,7 @@ export const templates: Template[] = [
     title: "Milestone-3",
     category: "Milestone",
     subCategory: "Achievement",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Congratulations on your achievement! This milestone marks the beginning of even greater success.",
   },
   {
@@ -141,7 +141,7 @@ export const templates: Template[] = [
     title: "Milestone-4",
     category: "Milestone",
     subCategory: "Career",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Celebrating your career growth and achievements! Well deserved.",
   },
   {
@@ -149,7 +149,7 @@ export const templates: Template[] = [
     title: "Appreciation-1",
     category: "Appreciation",
     subCategory: "Team",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "A big thank you to our amazing team for your outstanding work!",
   },
   {
@@ -157,7 +157,7 @@ export const templates: Template[] = [
     title: "Appreciation-2",
     category: "Appreciation",
     subCategory: "Individual",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Thank you for your exceptional contribution. Your work makes a difference!",
   },
   {
@@ -165,7 +165,7 @@ export const templates: Template[] = [
     title: "Referral-1",
     category: "Referral",
     subCategory: "Customer",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Thank you for referring us to your friends and family. We appreciate your trust!",
   },
   {
@@ -173,7 +173,7 @@ export const templates: Template[] = [
     title: "Referral-2",
     category: "Referral",
     subCategory: "Employee",
-    imageUrl: "https://placehold.co/240x200",
+    imageUrl: "images/bbanner.webp",
     content: "Thank you for referring a new team member. Great teams are built through great connections!",
   },
 ]
