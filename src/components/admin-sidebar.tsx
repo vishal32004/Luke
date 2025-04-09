@@ -113,21 +113,17 @@ const data = {
       ],
     },
     {
-      title: "Funds Balance",
+      title: "Payment",
       Icon: DollarSign, // Changed to DollarSign icon
       url: "#",
       items: [
         {
           title: "View Balance",
-          url: "#",
-        },
-        {
-          title: "Add Funds",
-          url: "#",
+          url: "/payment",
         },
         {
           title: "Transaction History",
-          url: "#",
+          url: "/transation-history",
         },
       ],
     },
@@ -162,6 +158,10 @@ const data = {
         {
           title: "Email",
           url: "/email-template",
+        },
+        {
+          title: "Notification",
+          url: "/notification",
         },
       ],
     },

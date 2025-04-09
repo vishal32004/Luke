@@ -7,6 +7,10 @@ import ViewCampaign from "@/pages/ViewCampaign";
 import Storefront from "@/pages/Storefront";
 import Admin from "@/pages/Admin";
 import EmailTemplatesGallery from "@/pages/Email-template";
+import Payment from "@/pages/Payment";
+import AddFunds from "@/pages/AddFunds";
+import TransactionHistory from "@/pages/TransationHistroy";
+import NotificationSettings from "@/pages/Notification";
 
 const routes: RouteConfig[] = [
   ...authRoutes,
@@ -33,6 +37,22 @@ const routes: RouteConfig[] = [
   {
     path: "/email-template",
     element: <EmailTemplatesGallery />,
+  },
+  {
+    path: "/payment",
+    element: <Payment />,
+  },
+  {
+    path: "/add-funds",
+    element: <AddFunds />,
+  },
+  {
+    path: "/transation-history",
+    element: <TransactionHistory />,
+  },
+  {
+    path: "/notification",
+    element: <NotificationSettings />,
   },
   { path: "*", element: <NotFound /> },
 ];

@@ -81,18 +81,34 @@ export default function Payment() {
 
             {/* PO Number Input (shown when PO option is selected) */}
             {paymentMethod === "po" && (
-              <div className="mt-4 space-y-2">
-                <Label htmlFor="poNumber" className="text-gray-700">
-                  Purchase Order Number*
-                </Label>
-                <Input
-                  id="poNumber"
-                  value={poNumber}
-                  onChange={(e) => setPoNumber(e.target.value)}
-                  placeholder="Enter your PO number"
-                  className="bg-white border-gray-300"
-                />
-              </div>
+              <>
+                <div className="mt-4 space-y-2">
+                  <Label htmlFor="poNumber" className="text-gray-700">
+                    Add PO Number*
+                  </Label>
+                  <Input
+                    id="poNumber"
+                    value={poNumber}
+                    onChange={(e) => setPoNumber(e.target.value)}
+                    placeholder="Enter your PO number"
+                    className="bg-white border-gray-300"
+                    type="number"
+                  />
+                </div>
+                <div className="mt-4 space-y-2">
+                  <Label htmlFor="poNumber" className="text-gray-700">
+                    Purchase Order Number*
+                  </Label>
+                  <Input
+                    id="poNumber"
+                    value={poNumber}
+                    onChange={(e) => setPoNumber(e.target.value)}
+                    placeholder="Enter your PO number"
+                    className="bg-white border-gray-300"
+                    type="file"
+                  />
+                </div>
+              </>
             )}
 
             <Button className="w-full bg-green-600 hover:bg-green-700 text-white mt-8 h-12 rounded-lg text-base font-medium">
