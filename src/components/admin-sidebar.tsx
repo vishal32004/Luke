@@ -160,6 +160,10 @@ const data = {
           url: "/email-template",
         },
         {
+          title: "Landing Page",
+          url: "/landing-page",
+        },
+        {
           title: "Notification",
           url: "/notification",
         },

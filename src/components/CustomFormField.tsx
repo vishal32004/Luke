@@ -47,6 +47,7 @@ interface CustomProps {
   comboboxOption?: { label: string; value: string }[];
   min?: number;
   max?: number;
+  multipleDates?: boolean;
 }
 
 const RenderField = ({
@@ -99,9 +100,29 @@ const RenderField = ({
                 )}
               >
                 {field.value ? (
-                  format(field.value, "PPP")
+                  props.multipleDates ? (
+                    // For multiple dates, show the count or join formatted dates
+                    Array.isArray(field.value) ? (
+                      field.value.length > 0 ? (
+                        field.value.length === 1 ? (
+                          format(field.value[0], "PPP")
+                        ) : (
+                          `${field.value.length} dates selected`
+                        )
+                      ) : (
+                        <span>Pick dates</span>
+                      )
+                    ) : (
+                      format(field.value, "PPP")
+                    )
+                  ) : (
+                    // For single date
+                    format(field.value, "PPP")
+                  )
                 ) : (
-                  <span>Pick a date</span>
+                  <span>
+                    {props.multipleDates ? "Pick dates" : "Pick a date"}
+                  </span>
                 )}
                 <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
               </Button>
@@ -109,7 +130,7 @@ const RenderField = ({
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0" align="start">
             <Calendar
-              mode="single"
+              mode={props.multipleDates ? "multiple" : "single"}
               selected={field.value}
               onSelect={field.onChange}
               disabled={(date) =>

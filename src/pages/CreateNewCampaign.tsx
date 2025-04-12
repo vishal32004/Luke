@@ -23,6 +23,7 @@ import {
   Link2Icon,
   Megaphone,
   Mic,
+  PlusCircle,
   Scale,
   Search,
   Settings,
@@ -33,12 +34,13 @@ import {
 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { CustomTable } from "@/components/table";
+// import { CustomTable } from "@/components/table";
 import { calculateTotal } from "@/lib/helper";
 import { CatalogSection } from "@/components/ProductFilter";
 import Payment from "@/components/Payment";
 import { Button } from "@/components/ui/button";
 import { templates } from "@/data/email-templates";
+import ReceptionistManager from "@/components/Receptionist";
 
 const formSchema = z
   .object({
@@ -53,13 +55,14 @@ const formSchema = z
       .string()
       .min(2, { message: "Please Select at least one Option" }),
     event: z.string().min(2, { message: "Please Select at least one Option" }),
+    customEvent: z.string().optional(),
     distributionType: z
       .string()
       .min(2, { message: "Please Select at least one Option" }),
-    recipients: z
-      .string()
-      .min(2, { message: "Please Select at least one Option" }),
-    addRecipients: z.boolean(),
+    // recipients: z
+    //   .string()
+    //   .min(2, { message: "Please Select at least one Option" }),
+    // addRecipients: z.boolean(),
     bulkBuyingQty: z
       .string()
       .min(1, { message: "Please Enter A valid Quantity" }),
@@ -98,18 +101,18 @@ const formSchema = z
       path: ["bulkBuyingQty"],
     }
   )
-  .refine(
-    (data) => {
-      if (data.distributionType === "Online Gift Distribution") {
-        return !!data.recipients;
-      }
-      return true;
-    },
-    {
-      message: "Recipients are required",
-      path: ["recipients"],
-    }
-  )
+  // .refine(
+  //   (data) => {
+  //     if (data.distributionType === "Online Gift Distribution") {
+  //       return !!data.recipients;
+  //     }
+  //     return true;
+  //   },
+  //   {
+  //     message: "Recipients are required",
+  //     path: ["recipients"],
+  //   }
+  // )
   .refine(
     (data) => {
       if (data.rewardType === "Value of Points") {
@@ -141,6 +144,7 @@ const defaultValues = {
   forWho: "",
   EventMainCategory: "",
   event: "",
+  customEvent: "",
   distributionType: "",
   recipients: "",
   bulkBuyingQty: "",
@@ -171,15 +175,19 @@ const CreateNewCampaign = () => {
     rewardType,
     showAdvancedDetails,
     points,
-    recipient,
-    addRecipients,
+    // recipient,
+    // addRecipients,
+    sendReminderAfterInitialGift,
+    sendReminderBeforeExpiration,
   ] = form.watch([
     "distributionType",
     "rewardType",
     "advanedDetails",
     "points",
-    "recipients",
-    "addRecipients",
+    // "recipients",
+    // "addRecipients",
+    "sendReminderAfterInitialGift",
+    "sendReminderBeforeExpiration",
   ]);
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
@@ -406,8 +414,21 @@ const CreateNewCampaign = () => {
                   label: "Performance Review Kickoff Meeting",
                   icon: BarChart,
                 },
+                {
+                  label: "Other",
+                  icon: PlusCircle,
+                },
               ]}
             />
+            {form.watch("event") === "Other" && (
+              <CustomFormField
+                control={form.control}
+                name="customEvent"
+                fieldType={FormFieldType.INPUT}
+                label="Custom Event Name"
+                placeholder="Enter your custom event name"
+              />
+            )}
           </div>
         </WizardStep>
 
@@ -444,67 +465,7 @@ const CreateNewCampaign = () => {
         >
           <div className="space-y-6">
             {distributionType !== "Bulk Order" ? (
-              <>
-                <CustomFormField
-                  control={form.control}
-                  name="recipients"
-                  fieldType={FormFieldType.COMBOBOX}
-                  label="Select / Add Recipients (Qty)"
-                  placeholder="Select an option"
-                  comboboxOption={[{ label: "Vishal", value: "vishal" }]}
-                />
-
-                {recipient && (
-                  <CustomTable
-                    columns={[
-                      {
-                        key: "name",
-                        header: "Name",
-                      },
-                      {
-                        key: "email",
-                        header: "Email",
-                      },
-                      {
-                        key: "Phone Number",
-                        header: "Number",
-                      },
-                    ]}
-                    data={[
-                      {
-                        name: "Vishal",
-                        email: "vishal@gmail.com",
-                        "Phone Number": "1234567890",
-                      },
-                    ]}
-                  />
-                )}
-                <CustomFormField
-                  control={form.control}
-                  name="addRecipients"
-                  fieldType={FormFieldType.CHECKBOX}
-                  label="Add recipient"
-                />
-
-                {addRecipients && (
-                  <>
-                    <CustomFormField
-                      control={form.control}
-                      name="recipientName"
-                      fieldType={FormFieldType.INPUT}
-                      label="Recipient Name"
-                      placeholder="Enter Recipient name"
-                    />
-                    <CustomFormField
-                      control={form.control}
-                      name="recipientEmail"
-                      fieldType={FormFieldType.INPUT}
-                      label="Recipient Email"
-                      placeholder="Enter Recipient Email"
-                    />
-                  </>
-                )}
-              </>
+              <ReceptionistManager />
             ) : (
               <CustomFormField
                 control={form.control}
@@ -779,6 +740,27 @@ const CreateNewCampaign = () => {
                     fieldType={FormFieldType.CHECKBOX}
                     label="Send a Reminder Before Expiration"
                   />
+
+                  {sendReminderBeforeExpiration && (
+                    <CustomFormField
+                      control={form.control}
+                      name="datesInitial"
+                      fieldType={FormFieldType.DATE_PICKER}
+                      label="Start Date"
+                      placeholder="Select start date"
+                      multipleDates={true}
+                    />
+                  )}
+                  {sendReminderAfterInitialGift && (
+                    <CustomFormField
+                      control={form.control}
+                      name="datesAfter"
+                      fieldType={FormFieldType.DATE_PICKER}
+                      label="Start Date"
+                      placeholder="Select start date"
+                      multipleDates={true}
+                    />
+                  )}
                 </div>
               </div>
             </WizardStep>

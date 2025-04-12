@@ -11,6 +11,9 @@ import Payment from "@/pages/Payment";
 import AddFunds from "@/pages/AddFunds";
 import TransactionHistory from "@/pages/TransationHistroy";
 import NotificationSettings from "@/pages/Notification";
+import LandingPageList from "@/pages/LandingPageList";
+import PreviewLandingTemplate from "@/pages/PreviewLandingPage";
+import EditLandingPageTemplate from "@/pages/EditLandingPageTemplate";
 
 const routes: RouteConfig[] = [
   ...authRoutes,
@@ -53,6 +56,18 @@ const routes: RouteConfig[] = [
   {
     path: "/notification",
     element: <NotificationSettings />,
+  },
+  {
+    path: "/landing-page",
+    element: <LandingPageList />,
+  },
+  {
+    path: "/landing/:id/preview",
+    element: <PreviewLandingTemplate />,
+  },
+  {
+    path: "/landing/:id/edit",
+    element: <EditLandingPageTemplate />,
   },
   { path: "*", element: <NotFound /> },
 ];

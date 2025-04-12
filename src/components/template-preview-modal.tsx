@@ -46,7 +46,7 @@ export function TemplatePreviewModal({
   isOpen,
   onOpenChange,
   template,
-  onSave,
+  // onSave,
 }: TemplatePreviewModalProps) {
   const [customizedTemplate, setCustomizedTemplate] = useState<
     Partial<Template>
@@ -80,12 +80,12 @@ export function TemplatePreviewModal({
     }
   };
 
-  const handleCustomize = () => {
-    if (onSave && customizedTemplate) {
-      onSave(customizedTemplate);
-    }
-    onOpenChange(false);
-  };
+  // const handleCustomize = () => {
+  //   if (onSave && customizedTemplate) {
+  //     onSave(customizedTemplate);
+  //   }
+  //   onOpenChange(false);
+  // };
 
   if (!template) return null;
   return (
