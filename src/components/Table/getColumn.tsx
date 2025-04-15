@@ -11,15 +11,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Checkbox } from "@/components/ui/checkbox";
 
-// Define a generic type
+// Shared type for rows
 export type BaseRow = {
   id: string;
   status: "Active" | "Inactive" | "Finished";
 };
 
+// Action type definition
+export type Action<T> = {
+  label: string;
+  onClick: (row: T) => void;
+};
+
+// getColumns with dynamic action list
 export function getColumns<T extends BaseRow>(
   extraColumns: ColumnDef<T>[],
-  handleActions?: (row: T) => void
+  actions?: Action<T>[]
 ): ColumnDef<T>[] {
   return [
     {
@@ -64,19 +71,14 @@ export function getColumns<T extends BaseRow>(
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            {handleActions && (
-              <>
-                <DropdownMenuItem onClick={() => handleActions(row.original)}>
-                  Edit
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleActions(row.original)}>
-                  View
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleActions(row.original)}>
-                  Duplicate
-                </DropdownMenuItem>
-              </>
-            )}
+            {actions?.map((action, idx) => (
+              <DropdownMenuItem
+                key={idx}
+                onClick={() => action.onClick(row.original)}
+              >
+                {action.label}
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuContent>
         </DropdownMenu>
       ),

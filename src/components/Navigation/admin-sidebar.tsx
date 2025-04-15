@@ -134,7 +134,7 @@ const data = {
       items: [
         {
           title: "All Admins",
-          url: "#",
+          url: "/admins",
         },
         {
           title: "Add New",

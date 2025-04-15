@@ -1,5 +1,29 @@
 import { z } from "zod";
 
+
+export const loginFormSchema = z.object({
+    email: z.string().email("Invalid email address"),
+    password: z.string().min(8, {
+        message: "Password must be at least 8 characters long.",
+    }),
+});
+
+
+
+
+export const signupFormSchema = z
+    .object({
+        name: z.string().min(2, "Name must be at least 2 characters"),
+        email: z.string().email("Invalid email address"),
+        password: z.string().min(8, "Password must be at least 8 characters long."),
+        confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords must match",
+        path: ["confirmPassword"],
+    });
+
+
 export const formSchema = z
     .object({
         campaignName: z.string().min(2, {
@@ -83,3 +107,28 @@ export const formSchema = z
             path: ["eventAddress", "eventDate"],
         }
     );
+
+
+
+export const adminFormSchema = z
+    .object({
+        name: z.string().min(1, "Name is required"),
+        email: z.string().email("Invalid email address"),
+        department: z.string().min(1, "Department is required"),
+        status: z.enum(["Active", "Inactive"]),
+        password: z.string().min(8, "Password must be at least 8 characters"),
+        confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+        message: "Passwords don't match",
+        path: ["confirmPassword"],
+    });
+
+
+export const receptionistFormSchema = z.object({
+    name: z.string().min(1, "Name is required"),
+    email: z.string().email("Invalid email address"),
+    phone: z.string().min(1, "Phone number is required"),
+    team: z.string().min(1, "Team is required"),
+    client: z.string().min(1, "Client is required"),
+});

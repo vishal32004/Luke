@@ -1,4 +1,4 @@
-import { receptionistFormSchema } from "@/schema/add-a-receptionist";
+import { receptionistFormSchema } from "@/schema/forms";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";

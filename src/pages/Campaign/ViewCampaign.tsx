@@ -1,114 +1,86 @@
-import { useState, useMemo } from "react";
 import { DataTable } from "@/components/Table/data-table";
-import { getColumns } from "@/components/Table/getColumn";
-import { Button } from "@/components/ui/button";
+import { getColumns, Action } from "@/components/Table/getColumn";
 
-export type Campaign = {
+type Campaign = {
   id: string;
-  campaignName: string;
-  event: string;
+  name: string;
+  status: "Active" | "Inactive" | "Finished";
   startDate: string;
-  status: "Active" | "Finished";
+  endDate: string;
 };
 
-const campaigns: Campaign[] = [
+// Sample campaign data
+const campaignData: Campaign[] = [
   {
-    id: "1",
-    campaignName: "Summer Sale",
-    event: "Launch Event",
-    startDate: "2025-05-01",
+    id: "cmp001",
+    name: "Spring Launch",
     status: "Active",
+    startDate: "2025-04-01",
+    endDate: "2025-06-30",
   },
   {
-    id: "2",
-    campaignName: "Winter Giveaway",
-    event: "Holiday Special",
-    startDate: "2025-01-15",
+    id: "cmp002",
+    name: "Summer Sale",
+    status: "Inactive",
+    startDate: "2025-07-01",
+    endDate: "2025-08-31",
+  },
+  {
+    id: "cmp003",
+    name: "Black Friday Blitz",
     status: "Finished",
-  },
-  {
-    id: "3",
-    campaignName: "Spring Sale",
-    event: "Online Event",
-    startDate: "2025-03-20",
-    status: "Active",
+    startDate: "2024-11-01",
+    endDate: "2024-11-30",
   },
 ];
 
-export default function CampaignTable() {
-  const [filter, setFilter] = useState<"all" | "active" | "finished" | "top">(
-    "all"
-  );
+// Action handlers
+const handleEdit = (row: Campaign) => {
+  console.log("Editing campaign:", row);
+};
 
-  const filteredData = useMemo(() => {
-    if (filter === "active") {
-      return campaigns.filter((c) => c.status === "Active");
-    }
-    if (filter === "finished") {
-      return campaigns.filter((c) => c.status === "Finished");
-    }
-    if (filter === "top") {
-      return [...campaigns].sort(
-        (a, b) =>
-          new Date(b.startDate).getTime() - new Date(a.startDate).getTime()
-      );
-    }
-    return campaigns;
-  }, [filter]);
+const handleDuplicate = (row: Campaign) => {
+  console.log("Duplicating campaign:", row);
+};
 
-  const columns = getColumns<Campaign>(
-    [
-      {
-        accessorKey: "campaignName",
-        header: "Campaign Name",
-      },
-      {
-        accessorKey: "event",
-        header: "Event",
-      },
-      {
-        accessorKey: "startDate",
-        header: "Event Date",
-      },
-      {
-        accessorKey: "status",
-        header: "Status",
-      },
-    ],
-    (row) => {
-      console.log("Selected campaign: ", row);
-    }
-  );
+const handleDelete = (row: Campaign) => {
+  console.log("Deleting campaign:", row);
+};
 
+// Actions list
+const campaignActions: Action<Campaign>[] = [
+  {
+    label: "Edit",
+    onClick: handleEdit,
+  },
+  {
+    label: "Duplicate",
+    onClick: handleDuplicate,
+  },
+  {
+    label: "Delete",
+    onClick: handleDelete,
+  },
+];
+
+// Define columns for the campaign table
+const columns = getColumns<Campaign>(
+  [
+    { accessorKey: "name", header: "Campaign Name" },
+    { accessorKey: "status", header: "Status" },
+    { accessorKey: "startDate", header: "Start Date" },
+    { accessorKey: "endDate", header: "End Date" },
+  ],
+  campaignActions
+);
+
+const Campaigns = () => {
   return (
-    <section className="my-5 px-6">
-      <div className="flex space-x-2 mb-4">
-        <Button
-          variant={filter === "all" ? "default" : "outline"}
-          onClick={() => setFilter("all")}
-        >
-          All
-        </Button>
-        <Button
-          variant={filter === "active" ? "default" : "outline"}
-          onClick={() => setFilter("active")}
-        >
-          Active
-        </Button>
-        <Button
-          variant={filter === "finished" ? "default" : "outline"}
-          onClick={() => setFilter("finished")}
-        >
-          Finished
-        </Button>
-        <Button
-          variant={filter === "top" ? "default" : "outline"}
-          onClick={() => setFilter("top")}
-        >
-          Top Campaign
-        </Button>
-      </div>
-      <DataTable columns={columns} data={filteredData} />
-    </section>
+    <div className="flex flex-col py-4 px-5">
+      <h1 className="mb-5 text-3xl">All Campaigns</h1>
+      <DataTable columns={columns} data={campaignData} />
+    </div>
   );
-}
+};
+
+export default Campaigns;

@@ -40,7 +40,7 @@ import Payment from "@/components/Payment";
 import { Button } from "@/components/ui/button";
 import { templates } from "@/data/email-templates";
 import ReceptionistManager from "@/components/Receptionist";
-import { formSchema } from "@/schema/campaign-form";
+import { formSchema } from "@/schema/forms";
 
 const defaultValues = {
   campaignName: "",
