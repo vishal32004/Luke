@@ -1,6 +1,6 @@
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import type { Template } from "@/types/email-templates";
+import type { Template } from "@/types/templates";
 
 interface EmailTemplateCardProps {
   template: Template;

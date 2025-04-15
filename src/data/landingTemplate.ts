@@ -1,21 +1,5 @@
-export interface Template {
-    id: string
-    name: string
-    description: string
-    thumbnail: string
-    lastEdited: string
-    elements: {
-        logo?: string
-        title?: string
-        description?: string
-        image?: string
-        buttonText?: string
-        buttonLink?: string
-        additionalSettings?: Record<string, any>
-    }
-}
-
-export const templates: Template[] = [
+import { LandingPageTemplate } from "@/types/templates";
+export const templates: LandingPageTemplate[] = [
     {
         id: "anniversary",
         name: "Work Anniversary",

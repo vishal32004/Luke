@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { EmailTemplateCard } from "@/components/email-template-card";
+import { EmailTemplateCard } from "@/components/Cards/email-template-card";
 import { CategorySidebar } from "@/components/Sidebar/category-sidebar";
 import { TemplatePreviewModal } from "@/components/Popup/template-preview-modal";
-import type { Template } from "@/types/email-templates";
+import type { Template } from "@/types/templates";
 import { categories, templates } from "@/data/email-templates";
 
 export default function EmailTemplatesGallery() {

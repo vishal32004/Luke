@@ -14,22 +14,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useState } from "react";
-import { OtpModal } from "@/components/otp-modal";
+import { OtpModal } from "@/components/Popup/otp-modal";
 import { Link } from "react-router-dom";
-import CustomFormField from "@/components/CustomFormField";
+import CustomFormField from "@/components/Form/CustomFormField";
 import { FormFieldType } from "@/types/Form";
-
-const signupFormSchema = z
-  .object({
-    name: z.string().min(2, "Name must be at least 2 characters"),
-    email: z.string().email("Invalid email address"),
-    password: z.string().min(8, "Password must be at least 8 characters long."),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords must match",
-    path: ["confirmPassword"],
-  });
+import { signupFormSchema } from "@/schema/Auth";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);

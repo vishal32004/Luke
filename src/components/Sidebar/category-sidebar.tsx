@@ -5,7 +5,7 @@ import type React from "react";
 import { useState, useEffect, useRef } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { Category } from "@/types/email-templates";
+import type { Category } from "@/types/templates";
 
 interface CategorySidebarProps {
   categories: Category[];

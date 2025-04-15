@@ -1,4 +1,4 @@
-import type { Category, Template } from "@/types/email-templates"
+import type { Category, Template } from "@/types/templates"
 
 // Sample categories with sub-categories
 export const categories: Category[] = [

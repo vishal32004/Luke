@@ -1,4 +1,4 @@
-import TemplateCard from "@/components/landing-page-template-card";
+import TemplateCard from "@/components/Cards/landing-page-template-card";
 import { templates } from "@/data/landingTemplate";
 import { Link } from "react-router-dom";
 

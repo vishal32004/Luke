@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import type { Category, Template } from "@/types/email-templates";
+import type { Category, Template } from "@/types/templates";
 import { ScrollArea } from "../ui/scroll-area";
 import styled from "styled-components";
 import { Button } from "../ui/button";

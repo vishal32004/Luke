@@ -15,17 +15,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useState } from "react";
-import { OtpModal } from "@/components/otp-modal";
+import { OtpModal } from "@/components/Popup/otp-modal";
 import { Link, useNavigate } from "react-router-dom";
-import CustomFormField from "@/components/CustomFormField";
+import CustomFormField from "@/components/Form/CustomFormField";
 import { FormFieldType } from "@/types/Form";
-
-const loginFormSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters long.",
-  }),
-});
+import { loginFormSchema } from "@/schema/Auth";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
