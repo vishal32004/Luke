@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom"; // React Router
 import { ChevronDown, ExternalLink, Save, ChevronRight } from "lucide-react";
-import { templates, type Template } from "@/lib/landingTemplate";
+import { templates, type Template } from "@/data/landingTemplate";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";

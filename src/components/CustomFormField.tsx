@@ -6,11 +6,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Control, ControllerRenderProps } from "react-hook-form";
-import React from "react";
+import {
+  Control,
+  ControllerRenderProps,
+  FieldValues,
+  Path,
+} from "react-hook-form";
+import React, { memo } from "react";
 import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { FormFieldType } from "@/types/Form";
 import { Calendar } from "./ui/calendar";
 import { CalendarIcon, LucideIcon } from "lucide-react";
 import { Button } from "./ui/button";
@@ -18,7 +22,6 @@ import { cn } from "@/lib/utils";
 import { Checkbox } from "./ui/checkbox";
 import { Textarea } from "./ui/textarea";
 import { format } from "date-fns";
-import { ColorPicker } from "./ui/color-picker";
 import {
   Popover,
   PopoverContent,
@@ -26,14 +29,67 @@ import {
 } from "@/components/ui/popover";
 import { Combobox } from "./ui/combobox";
 import { QuantityController } from "./QuantityController";
-type radioOptionType = {
+import { FormFieldType } from "@/types/Form";
+
+export type RadioOptionType = {
   label: string;
+  value: string;
   icon: LucideIcon;
 };
-interface CustomProps {
-  control: Control<any>;
-  fieldType: FormFieldType;
+
+export type ComboboxOptionType = {
+  label: string;
+  value: string;
+};
+
+interface BaseFieldProps {
+  field: ControllerRenderProps<any, any>;
+}
+
+interface InputFieldProps extends BaseFieldProps {
+  placeholder?: string;
+  inputType?: string;
+  classNames?: string;
+}
+
+interface SelectFieldProps extends BaseFieldProps {
+  placeholder?: string;
+  children?: React.ReactNode;
+}
+
+interface DatePickerFieldProps extends BaseFieldProps {
+  multipleDates?: boolean;
+}
+
+interface CheckboxFieldProps extends BaseFieldProps {
   name: string;
+  label?: string;
+}
+
+interface TextareaFieldProps extends BaseFieldProps {
+  placeholder?: string;
+  disabled?: boolean;
+}
+
+interface RadioFieldProps extends BaseFieldProps {
+  radioOptions?: RadioOptionType[];
+  radioGridClass?: string;
+}
+
+interface ComboboxFieldProps extends BaseFieldProps {
+  comboboxOption?: ComboboxOptionType[];
+  placeholder?: string;
+}
+
+interface QuantityFieldProps extends BaseFieldProps {
+  min?: number;
+  max?: number;
+}
+
+export interface CustomFormFieldProps<T extends FieldValues> {
+  control: Control<T>;
+  fieldType: FormFieldType;
+  name: Path<T>;
   label?: string;
   placeholder?: string;
   iconSrc?: string;
@@ -42,204 +98,221 @@ interface CustomProps {
   dateFormat?: string;
   showTimeSelect?: boolean;
   children?: React.ReactNode;
-  radioOptions?: radioOptionType[];
+  radioOptions?: RadioOptionType[];
   radioGridClass?: string;
-  comboboxOption?: { label: string; value: string }[];
+  comboboxOption?: ComboboxOptionType[];
   min?: number;
   max?: number;
   multipleDates?: boolean;
+  inputType?: string;
+  classNames?: string;
+}
+interface RenderFieldProps<T extends FieldValues> {
+  field: ControllerRenderProps<T, Path<T>>;
+  props: CustomFormFieldProps<T>;
 }
 
-const RenderField = ({
-  field,
-  props,
-}: {
-  field: ControllerRenderProps;
-  props: CustomProps;
-}) => {
-  const { fieldType, placeholder } = props;
+const InputField = memo(
+  ({ field, placeholder, inputType, classNames }: InputFieldProps) => (
+    <div
+      className={cn(
+        "flex rounded-md border border-dark-500 bg-dark-400",
+        classNames
+      )}
+    >
+      <FormControl>
+        <Input
+          placeholder={placeholder}
+          {...field}
+          className="shad-input border-0"
+          type={inputType || "text"}
+        />
+      </FormControl>
+    </div>
+  )
+);
 
-  switch (fieldType) {
-    case FormFieldType.INPUT:
-      return (
-        <div className="flex rounded-md border border-dark-500 bg-dark-400">
-          <FormControl>
-            <Input
-              placeholder={placeholder}
-              {...field}
-              className="shad-input border-0"
-            />
-          </FormControl>
-        </div>
-      );
-
-    case FormFieldType.SELECT:
-      return (
+const SelectField = memo(
+  ({ field, placeholder, children }: SelectFieldProps) => (
+    <FormControl>
+      <Select onValueChange={field.onChange} defaultValue={field.value}>
         <FormControl>
-          <Select onValueChange={field.onChange} defaultValue={field.value}>
-            <FormControl>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder={props.placeholder} />
-              </SelectTrigger>
-            </FormControl>
-            <SelectContent>{props.children}</SelectContent>
-          </Select>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder={placeholder} />
+          </SelectTrigger>
         </FormControl>
-      );
+        <SelectContent>{children}</SelectContent>
+      </Select>
+    </FormControl>
+  )
+);
 
-    case FormFieldType.DATE_PICKER:
-      return (
-        <Popover>
-          <PopoverTrigger asChild>
-            <FormControl>
-              <Button
-                variant={"outline"}
-                className={cn(
-                  "w-full pl-3 text-left font-normal",
-                  !field.value && "text-muted-foreground"
-                )}
-              >
-                {field.value ? (
-                  props.multipleDates ? (
-                    // For multiple dates, show the count or join formatted dates
-                    Array.isArray(field.value) ? (
-                      field.value.length > 0 ? (
-                        field.value.length === 1 ? (
-                          format(field.value[0], "PPP")
-                        ) : (
-                          `${field.value.length} dates selected`
-                        )
-                      ) : (
-                        <span>Pick dates</span>
-                      )
-                    ) : (
-                      format(field.value, "PPP")
-                    )
-                  ) : (
-                    // For single date
-                    format(field.value, "PPP")
-                  )
-                ) : (
-                  <span>
-                    {props.multipleDates ? "Pick dates" : "Pick a date"}
-                  </span>
-                )}
-                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-              </Button>
-            </FormControl>
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
-            <Calendar
-              mode={props.multipleDates ? "multiple" : "single"}
-              selected={field.value}
-              onSelect={field.onChange}
-              disabled={(date) =>
-                date > new Date() || date < new Date("1900-01-01")
-              }
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
-      );
-
-    case FormFieldType.CHECKBOX:
-      return (
+const DatePickerField = memo(
+  ({ field, multipleDates }: DatePickerFieldProps) => (
+    <Popover>
+      <PopoverTrigger asChild>
         <FormControl>
-          <div className="flex items-center gap-4">
-            <Checkbox
-              id={props.name}
-              checked={field.value}
-              onCheckedChange={field.onChange}
-            />
-            <label
-              htmlFor={props.name}
-              className="md:leading-none cursor-pointer text-sm font-medium text-dark-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70;"
-            >
-              {props.label}
-            </label>
-          </div>
-        </FormControl>
-      );
-
-    case FormFieldType.TEXTAREA:
-      return (
-        <FormControl>
-          <Textarea
-            placeholder={placeholder}
-            {...field}
-            className="bg-dark-400 placeholder:text-dark-600 border-dark-500 focus-visible:ring-0 focus-visible:ring-offset-0"
-            disabled={props.disabled}
-          />
-        </FormControl>
-      );
-
-    case FormFieldType.COLOR_PICKER:
-      return (
-        <FormControl>
-          <ColorPicker
-            value={field.value}
-            onChange={field.onChange}
-            placeholder={props.placeholder}
-          />
-        </FormControl>
-      );
-    case FormFieldType.RADIO:
-      return (
-        <FormControl>
-          <RadioGroup
-            onValueChange={field.onChange}
-            defaultValue={field.value}
-            className={cn("grid", props.radioGridClass)}
+          <Button
+            variant="outline"
+            className={cn(
+              "w-full pl-3 text-left font-normal",
+              !field.value && "text-muted-foreground"
+            )}
           >
-            {props.radioOptions?.map((option: radioOptionType) => (
-              <FormItem
-                className="flex items-center space-x-3 space-y-0 card-radio"
-                key={option.label}
-              >
-                <FormControl>
-                  <RadioGroupItem value={option.label} className="hidden" />
-                </FormControl>
-                <FormLabel className="font-normal text-center text-md  h-full p-4 border rounded-lg cursor-pointer hover:bg-gray-100 flex flex-col items-center justify-center w-full">
-                  <option.icon />
-                  {option.label}
-                </FormLabel>
-              </FormItem>
-            ))}
-          </RadioGroup>
+            {renderDatePickerValue(field.value, multipleDates)}
+            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+          </Button>
         </FormControl>
-      );
-    case FormFieldType.COMBOBOX:
-      return (
-        <FormControl>
-          <Combobox
-            value={field.value}
-            onChange={field.onChange}
-            options={props.comboboxOption as { label: string; value: string }[]}
-            placeholder={props.placeholder}
-            searchPlaceholder="Search"
-          />
-        </FormControl>
-      );
-    case FormFieldType.QUANTITY_CONTROLLER:
-      return (
-        <FormControl>
-          <QuantityController
-            value={field.value || 1}
-            onIncrement={() => field.onChange(field.value + 1)}
-            onDecrement={() => field.onChange(field.value - 1)}
-            onChange={(value) => field.onChange(value)}
-            min={1}
-            max={99}
-          />
-        </FormControl>
-      );
-    default:
-      break;
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          mode={multipleDates ? "multiple" : "single"}
+          selected={field.value}
+          onSelect={field.onChange}
+          disabled={(date) =>
+            date > new Date() || date < new Date("1900-01-01")
+          }
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
+  )
+);
+
+const CheckboxField = memo(({ field, name, label }: CheckboxFieldProps) => (
+  <FormControl>
+    <div className="flex items-center gap-4">
+      <Checkbox
+        id={name}
+        checked={field.value}
+        onCheckedChange={field.onChange}
+      />
+      <label
+        htmlFor={name}
+        className="md:leading-none cursor-pointer text-sm font-medium text-dark-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+      >
+        {label}
+      </label>
+    </div>
+  </FormControl>
+));
+
+const TextareaField = memo(
+  ({ field, placeholder, disabled }: TextareaFieldProps) => (
+    <FormControl>
+      <Textarea
+        placeholder={placeholder}
+        {...field}
+        className="bg-dark-400 placeholder:text-dark-600 border-dark-500 focus-visible:ring-0 focus-visible:ring-offset-0"
+        disabled={disabled}
+      />
+    </FormControl>
+  )
+);
+
+const RadioField = memo(
+  ({ field, radioOptions, radioGridClass }: RadioFieldProps) => (
+    <FormControl>
+      <RadioGroup
+        onValueChange={field.onChange}
+        defaultValue={field.value}
+        className={cn("grid", radioGridClass)}
+      >
+        {radioOptions?.map((option: RadioOptionType) => (
+          <FormItem
+            className="flex items-center space-x-3 space-y-0 card-radio"
+            key={option.value}
+          >
+            <FormControl>
+              <RadioGroupItem value={option.value} className="hidden" />
+            </FormControl>
+            <FormLabel className="font-normal text-center text-md h-full p-4 border rounded-lg cursor-pointer hover:bg-gray-100 flex flex-col items-center justify-center w-full">
+              <option.icon />
+              {option.label}
+            </FormLabel>
+          </FormItem>
+        ))}
+      </RadioGroup>
+    </FormControl>
+  )
+);
+
+const ComboboxField = memo(
+  ({ field, comboboxOption, placeholder }: ComboboxFieldProps) => (
+    <FormControl>
+      <Combobox
+        value={field.value}
+        onChange={field.onChange}
+        options={comboboxOption || []}
+        placeholder={placeholder}
+        searchPlaceholder="Search"
+      />
+    </FormControl>
+  )
+);
+
+const QuantityField = memo(
+  ({ field, min = 1, max = 99 }: QuantityFieldProps) => (
+    <FormControl>
+      <QuantityController
+        value={field.value || 1}
+        onIncrement={() => field.onChange(Math.min(field.value + 1, max))}
+        onDecrement={() => field.onChange(Math.max(field.value - 1, min))}
+        onChange={(value) => field.onChange(value)}
+        min={min}
+        max={max}
+      />
+    </FormControl>
+  )
+);
+
+const renderDatePickerValue = (
+  value: Date | Date[] | null | undefined,
+  multipleDates?: boolean
+): React.ReactNode => {
+  if (!value) {
+    return <span>{multipleDates ? "Pick dates" : "Pick a date"}</span>;
   }
+
+  if (multipleDates && Array.isArray(value)) {
+    if (value.length === 0) {
+      return <span>Pick dates</span>;
+    }
+    return value.length === 1
+      ? format(value[0], "PPP")
+      : `${value.length} dates selected`;
+  }
+
+  return format(value as Date, "PPP");
 };
 
-export default function CustomFormField(props: CustomProps) {
+const fieldComponents = {
+  [FormFieldType.INPUT]: InputField,
+  [FormFieldType.SELECT]: SelectField,
+  [FormFieldType.DATE_PICKER]: DatePickerField,
+  [FormFieldType.CHECKBOX]: CheckboxField,
+  [FormFieldType.TEXTAREA]: TextareaField,
+  [FormFieldType.RADIO]: RadioField,
+  [FormFieldType.COMBOBOX]: ComboboxField,
+  [FormFieldType.QUANTITY_CONTROLLER]: QuantityField,
+};
+
+function RenderField<T extends FieldValues>({
+  field,
+  props,
+}: RenderFieldProps<T>): React.ReactElement | null {
+  const FieldComponent =
+    fieldComponents[props.fieldType as keyof typeof fieldComponents];
+  if (!FieldComponent) return null;
+
+  return <FieldComponent field={field} {...props} />;
+}
+
+function CustomFormField<T extends FieldValues>(
+  props: CustomFormFieldProps<T>
+): React.ReactElement {
   const { control, fieldType, label, name } = props;
+
   return (
     <FormField
       control={control}
@@ -256,3 +329,5 @@ export default function CustomFormField(props: CustomProps) {
     />
   );
 }
+
+export default memo(CustomFormField) as typeof CustomFormField;

@@ -1,5 +1,5 @@
 import TemplateCard from "@/components/landing-page-template-card";
-import { templates } from "@/lib/landingTemplate";
+import { templates } from "@/data/landingTemplate";
 import { Link } from "react-router-dom";
 
 export default function LandingPageList() {

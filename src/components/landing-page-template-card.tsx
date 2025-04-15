@@ -4,7 +4,7 @@ import type React from "react";
 
 import { useState } from "react";
 import { Edit2, Eye, Trash2, ChevronRight } from "lucide-react";
-import type { Template } from "@/lib/landingTemplate";
+import type { Template } from "@/data/landingTemplate";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Link } from "react-router-dom";

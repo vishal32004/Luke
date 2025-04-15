@@ -34,109 +34,13 @@ import {
 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-// import { CustomTable } from "@/components/table";
 import { calculateTotal } from "@/lib/helper";
 import { CatalogSection } from "@/components/ProductFilter";
 import Payment from "@/components/Payment";
 import { Button } from "@/components/ui/button";
 import { templates } from "@/data/email-templates";
 import ReceptionistManager from "@/components/Receptionist";
-
-const formSchema = z
-  .object({
-    campaignName: z.string().min(2, {
-      message: "Campaign name is required",
-    }),
-    description: z.string().min(2, {
-      message: "Description must be at least 2 characters.",
-    }),
-    forWho: z.string().min(2, { message: "Please Select at least one Option" }),
-    EventMainCategory: z
-      .string()
-      .min(2, { message: "Please Select at least one Option" }),
-    event: z.string().min(2, { message: "Please Select at least one Option" }),
-    customEvent: z.string().optional(),
-    distributionType: z
-      .string()
-      .min(2, { message: "Please Select at least one Option" }),
-    // recipients: z
-    //   .string()
-    //   .min(2, { message: "Please Select at least one Option" }),
-    // addRecipients: z.boolean(),
-    bulkBuyingQty: z
-      .string()
-      .min(1, { message: "Please Enter A valid Quantity" }),
-    rewardType: z
-      .string()
-      .min(2, { message: "Please Select at least one Option" }),
-    points: z.string().min(1, { message: "Please Enter A Valid Option" }),
-    valueCodes: z.string().min(2, { message: "Please Enter A Valid Option" }),
-    quantity: z.number().min(1, { message: "Please Enter the Quantity" }),
-    link: z.string().min(2, {
-      message: "A valid Link",
-    }),
-    advanedDetails: z.boolean().optional(),
-    scheduledDate: z.date(),
-    personalMessage: z.string().min(2, {
-      message: "Too Small",
-    }),
-    eventAddress: z.string().min(2, {
-      message: "Please Add A Valid Address",
-    }),
-    eventDate: z.date(),
-    startDate: z.date(),
-    endDate: z.date(),
-    sendReminderAfterInitialGift: z.boolean(),
-    sendReminderBeforeExpiration: z.boolean(),
-  })
-  .refine(
-    (data) => {
-      if (data.distributionType === "Bulk Order") {
-        return !!data.bulkBuyingQty;
-      }
-      return true;
-    },
-    {
-      message: "Bulk Buying Quantity is required",
-      path: ["bulkBuyingQty"],
-    }
-  )
-  // .refine(
-  //   (data) => {
-  //     if (data.distributionType === "Online Gift Distribution") {
-  //       return !!data.recipients;
-  //     }
-  //     return true;
-  //   },
-  //   {
-  //     message: "Recipients are required",
-  //     path: ["recipients"],
-  //   }
-  // )
-  .refine(
-    (data) => {
-      if (data.rewardType === "Value of Points") {
-        return !!data.points;
-      }
-      return true;
-    },
-    {
-      message: "Points are required",
-      path: ["points"],
-    }
-  )
-  .refine(
-    (data) => {
-      if (data.rewardType === "Bulk Order at Registered office / Event Place") {
-        return !!data.eventAddress && !!data.eventDate;
-      }
-      return true;
-    },
-    {
-      message: "Event Address & Date are required",
-      path: ["eventAddress", "eventDate"],
-    }
-  );
+import { formSchema } from "@/schema/campaign-form";
 
 const defaultValues = {
   campaignName: "",
@@ -175,8 +79,6 @@ const CreateNewCampaign = () => {
     rewardType,
     showAdvancedDetails,
     points,
-    // recipient,
-    // addRecipients,
     sendReminderAfterInitialGift,
     sendReminderBeforeExpiration,
   ] = form.watch([
@@ -184,8 +86,6 @@ const CreateNewCampaign = () => {
     "rewardType",
     "advanedDetails",
     "points",
-    // "recipients",
-    // "addRecipients",
     "sendReminderAfterInitialGift",
     "sendReminderBeforeExpiration",
   ]);
@@ -195,11 +95,9 @@ const CreateNewCampaign = () => {
   };
 
   const validateStep = async (stepFields: string[]) => {
-    console.log(stepFields, "stepfield");
     const result = await form.trigger(
       stepFields as (keyof z.infer<typeof formSchema>)[]
     );
-    console.log(result);
     return result;
   };
 
@@ -229,12 +127,11 @@ const CreateNewCampaign = () => {
       fields.push("rewardType");
     }
 
-    if (rewardType === "Value Of Points") fields.push("points");
-    if (rewardType === "Value Of Code") fields.push("valueCodes");
-    // if (rewardType === "Create Reward Link") fields.push("link");
-
+    if (rewardType === "value_of_points") fields.push("points");
+    if (rewardType === "value_of_code") fields.push("valueCodes");
     return fields;
   })();
+
   return (
     <section className="flex justify-center my-7 flex-col gap-y-5 items-center ">
       <div className="md:max-w-[80%] w-full">
@@ -284,18 +181,22 @@ const CreateNewCampaign = () => {
               radioOptions={[
                 {
                   label: "Internal Team",
+                  value: "internal_team",
                   icon: UserCircle,
                 },
                 {
                   label: "External Client",
+                  value: "external_client",
                   icon: Briefcase,
                 },
                 {
                   label: "Channel Partners",
+                  value: "channel_partners",
                   icon: Handshake,
                 },
                 {
                   label: "Others",
+                  value: "others",
                   icon: Search,
                 },
               ]}
@@ -318,50 +219,62 @@ const CreateNewCampaign = () => {
               radioOptions={[
                 {
                   label: "HR (Human Resources)",
+                  value: "hr",
                   icon: UserCircle,
                 },
                 {
                   label: "L&D (Learning and Development)",
+                  value: "learning_development",
                   icon: BookOpen,
                 },
                 {
                   label: "Sales",
+                  value: "sales",
                   icon: Briefcase,
                 },
                 {
                   label: "Marketing",
+                  value: "marketing",
                   icon: Megaphone,
                 },
                 {
                   label: "IT (Information Technology)",
+                  value: "it",
                   icon: Cpu,
                 },
                 {
                   label: "Finance",
+                  value: "finance",
                   icon: DollarSign,
                 },
                 {
                   label: "Operations",
+                  value: "operations",
                   icon: Settings,
                 },
                 {
                   label: "Customer Support",
+                  value: "customer_support",
                   icon: Headphones,
                 },
                 {
                   label: "R&D (Research and Development)",
+                  value: "rnd",
                   icon: FlaskConical,
                 },
                 {
                   label: "Administration",
+                  value: "administration",
                   icon: Clipboard,
                 },
                 {
                   label: "Legal and Compliance",
+                  value: "legal_compliance",
                   icon: Scale,
                 },
                 {
                   label: "Corporate Social Responsibility (CSR)",
+                  value: "csr",
                   icon: Heart,
                 },
               ]}
@@ -384,38 +297,47 @@ const CreateNewCampaign = () => {
               radioOptions={[
                 {
                   label: "Recruitment Drive",
+                  value: "recruitment_drive",
                   icon: Users,
                 },
                 {
                   label: "New Hire Onboarding Session",
+                  value: "new_hire_onboarding",
                   icon: UserPlus,
                 },
                 {
                   label: "Employee Town Hall",
+                  value: "employee_town_hall",
                   icon: Mic,
                 },
                 {
                   label: "Team-Building Retreat",
+                  value: "team_building_retreat",
                   icon: Users,
                 },
                 {
                   label: "Diversity and Inclusion Workshop",
+                  value: "diversity_inclusion_workshop",
                   icon: Globe,
                 },
                 {
                   label: "Leadership Development Program",
+                  value: "leadership_development",
                   icon: Award,
                 },
                 {
                   label: "Employee Wellness Fair",
+                  value: "employee_wellness_fair",
                   icon: Heart,
                 },
                 {
                   label: "Performance Review Kickoff Meeting",
+                  value: "performance_review_kickoff",
                   icon: BarChart,
                 },
                 {
                   label: "Other",
+                  value: "other",
                   icon: PlusCircle,
                 },
               ]}
@@ -447,10 +369,12 @@ const CreateNewCampaign = () => {
               radioOptions={[
                 {
                   label: "Online Gift Distribution",
+                  value: "online_gift_distribution",
                   icon: Link,
                 },
                 {
                   label: "Bulk Order",
+                  value: "bulk_order",
                   icon: ShoppingCart,
                 },
               ]}
@@ -495,20 +419,23 @@ const CreateNewCampaign = () => {
                   radioOptions={[
                     {
                       label: "Value Of Code",
+                      value: "value_of_code",
                       icon: Code,
                     },
                     {
                       label: "Value Of Points",
+                      value: "value_of_points",
                       icon: Hash,
                     },
                     {
                       label: "Create Reward Link",
+                      value: "create_reward_link",
                       icon: Link2Icon,
                     },
                   ]}
                 />
 
-                {rewardType === "Value Of Code" && (
+                {rewardType === "value_of_code" && (
                   <div className="grid grid-cols-3 gap-5">
                     <div className="col-span-2">
                       <CustomFormField
@@ -531,39 +458,25 @@ const CreateNewCampaign = () => {
                   </div>
                 )}
 
-                {rewardType === "Value Of Points" && (
-                  <div className="grid grid-cols-3 items-center gap-2">
-                    <div className="flex flex-col col-span-2">
-                      <CustomFormField
-                        control={form.control}
-                        name="points"
-                        fieldType={FormFieldType.INPUT}
-                        label="Points"
-                        placeholder="Enter Value Of Points"
-                      />
-                      <p>Note: 1 Reward Points = INR 1.00</p>
+                {rewardType === "value_of_points" && (
+                  <>
+                    <div className="grid grid-cols-3 items-end gap-2">
+                      <div className="flex flex-col col-span-2">
+                        <CustomFormField
+                          control={form.control}
+                          name="points"
+                          fieldType={FormFieldType.INPUT}
+                          label="Points"
+                          placeholder="Enter Value Of Points"
+                        />
+                      </div>
+                      <p className="w-full text-center bg-first text-white rounded-md px-3 py-2">
+                        Total: <span>{calculateTotal(+points)}</span>
+                      </p>
                     </div>
-                    <p className="w-full text-center bg-first text-white rounded-md px-3 py-2">
-                      Total: <span>{calculateTotal(+points)}</span>
-                    </p>
-                  </div>
+                    <p className="mt-5">Note: 1 Reward Points = INR 1.00</p>
+                  </>
                 )}
-
-                {/* {rewardType === "Create Reward Link" && (
-                  <div className="grid grid-cols-3 gap-3 items-center">
-                    <div className="col-span-2">
-                      <CustomFormField
-                        control={form.control}
-                        name="link"
-                        fieldType={FormFieldType.INPUT}
-                        label="Link"
-                        placeholder="Link"
-                      />
-                    </div>
-                    <Button>Regenerate</Button>
-                  </div>
-                )} */}
-
                 <CustomFormField
                   control={form.control}
                   name="advanedDetails"
@@ -625,26 +538,7 @@ const CreateNewCampaign = () => {
                 <h2 className="font-bold">Landing Page</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="col-span-2 space-y-4">
-                    <CustomFormField
-                      control={form.control}
-                      name="landingPageHeader"
-                      fieldType={FormFieldType.INPUT}
-                      label="Header Text"
-                      placeholder="Enter header text"
-                    />
-                    <CustomFormField
-                      control={form.control}
-                      name="landingPageBackground"
-                      fieldType={FormFieldType.COLOR_PICKER}
-                      label="Background Color"
-                    />
-                    <CustomFormField
-                      control={form.control}
-                      name="landingPageButtonText"
-                      fieldType={FormFieldType.INPUT}
-                      label="Button Text"
-                      placeholder="Enter button text"
-                    />
+                    Landing Page content
                   </div>
                 </div>
               </div>

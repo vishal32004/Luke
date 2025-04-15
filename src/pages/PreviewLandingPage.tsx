@@ -1,6 +1,6 @@
 import { useParams, Link } from "react-router-dom";
 import { ArrowLeft, Edit2 } from "lucide-react";
-import { templates } from "@/lib/landingTemplate";
+import { templates } from "@/data/landingTemplate";
 import { Button } from "@/components/ui/button";
 
 export default function PreviewLandingTemplate() {
