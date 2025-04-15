@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom"; // React Router
+import { useParams, useNavigate } from "react-router-dom";
 import { ChevronDown, ExternalLink, Save, ChevronRight } from "lucide-react";
-import { templates, type Template } from "@/data/landingTemplate";
+import { templates } from "@/data/landingTemplate";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,12 +13,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { LandingPageTemplate } from "@/types/templates";
 
 export default function EditLandingPageTemplate() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [template, setTemplate] = useState<Template | null>(null);
+  const [template, setTemplate] = useState<LandingPageTemplate | null>(null);
   const [activeElement, setActiveElement] = useState<string | null>("title");
   const [previewMode, setPreviewMode] = useState<"desktop" | "mobile">(
     "desktop"
@@ -64,12 +65,6 @@ export default function EditLandingPageTemplate() {
       <header className="bg-white border-b sticky top-0 z-10">
         <div className="container mx-auto px-4 py-3 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Link
-              to="/"
-              className="text-muted-foreground hover:text-foreground"
-            >
-              ← Back to templates
-            </Link>
             <h1 className="text-xl font-bold">{template.name}</h1>
           </div>
 

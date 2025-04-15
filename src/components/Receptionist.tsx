@@ -1,7 +1,4 @@
-"use client";
-
 import type React from "react";
-
 import { useState } from "react";
 import {
   Download,
@@ -46,6 +43,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import AddAReceptionist from "./Form/AddAReceptionist";
 
 // Sample data for demonstration
 const sampleReceptionists = [
@@ -82,6 +80,7 @@ const teams = [
   "Administrative",
   "Support",
 ];
+
 const clients = [
   "All Clients",
   "ABC Corp",
@@ -102,7 +101,6 @@ export default function ReceptionistManager() {
     []
   );
 
-  // Filter receptionists based on selected team, client, and search query
   const filteredReceptionists = receptionists.filter((receptionist) => {
     const matchesTeam =
       selectedTeam === "All Teams" || receptionist.team === selectedTeam;
@@ -116,7 +114,6 @@ export default function ReceptionistManager() {
     return matchesTeam && matchesClient && matchesSearch;
   });
 
-  // Handle file upload for bulk addition
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -151,25 +148,23 @@ export default function ReceptionistManager() {
     }
   };
 
-  // Handle form submission for individual addition
-  const handleIndividualSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
+  // const handleIndividualSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   const formData = new FormData(e.currentTarget);
 
-    const newReceptionist = {
-      id: receptionists.length + 1,
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      phone: formData.get("phone") as string,
-      team: formData.get("team") as string,
-      client: formData.get("client") as string,
-    };
+  //   const newReceptionist = {
+  //     id: receptionists.length + 1,
+  //     name: formData.get("name") as string,
+  //     email: formData.get("email") as string,
+  //     phone: formData.get("phone") as string,
+  //     team: formData.get("team") as string,
+  //     client: formData.get("client") as string,
+  //   };
 
-    setReceptionists([...receptionists, newReceptionist]);
-    setAddDialogOpen(false);
-  };
+  //   setReceptionists([...receptionists, newReceptionist]);
+  //   setAddDialogOpen(false);
+  // };
 
-  // Handle bulk addition
   const handleBulkAdd = () => {
     const newReceptionists = bulkData.map((item, index) => ({
       id: receptionists.length + index + 1,
@@ -182,21 +177,17 @@ export default function ReceptionistManager() {
     setAddDialogOpen(false);
   };
 
-  // Handle select all checkbox
   const handleSelectAll = (checked: boolean) => {
     if (checked) {
-      // Select all visible receptionists
       const allVisibleIds = filteredReceptionists.map(
         (receptionist) => receptionist.id
       );
       setSelectedReceptionists(allVisibleIds);
     } else {
-      // Deselect all
       setSelectedReceptionists([]);
     }
   };
 
-  // Handle individual checkbox selection
   const handleSelectReceptionist = (id: number, checked: boolean) => {
     if (checked) {
       setSelectedReceptionists([...selectedReceptionists, id]);
@@ -207,9 +198,7 @@ export default function ReceptionistManager() {
     }
   };
 
-  // Handle template download
   const handleDownloadTemplate = () => {
-    // Create CSV content with headers
     const headers = ["Name", "Email", "Phone", "Team", "Client"];
     const csvContent = [
       headers.join(","),
@@ -217,10 +206,8 @@ export default function ReceptionistManager() {
       "Jane Smith,jane.smith@example.com,555-5678,Customer Service,XYZ Inc",
     ].join("\n");
 
-    // Create a Blob with the CSV content
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
 
-    // Create a download link and trigger the download
     const link = document.createElement("a");
     const url = URL.createObjectURL(blob);
     link.setAttribute("href", url);
@@ -253,71 +240,7 @@ export default function ReceptionistManager() {
                   <TabsTrigger value="bulk">Bulk Upload</TabsTrigger>
                 </TabsList>
                 <TabsContent value="individual">
-                  <form
-                    onSubmit={handleIndividualSubmit}
-                    className="space-y-4 py-4"
-                  >
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="name">Name</Label>
-                        <Input id="name" name="name" required />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="email">Email</Label>
-                        <Input id="email" name="email" type="email" required />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="phone">Phone</Label>
-                        <Input id="phone" name="phone" required />
-                      </div>
-                      <div className="space-y-2">
-                        <Label htmlFor="team">Team</Label>
-                        <Select name="team" defaultValue="Front Desk">
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select team" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {teams
-                              .filter((team) => team !== "All Teams")
-                              .map((team) => (
-                                <SelectItem key={team} value={team}>
-                                  {team}
-                                </SelectItem>
-                              ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="client">Client</Label>
-                      <Select name="client" defaultValue="ABC Corp">
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select client" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {clients
-                            .filter((client) => client !== "All Clients")
-                            .map((client) => (
-                              <SelectItem key={client} value={client}>
-                                {client}
-                              </SelectItem>
-                            ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <div className="flex justify-end space-x-2 pt-4">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => setAddDialogOpen(false)}
-                      >
-                        Cancel
-                      </Button>
-                      <Button type="submit">Add Receptionist</Button>
-                    </div>
-                  </form>
+                  <AddAReceptionist teams={teams} clients={clients} />
                 </TabsContent>
                 <TabsContent value="bulk">
                   <div className="space-y-4 py-4">

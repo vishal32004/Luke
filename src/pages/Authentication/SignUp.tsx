@@ -18,7 +18,7 @@ import { OtpModal } from "@/components/Popup/otp-modal";
 import { Link } from "react-router-dom";
 import CustomFormField from "@/components/Form/CustomFormField";
 import { FormFieldType } from "@/types/Form";
-import { signupFormSchema } from "@/schema/Auth";
+import { signupFormSchema } from "@/schema/auth";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
