@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/select";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
-// Define product type
 interface Product {
   id: string;
   name: string;
@@ -20,7 +19,6 @@ interface Product {
   imageUrl: string;
 }
 
-// Define filter type
 interface Filters {
   category: string;
   minPrice: number;
@@ -103,7 +101,6 @@ const products: Product[] = [
   },
 ];
 
-// Props for ProductFilter component
 interface ProductFilterProps {
   onFilter: (filters: Filters) => void;
 }

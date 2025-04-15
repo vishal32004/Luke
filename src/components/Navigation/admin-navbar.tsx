@@ -1,4 +1,4 @@
-import { SidebarTrigger } from "./ui/sidebar";
+import { SidebarTrigger } from "../ui/sidebar";
 export default function Navbar() {
   return (
     <nav className="border-b bg-background">

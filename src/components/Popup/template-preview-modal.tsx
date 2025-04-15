@@ -8,11 +8,11 @@ import {
 } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import type { Category, Template } from "@/types/email-templates";
-import { ScrollArea } from "./ui/scroll-area";
+import { ScrollArea } from "../ui/scroll-area";
 import styled from "styled-components";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { Edit, Upload, X } from "lucide-react";
-import { Textarea } from "./ui/textarea";
+import { Textarea } from "../ui/textarea";
 
 interface TemplatePreviewModalProps {
   isOpen: boolean;

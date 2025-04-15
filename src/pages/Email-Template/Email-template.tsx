@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { EmailTemplateCard } from "@/components/email-template-card";
-import { CategorySidebar } from "@/components/category-sidebar";
-import { TemplatePreviewModal } from "@/components/template-preview-modal";
+import { CategorySidebar } from "@/components/Sidebar/category-sidebar";
+import { TemplatePreviewModal } from "@/components/Popup/template-preview-modal";
 import type { Template } from "@/types/email-templates";
 import { categories, templates } from "@/data/email-templates";
 
@@ -39,7 +39,6 @@ export default function EmailTemplatesGallery() {
     return filtered;
   })();
 
-  // Handle template preview
   const handlePreview = (template: Template) => {
     setSelectedTemplate(template);
     setIsPreviewOpen(true);
@@ -50,7 +49,6 @@ export default function EmailTemplatesGallery() {
     setSelectedSubCategory(null);
   };
 
-  // Handle sub-category selection
   const handleSubCategorySelect = (
     categoryName: string,
     subCategoryName: string
@@ -59,7 +57,6 @@ export default function EmailTemplatesGallery() {
     setSelectedSubCategory(subCategoryName);
   };
 
-  // Handle template save
   const handleTemplateSave = (updatedTemplate: Partial<Template>) => {
     console.log("Template saved:", updatedTemplate);
   };
@@ -78,7 +75,6 @@ export default function EmailTemplatesGallery() {
         />
 
         <div className="flex-1">
-          {/* Gallery Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredTemplates.map((template) => (
               <EmailTemplateCard

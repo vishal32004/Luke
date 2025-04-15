@@ -1,5 +1,5 @@
-import { DataTable } from "@/components/data-table";
-import { getColumns } from "@/components/getColumn";
+import { DataTable } from "@/components/Table/data-table";
+import { getColumns } from "@/components/Table/getColumn";
 type Admin = {
   id: string;
   name: string;

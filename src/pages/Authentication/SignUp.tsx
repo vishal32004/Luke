@@ -16,6 +16,8 @@ import {
 import { useState } from "react";
 import { OtpModal } from "@/components/otp-modal";
 import { Link } from "react-router-dom";
+import CustomFormField from "@/components/CustomFormField";
+import { FormFieldType } from "@/types/Form";
 
 const signupFormSchema = z
   .object({
@@ -73,41 +75,21 @@ const Signup = () => {
                       </h1>
                     </div>
                     <div className="grid gap-2">
-                      <FormField
+                      <CustomFormField
                         control={form.control}
                         name="name"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Name</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="text"
-                                placeholder="Enter Name"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
+                        fieldType={FormFieldType.INPUT}
+                        label="Name"
+                        placeholder="Enter Name"
                       />
                     </div>
                     <div className="grid gap-2">
-                      <FormField
+                      <CustomFormField
                         control={form.control}
                         name="email"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Email</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="email"
-                                placeholder="Enter Email"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
+                        fieldType={FormFieldType.INPUT}
+                        label="Email"
+                        placeholder="Enter Email"
                       />
                     </div>
                     <div className="grid gap-2">
@@ -145,22 +127,13 @@ const Signup = () => {
                       />
                     </div>
                     <div className="grid gap-2">
-                      <FormField
+                      <CustomFormField
                         control={form.control}
                         name="confirmPassword"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Confirm Password</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="password"
-                                placeholder="Confirm Password"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
+                        fieldType={FormFieldType.INPUT}
+                        inputType="password"
+                        label="Confirm Password"
+                        placeholder="Enter Confirm Password"
                       />
                     </div>
                     <Button

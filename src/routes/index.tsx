@@ -1,19 +1,19 @@
 import { RouteConfig } from "@/types/routes";
 import authRoutes from "./AuthRoutes";
-import NotFound from "@/components/404";
+import NotFound from "@/pages/404";
 import Dashboard from "@/pages/Dashboard";
-import CreateNewCampaign from "@/pages/CreateNewCampaign";
-import ViewCampaign from "@/pages/ViewCampaign";
+import CreateNewCampaign from "@/pages/Campaign/CreateNewCampaign";
+import ViewCampaign from "@/pages/Campaign/ViewCampaign";
 import Storefront from "@/pages/Storefront";
-import Admin from "@/pages/Admin";
-import EmailTemplatesGallery from "@/pages/Email-template";
-import Payment from "@/pages/Payment";
-import AddFunds from "@/pages/AddFunds";
-import TransactionHistory from "@/pages/TransationHistroy";
+import Admin from "@/pages/Admin/Admin";
+import EmailTemplatesGallery from "@/pages/Email-Template/Email-template";
+import Payment from "@/pages/Balance/Payment";
+import AddFunds from "@/pages/Balance/AddFunds";
+import TransactionHistory from "@/pages/Balance/TransationHistroy";
 import NotificationSettings from "@/pages/Notification";
-import LandingPageList from "@/pages/LandingPageList";
-import PreviewLandingTemplate from "@/pages/PreviewLandingPage";
-import EditLandingPageTemplate from "@/pages/EditLandingPageTemplate";
+import LandingPageList from "@/pages/Landing-Page-Template/LandingPageList";
+import PreviewLandingTemplate from "@/pages/Landing-Page-Template/PreviewLandingPage";
+import EditLandingPageTemplate from "@/pages/Landing-Page-Template/EditLandingPageTemplate";
 
 const routes: RouteConfig[] = [
   ...authRoutes,

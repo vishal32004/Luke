@@ -17,8 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ArrowLeft, Info } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Info } from "lucide-react";
 
 export default function AddFunds() {
   const [amount, setAmount] = useState("");
@@ -27,11 +26,6 @@ export default function AddFunds() {
   return (
     <div className="container mx-auto py-10 max-w-5xl">
       <div className="flex items-center mb-6">
-        <Button variant="ghost" size="sm" asChild className="mr-2">
-          <Link to="/">
-            <ArrowLeft className="h-4 w-4 mr-1" /> Back
-          </Link>
-        </Button>
         <h1 className="text-2xl font-bold">Add Funds to Wallet</h1>
       </div>
 

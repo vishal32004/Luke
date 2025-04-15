@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
-import { DataTable } from "@/components/data-table";
-import { getColumns } from "@/components/getColumn";
+import { DataTable } from "@/components/Table/data-table";
+import { getColumns } from "@/components/Table/getColumn";
 import { Button } from "@/components/ui/button";
 
 export type Campaign = {
@@ -108,7 +108,7 @@ export default function CampaignTable() {
           Top Campaign
         </Button>
       </div>
-      <DataTable columns={columns} data={filteredData}/>
+      <DataTable columns={columns} data={filteredData} />
     </section>
   );
 }

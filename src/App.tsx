@@ -4,10 +4,10 @@ import Loader from "@/components/Loader";
 import routes from "@/routes";
 import { RouteConfig } from "@/types/routes";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { AdminSidebar } from "@/components/admin-sidebar";
-import Navbar from "@/components/admin-navbar";
+import { AdminSidebar } from "@/components/Navigation/admin-sidebar";
+import Navbar from "@/components/Navigation/admin-navbar";
 import "./App.css";
-import Footer from "./components/footer";
+import Footer from "./components/Navigation/footer";
 
 const createRoutes = (routes: RouteConfig[]) =>
   routes.map((route, index) => {

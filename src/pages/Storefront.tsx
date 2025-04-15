@@ -17,7 +17,6 @@ import { Separator } from "@/components/ui/separator";
 import { Edit, Save, Eye, Upload, X } from "lucide-react";
 
 const Storefront = () => {
-  // State for editable fields
   const [editingUrl, setEditingUrl] = useState(false);
   const [editingPointsName, setEditingPointsName] = useState(false);
   const [storefrontUrl, setStorefrontUrl] = useState(
@@ -28,7 +27,6 @@ const Storefront = () => {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
 
-  // Handle logo upload
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
@@ -47,7 +45,6 @@ const Storefront = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
-          {/* Storefront URL */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label className="text-base font-medium">Storefront URL</Label>
@@ -79,7 +76,6 @@ const Storefront = () => {
 
           <Separator />
 
-          {/* Global Reward Catalog */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label className="text-base font-medium">
@@ -98,7 +94,6 @@ const Storefront = () => {
 
           <Separator />
 
-          {/* Points Name */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label className="text-base font-medium">Points Name</Label>
@@ -131,7 +126,6 @@ const Storefront = () => {
 
           <Separator />
 
-          {/* Company Logo */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label className="text-base font-medium">Company Logo</Label>
@@ -180,7 +174,6 @@ const Storefront = () => {
 
           <Separator />
 
-          {/* Storefront Footer */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label className="text-base font-medium">Storefront Footer</Label>

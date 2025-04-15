@@ -17,6 +17,8 @@ import {
 import { useState } from "react";
 import { OtpModal } from "@/components/otp-modal";
 import { Link, useNavigate } from "react-router-dom";
+import CustomFormField from "@/components/CustomFormField";
+import { FormFieldType } from "@/types/Form";
 
 const loginFormSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -42,8 +44,8 @@ const Login = () => {
     console.log(values);
     setOpen(true);
     setTimeout(() => {
-      navigate("/admin/dashboard"); // Redirect to /admin/dashboard
-    }, 1000); // Simulate a delay for the OTP modal or login process
+      navigate("/admin/dashboard");
+    }, 1000);
   }
 
   function handleTogglePassword() {
@@ -74,22 +76,12 @@ const Login = () => {
                       </h1>
                     </div>
 
-                    <FormField
+                    <CustomFormField
                       control={form.control}
                       name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="email"
-                              placeholder="Enter Email"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
+                      fieldType={FormFieldType.INPUT}
+                      label="Email"
+                      placeholder="Enter Email"
                     />
 
                     <FormField
