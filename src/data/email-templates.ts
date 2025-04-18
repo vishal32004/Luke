@@ -18,6 +18,7 @@ export const categories: Category[] = [
 export const templates: Template[] = [
   {
     id: "1",
+    value: "1",
     title: "Birthday-1",
     category: "Birthday",
     subCategory: "Personal",
@@ -26,6 +27,7 @@ export const templates: Template[] = [
   },
   {
     id: "2",
+    value: "2",
     title: "Birthday-2",
     category: "Birthday",
     subCategory: "Professional",
@@ -34,6 +36,7 @@ export const templates: Template[] = [
   },
   {
     id: "3",
+    value: "3",
     title: "Birthday-3",
     category: "Birthday",
     subCategory: "Personal",
@@ -42,6 +45,7 @@ export const templates: Template[] = [
   },
   {
     id: "4",
+    value: "4",
     title: "Birthday-4",
     category: "Birthday",
     subCategory: "Professional",
@@ -50,6 +54,7 @@ export const templates: Template[] = [
   },
   {
     id: "5",
+    value: "5",
     title: "Birthday-5",
     category: "Birthday",
     subCategory: "Personal",
@@ -58,6 +63,7 @@ export const templates: Template[] = [
   },
   {
     id: "6",
+    value: "6",
     title: "Birthday-6",
     category: "Birthday",
     subCategory: "Professional",
@@ -66,6 +72,7 @@ export const templates: Template[] = [
   },
   {
     id: "7",
+    value: "7",
     title: "Anniversary-1",
     category: "Anniversary",
     subCategory: "Work",
@@ -74,6 +81,7 @@ export const templates: Template[] = [
   },
   {
     id: "8",
+    value: "8",
     title: "Anniversary-2",
     category: "Anniversary",
     subCategory: "Company",
@@ -82,6 +90,7 @@ export const templates: Template[] = [
   },
   {
     id: "9",
+    value: "9",
     title: "Anniversary-3",
     category: "Anniversary",
     subCategory: "Work",
@@ -90,6 +99,7 @@ export const templates: Template[] = [
   },
   {
     id: "10",
+    value: "10",
     title: "Anniversary-4",
     category: "Anniversary",
     subCategory: "Company",
@@ -98,6 +108,7 @@ export const templates: Template[] = [
   },
   {
     id: "11",
+    value: "11",
     title: "Anniversary-5",
     category: "Anniversary",
     subCategory: "Work",
@@ -106,6 +117,7 @@ export const templates: Template[] = [
   },
   {
     id: "12",
+    value: "12",
     title: "Anniversary-6",
     category: "Anniversary",
     subCategory: "Company",
@@ -114,6 +126,7 @@ export const templates: Template[] = [
   },
   {
     id: "13",
+    value: "13",
     title: "Milestone-1",
     category: "Milestone",
     subCategory: "Achievement",
@@ -122,6 +135,7 @@ export const templates: Template[] = [
   },
   {
     id: "14",
+    value: "14",
     title: "Milestone-2",
     category: "Milestone",
     subCategory: "Career",
@@ -130,6 +144,7 @@ export const templates: Template[] = [
   },
   {
     id: "15",
+    value: "15",
     title: "Milestone-3",
     category: "Milestone",
     subCategory: "Achievement",
@@ -138,6 +153,7 @@ export const templates: Template[] = [
   },
   {
     id: "16",
+    value: "16",
     title: "Milestone-4",
     category: "Milestone",
     subCategory: "Career",
@@ -146,6 +162,7 @@ export const templates: Template[] = [
   },
   {
     id: "17",
+    value: "17",
     title: "Appreciation-1",
     category: "Appreciation",
     subCategory: "Team",
@@ -154,6 +171,7 @@ export const templates: Template[] = [
   },
   {
     id: "18",
+    value: "18",
     title: "Appreciation-2",
     category: "Appreciation",
     subCategory: "Individual",
@@ -162,6 +180,7 @@ export const templates: Template[] = [
   },
   {
     id: "19",
+    value: "19",
     title: "Referral-1",
     category: "Referral",
     subCategory: "Customer",
@@ -170,6 +189,7 @@ export const templates: Template[] = [
   },
   {
     id: "20",
+    value: "20",
     title: "Referral-2",
     category: "Referral",
     subCategory: "Employee",
@@ -177,4 +197,5 @@ export const templates: Template[] = [
     content: "Thank you for referring a new team member. Great teams are built through great connections!",
   },
 ]
+
 

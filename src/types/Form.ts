@@ -9,4 +9,5 @@ export enum FormFieldType {
     COMBOBOX,
     QUANTITY_CONTROLLER,
     CHECKBOX_GROUP,
+    RADIO_CARD
 }

@@ -175,7 +175,6 @@ const ProductFilter: React.FC<ProductFilterProps> = ({ onFilter }) => {
   );
 };
 
-// Props for ProductList component
 interface ProductListProps {
   products: Product[];
 }
@@ -241,7 +240,6 @@ export const CatalogSection: React.FC = () => {
   const handleFilter = (filters: Filters) => {
     const { category, minPrice, maxPrice, sortBy } = filters;
 
-    // Filter products
     const filtered = products.filter((product) => {
       return (
         (category ? product.category === category : true) &&
@@ -250,7 +248,6 @@ export const CatalogSection: React.FC = () => {
       );
     });
 
-    // Sort products
     if (sortBy === "priceLowToHigh") {
       filtered.sort((a, b) => a.price - b.price);
     } else if (sortBy === "priceHighToLow") {

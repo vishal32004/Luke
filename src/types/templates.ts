@@ -1,6 +1,7 @@
 export interface Template {
   id: string
   title: string
+  value: string
   category: string
   subCategory: string
   imageUrl: string

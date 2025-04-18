@@ -12,7 +12,6 @@ import {
   Code,
   Cpu,
   DollarSign,
-  Eye,
   FlaskConical,
   Globe,
   Handshake,
@@ -37,7 +36,6 @@ import { z } from "zod";
 import { calculateTotal } from "@/lib/helper";
 import { CatalogSection } from "@/components/ProductFilter";
 import Payment from "@/components/Payment";
-import { Button } from "@/components/ui/button";
 import { templates } from "@/data/email-templates";
 import ReceptionistManager from "@/components/Receptionist";
 import { formSchema } from "@/schema/forms";
@@ -109,6 +107,7 @@ const CreateNewCampaign = () => {
     4: ["distributionType"],
     5: [distributionType === "Bulk Order" ? "bulkBuyingQty" : "recipients"],
     6: [] as string[],
+    9: ["emailTemplate"],
     11: [
       "startDate",
       "endDate",
@@ -342,7 +341,7 @@ const CreateNewCampaign = () => {
                 },
               ]}
             />
-            {form.watch("event") === "Other" && (
+            {form.watch("event") === "other" && (
               <CustomFormField
                 control={form.control}
                 name="customEvent"
@@ -536,46 +535,63 @@ const CreateNewCampaign = () => {
             <WizardStep step={8}>
               <div className="space-y-6">
                 <h2 className="font-bold">Landing Page</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="col-span-2 space-y-4">
-                    Landing Page content
-                  </div>
-                </div>
+                <CustomFormField
+                  control={form.control}
+                  name="landingPageTemplate"
+                  fieldType={FormFieldType.RADIO_CARD}
+                  radioCardoptions={templates.slice(0, 6).map((template) => ({
+                    value: template.id,
+                    content: (
+                      <div className="bg-white rounded-lg overflow-hidden shadow-sm group relative">
+                        <div className="relative h-40">
+                          <img
+                            src={template.imageUrl || "/placeholder.svg"}
+                            alt={template.title}
+                            className="object-cover w-full max-h-full"
+                          />
+                        </div>
+                        <div className="p-2 text-center">
+                          <h3 className="text-sm">{template.title}</h3>
+                          <p className="text-xs text-gray-500">
+                            {template.subCategory}
+                          </p>
+                        </div>
+                      </div>
+                    ),
+                  }))}
+                />
               </div>
             </WizardStep>
 
-            <WizardStep step={9}>
+            <WizardStep step={9} validator={() => validateStep(stepFields[9])}>
               <div className="space-y-6">
                 <h2 className="font-bold">Email Customization</h2>
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  {templates.slice(0, 6).map((template) => (
-                    <div className="bg-white rounded-lg overflow-hidden shadow-sm group relative">
-                      <div className="relative h-40">
-                        <img
-                          src={template.imageUrl || "/placeholder.svg"}
-                          alt={template.title}
-                          className="object-cover w-full max-h-full"
-                        />
-                        <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                          <Button
-                            variant="secondary"
-                            size="sm"
-                            className="flex items-center gap-1"
-                          >
-                            <Eye className="h-4 w-4" />
-                            Preview
-                          </Button>
+
+                <CustomFormField
+                  control={form.control}
+                  name="emailTemplate"
+                  fieldType={FormFieldType.RADIO_CARD}
+                  radioCardoptions={templates.slice(0, 6).map((template) => ({
+                    value: template.id,
+                    content: (
+                      <div className="bg-white rounded-lg overflow-hidden shadow-sm group relative">
+                        <div className="relative h-40">
+                          <img
+                            src={template.imageUrl || "/placeholder.svg"}
+                            alt={template.title}
+                            className="object-cover w-full max-h-full"
+                          />
+                        </div>
+                        <div className="p-2 text-center">
+                          <h3 className="text-sm">{template.title}</h3>
+                          <p className="text-xs text-gray-500">
+                            {template.subCategory}
+                          </p>
                         </div>
                       </div>
-                      <div className="p-2 text-center">
-                        <h3 className="text-sm">{template.title}</h3>
-                        <p className="text-xs text-gray-500">
-                          {template.subCategory}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                    ),
+                  }))}
+                />
               </div>
             </WizardStep>
 

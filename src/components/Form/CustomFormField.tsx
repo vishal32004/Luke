@@ -13,10 +13,15 @@ import {
   Path,
 } from "react-hook-form";
 import React, { memo } from "react";
-import { Select, SelectContent, SelectTrigger, SelectValue } from "../ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Calendar } from "../ui/calendar";
-import { CalendarIcon, LucideIcon } from "lucide-react";
+import { CalendarIcon, Check, LucideIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "../ui/checkbox";
@@ -40,6 +45,11 @@ export type RadioOptionType = {
 export type ComboboxOptionType = {
   label: string;
   value: string;
+};
+
+export type RadioCardOptionType = {
+  value: string;
+  content: React.ReactNode;
 };
 
 interface BaseFieldProps {
@@ -85,6 +95,9 @@ interface QuantityFieldProps extends BaseFieldProps {
   min?: number;
   max?: number;
 }
+interface RadioCardFieldProps extends BaseFieldProps {
+  radioCardoptions?: RadioCardOptionType[];
+}
 
 export interface CustomFormFieldProps<T extends FieldValues> {
   control: Control<T>;
@@ -106,6 +119,7 @@ export interface CustomFormFieldProps<T extends FieldValues> {
   multipleDates?: boolean;
   inputType?: string;
   classNames?: string;
+  radioCardoptions?: RadioCardOptionType[];
 }
 interface RenderFieldProps<T extends FieldValues> {
   field: ControllerRenderProps<T, Path<T>>;
@@ -286,6 +300,44 @@ const renderDatePickerValue = (
   return format(value as Date, "PPP");
 };
 
+const RadioCardField = memo(
+  ({ field, radioCardoptions }: RadioCardFieldProps) => (
+    <FormControl>
+      <RadioGroup
+        onValueChange={field.onChange}
+        value={field.value}
+        className="grid grid-cols-3"
+      >
+        {radioCardoptions?.map((option) => (
+          <div key={option.value} className="relative col-span-1">
+            <RadioGroupItem
+              value={option.value}
+              id={option.value}
+              className="peer absolute opacity-0 w-0 h-0"
+            />
+            <label
+              htmlFor={option.value}
+              className={cn(
+                "cursor-pointer transition-all relative inline-block",
+                "peer-checked:border-primary peer-checked:bg-primary/10"
+              )}
+            >
+              <div
+                className={cn(
+                  "absolute top-[-10px] right-[-5px] text-white rounded-full p-1 z-10 bg-blue-500",
+                  field.value === option.value ? "opacity-100" : "opacity-0"
+                )}
+              >
+                <Check className="h-3 w-3" />
+              </div>
+              {option.content}
+            </label>
+          </div>
+        ))}
+      </RadioGroup>
+    </FormControl>
+  )
+);
 const fieldComponents = {
   [FormFieldType.INPUT]: InputField,
   [FormFieldType.SELECT]: SelectField,
@@ -295,6 +347,7 @@ const fieldComponents = {
   [FormFieldType.RADIO]: RadioField,
   [FormFieldType.COMBOBOX]: ComboboxField,
   [FormFieldType.QUANTITY_CONTROLLER]: QuantityField,
+  [FormFieldType.RADIO_CARD]: RadioCardField,
 };
 
 function RenderField<T extends FieldValues>({

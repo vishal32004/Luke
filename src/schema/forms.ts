@@ -70,6 +70,8 @@ export const formSchema = z
         smsCallToAction: z.string(),
         datesInitial: z.string(),
         datesAfter: z.string(),
+        emailTemplate: z.string(),
+        landingPageTemplate: z.string(),
     })
     .refine(
         (data) => {
