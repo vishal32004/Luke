@@ -105,7 +105,7 @@ const CreateNewCampaign = () => {
     2: ["EventMainCategory"],
     3: ["event"],
     4: ["distributionType"],
-    5: [distributionType === "Bulk Order" ? "bulkBuyingQty" : "recipients"],
+    5: [distributionType === "bulk_order" ? "bulkBuyingQty" : "recipients"],
     6: [] as string[],
     9: ["emailTemplate"],
     11: [
@@ -119,7 +119,7 @@ const CreateNewCampaign = () => {
   stepFields[6] = (() => {
     const fields = [];
 
-    if (distributionType === "Bulk Order") {
+    if (distributionType === "bulk_order") {
       fields.push("eventAddress", "eventDate");
       return fields;
     } else {
@@ -387,7 +387,7 @@ const CreateNewCampaign = () => {
           fieldNames={stepFields[5]}
         >
           <div className="space-y-6">
-            {distributionType !== "Bulk Order" ? (
+            {distributionType !== "bulk_order" ? (
               <ReceptionistManager />
             ) : (
               <CustomFormField
@@ -407,7 +407,7 @@ const CreateNewCampaign = () => {
           fieldNames={stepFields[6]}
         >
           <div className="space-y-6">
-            {distributionType !== "Bulk Order" ? (
+            {distributionType !== "bulk_order" ? (
               <>
                 <CustomFormField
                   control={form.control}
@@ -524,7 +524,7 @@ const CreateNewCampaign = () => {
           </div>
         </WizardStep>
 
-        {distributionType !== "Bulk Order" && (
+        {distributionType !== "bulk_order" && (
           <>
             <WizardStep step={7}>
               <div className="space-y-6">

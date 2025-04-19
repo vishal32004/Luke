@@ -3,7 +3,7 @@ import { ArrowLeft, Edit2 } from "lucide-react";
 import { templates } from "@/data/landingTemplate";
 import { Button } from "@/components/ui/button";
 
-export default function PreviewLandingTemplate() {
+export default function LandingTemplatePreview() {
   const { id } = useParams<{ id: string }>();
   const template = templates.find((t) => t.id === id);
 
@@ -43,31 +43,79 @@ export default function PreviewLandingTemplate() {
         </div>
       </header>
 
-      <div className="flex-1 bg-gray-100">
-        <div className="container mx-auto px-4 py-8">
-          <div className="bg-white border rounded-lg overflow-hidden max-w-4xl mx-auto">
-            <div className="relative">
-              <img
-                src="https://img.freepik.com/free-vector/mandala-illustration_53876-75291.jpg?t=st=1744441981~exp=1744445581~hmac=5ff80677b5920e3b22834db304973ddb4a0b3ddb26291d4fe3de171deaf55a85&w=900"
-                alt="Template background"
-                width={1200}
-                height={600}
-                className="w-full h-auto"
-              />
+      {/* Preview Content */}
+      <div className="flex-1 bg-gray-50 p-6">
+        <div className="bg-white border rounded-lg mx-auto max-w-4xl overflow-hidden shadow-lg">
+          <div className="relative">
+            {/* Banner Image Section */}
+            <div className="h-48 relative overflow-hidden">
+              {template.elements.bannerImage ? (
+                <img
+                  src={template.elements.bannerImage}
+                  alt="Banner"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-r from-blue-500 to-blue-700" />
+              )}
+            </div>
 
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center text-white p-6">
-                <h2 className="text-3xl md:text-5xl font-bold mb-4">
-                  {template.elements.title || "Happy Work Anniversary!"}
-                </h2>
-                <p className="mb-6 max-w-md">
-                  {template.elements.description ||
-                    "Here is something to brighten your celebrations a little more!"}
-                </p>
-                <Button className="px-6">
-                  {template.elements.buttonText || "Claim reward"}
+            {/* Content Section */}
+            <div className="bg-white rounded-t-3xl -mt-6 px-8 py-12 text-center">
+              {/* Logo */}
+              {template.elements.logo && (
+                <div className="mb-4 flex justify-center">
+                  <img
+                    src={template.elements.logo}
+                    alt="Logo"
+                    className="h-12"
+                  />
+                </div>
+              )}
+
+              {/* Title */}
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                {template.elements.title || "Thank you for registering!"}
+              </h1>
+
+              {/* Description */}
+              <p className="text-lg text-gray-600 max-w-md mx-auto mb-8">
+                {template.elements.description ||
+                  "We have a little something for you as a token of appreciation."}
+              </p>
+
+              {/* Button */}
+              <div className="flex justify-center mb-4">
+                <Button className="px-6 py-6 text-lg">
+                  {template.elements.buttonText || "Claim your reward"}
                 </Button>
-                <div className="mt-4 text-sm">How to redeem?</div>
               </div>
+
+              {/* Footer Link */}
+              {template.elements.footerText && (
+                <div className="text-blue-500 hover:underline cursor-pointer mt-4">
+                  {template.elements.footerText}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Template Info */}
+        <div className="mt-8 bg-white p-6 rounded-lg max-w-4xl mx-auto">
+          <h2 className="text-xl font-bold mb-4">Template Details</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <h3 className="text-sm font-medium text-gray-500">Name</h3>
+              <p>{template.name}</p>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-gray-500">Category</h3>
+              <p>{template.category}</p>
+            </div>
+            <div>
+              <h3 className="text-sm font-medium text-gray-500">ID</h3>
+              <p>{template.id}</p>
             </div>
           </div>
         </div>

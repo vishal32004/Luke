@@ -14,18 +14,28 @@ export interface Category {
 }
 
 export interface LandingPageTemplate {
-  id: string
-  name: string
-  description: string
-  thumbnail: string
-  lastEdited: string
+  id: string;
+  name: string;
+  category: string;
+  thumbnail: string;
   elements: {
-    logo?: string
-    title?: string
-    description?: string
-    image?: string
-    buttonText?: string
-    buttonLink?: string
-    additionalSettings?: Record<string, any>
-  }
+    logo?: string;
+    logoSize?: string;
+    title?: string;
+    titleSize?: string;
+    titleWeight?: string;
+    description?: string;
+    descriptionSize?: string;
+    buttonText?: string;
+    buttonLink?: string;
+    bannerImage?: string;
+    footerText?: string;
+    textColor?: string;
+    buttonStyle?: string;
+    buttonSize?: string;
+    textAlignment?: string;
+    contentSpacing?: string;
+    animation?: string;
+    overlay?: string;
+  };
 }
