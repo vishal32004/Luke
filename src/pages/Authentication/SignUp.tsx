@@ -17,7 +17,7 @@ import { useState } from "react";
 import { OtpModal } from "@/components/Popup/otp-modal";
 import { Link } from "react-router-dom";
 import CustomFormField from "@/components/Form/CustomFormField";
-import { FormFieldType } from "@/types/Form";
+import { FormFieldType } from "@/types/form";
 import { signupFormSchema } from "@/schema/forms";
 
 const Signup = () => {

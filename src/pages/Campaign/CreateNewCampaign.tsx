@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { WizardForm } from "@/components/Form/wizard-form";
 import { WizardStep } from "@/components/ui/wizard";
 import CustomFormField from "@/components/Form/CustomFormField";
-import { FormFieldType } from "@/types/Form";
+import { FormFieldType } from "@/types/form";
 import {
   Award,
   BarChart,

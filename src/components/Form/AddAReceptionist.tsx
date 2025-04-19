@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form } from "@/components/ui/form";
 import CustomFormField from "./CustomFormField";
-import { FormFieldType } from "@/types/Form";
+import { FormFieldType } from "@/types/form";
 import { SelectItem } from "../ui/select";
 import { Button } from "../ui/button";
 

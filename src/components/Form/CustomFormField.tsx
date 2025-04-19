@@ -34,7 +34,7 @@ import {
 } from "@/components/ui/popover";
 import { Combobox } from "../ui/combobox";
 import { QuantityController } from "../QuantityController";
-import { FormFieldType } from "@/types/Form";
+import { FormFieldType } from "@/types/form";
 
 export type RadioOptionType = {
   label: string;

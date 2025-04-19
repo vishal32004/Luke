@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { adminFormSchema } from "@/schema/forms";
 import { z } from "zod";
 import CustomFormField from "./CustomFormField";
-import { FormFieldType } from "@/types/Form";
+import { FormFieldType } from "@/types/form";
 import { Form } from "../ui/form";
 
 type AdminFormValues = z.infer<typeof adminFormSchema>;
