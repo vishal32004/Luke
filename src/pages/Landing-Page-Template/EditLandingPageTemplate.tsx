@@ -492,12 +492,12 @@ export default function EditLandingPageTemplate() {
                 >
                   Desktop
                 </TabsTrigger>
-                <TabsTrigger
+                {/* <TabsTrigger
                   value="mobile"
                   onClick={() => setPreviewMode("mobile")}
                 >
                   Mobile
-                </TabsTrigger>
+                </TabsTrigger> */}
               </TabsList>
             </Tabs>
           </div>
