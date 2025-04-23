@@ -1,4 +1,4 @@
-import NotFound from "@/pages/404";
+// import NotFound from "@/pages/404";
 import Dashboard from "@/pages/Dashboard";
 import CreateNewCampaign from "@/pages/Campaign/CreateNewCampaign";
 import ViewCampaign from "@/pages/Campaign/ViewCampaign";
@@ -14,6 +14,7 @@ import PreviewLandingTemplate from "@/pages/Landing-Page-Template/PreviewLanding
 import EditLandingPageTemplate from "@/pages/Landing-Page-Template/EditLandingPageTemplate";
 import AppLayout from "@/layouts/AppLayout";
 import { RouteObject } from "react-router-dom";
+import ReportsPage from "@/pages/Reports/Report";
 
 const AppRoutes: RouteObject = {
   path: "/",
@@ -72,8 +73,8 @@ const AppRoutes: RouteObject = {
       element: <EditLandingPageTemplate />,
     },
     {
-      path: "*",
-      element: <NotFound />,
+      path: "/reports",
+      element: <ReportsPage />,
     },
   ],
 };

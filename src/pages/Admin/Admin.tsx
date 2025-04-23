@@ -47,7 +47,7 @@ const adminData: Admin[] = [
 
 const AdminPage = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [admins, setAdmins] = useState<Admin[]>(adminData);
+  // const [admins, setAdmins] = useState<Admin[]>(adminData);
 
   const adminActions: Action<Admin>[] = [
     {
@@ -79,7 +79,7 @@ const AdminPage = () => {
         </Button>
       </div>
 
-      <DataTable columns={columns} data={admins} />
+      <DataTable columns={columns} data={adminData} />
 
       <AddAdminForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
     </div>

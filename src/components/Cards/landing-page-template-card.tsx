@@ -1,16 +1,14 @@
-"use client";
-
 import type React from "react";
 
 import { useState } from "react";
 import { Edit2, Eye, Trash2, ChevronRight } from "lucide-react";
-import type { Template } from "@/data/landingTemplate";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Link } from "react-router-dom";
+import { LandingPageTemplate } from "@/types/templates";
 
 interface TemplateCardProps {
-  template: Template;
+  template: LandingPageTemplate;
 }
 
 export default function LandingTemplateCard({ template }: TemplateCardProps) {
@@ -75,13 +73,10 @@ export default function LandingTemplateCard({ template }: TemplateCardProps) {
 
       <CardContent className="p-4">
         <h3 className="font-medium text-lg">{template.name}</h3>
-        <p className="text-muted-foreground text-sm">{template.description}</p>
+        <p className="text-muted-foreground text-sm">{template.elements.description}</p>
       </CardContent>
 
       <CardFooter className="p-4 pt-0 flex justify-between">
-        <div className="text-xs text-muted-foreground">
-          Last edited: {template.lastEdited}
-        </div>
         <Link
           to={`/landing/${template.id}/edit`}
           className="text-xs text-primary flex items-center"

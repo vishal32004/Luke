@@ -85,7 +85,7 @@ const data = {
       items: [
         {
           title: "Reward Points",
-          url: "#",
+          url: "/reports",
         },
         {
           title: "Reward Code",
