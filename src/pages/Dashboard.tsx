@@ -1,4 +1,4 @@
-import { useState } from "react";
+import CalendarWithEvents from "@/components/CalendarWithEvents";
 import {
   Edit,
   HelpCircle,
@@ -8,11 +8,9 @@ import {
   UserCheck2,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Calendar } from "@/components/ui/calendar";
 const name = "Vishal";
 
 const Dashboard = () => {
-  const [date, setDate] = useState<Date | undefined>(new Date());
   const callActions = [
     {
       title: "Start New Campaign / View Campaign",
@@ -54,8 +52,8 @@ const Dashboard = () => {
             <h2>Dashboard</h2>
           </div>
 
-          <div className="grid grid-cols-7 gap-5 items-end mt-5">
-            <div className="grid grid-cols-3 grid-rows-2 gap-x-3 gap-y-4 col-span-5">
+          <div className="flex flex-col gap-y-5 mt-5">
+            <div className="grid grid-cols-3 grid-rows-2 gap-x-3 gap-y-4">
               {callActions.map((action) => (
                 <Link
                   to={action.link}
@@ -74,22 +72,8 @@ const Dashboard = () => {
                 </Link>
               ))}
             </div>
-            <div className="col-span-2 h-full">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                className="rounded-md border shadow bg-white cal-body"
-                classNames={{
-                  table: "w-full",
-                  caption_end: "w-full",
-                  head_row: "justify-between flex",
-                  row: "justify-between flex",
-                  day_today: "bg-first text-white",
-                  day_selected: "bg-first text-white hover:text-white",
-                  nav_button: "bg-second p-2 rounded-full",
-                }}
-              />
+            <div className="h-full">
+              <CalendarWithEvents />
             </div>
           </div>
         </div>
