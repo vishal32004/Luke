@@ -38,7 +38,7 @@ interface CustomerFormProps {
   defaultValues?: Partial<CustomerFormValues>;
 }
 
-const CustomerForm = ({ onSubmit, defaultValues }: CustomerFormProps) => {
+const AutoDealersForm = ({ onSubmit, defaultValues }: CustomerFormProps) => {
   const form = useForm<CustomerFormValues>({
     resolver: zodResolver(customerFormSchema),
     defaultValues: {
@@ -290,4 +290,4 @@ const CustomerForm = ({ onSubmit, defaultValues }: CustomerFormProps) => {
   );
 };
 
-export default CustomerForm;
+export default AutoDealersForm;

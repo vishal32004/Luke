@@ -79,6 +79,7 @@ const CreateNewCampaign = () => {
     points,
     sendReminderAfterInitialGift,
     sendReminderBeforeExpiration,
+    forWho,
   ] = form.watch([
     "distributionType",
     "rewardType",
@@ -86,6 +87,7 @@ const CreateNewCampaign = () => {
     "points",
     "sendReminderAfterInitialGift",
     "sendReminderBeforeExpiration",
+    "forWho",
   ]);
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
@@ -388,7 +390,7 @@ const CreateNewCampaign = () => {
         >
           <div className="space-y-6">
             {distributionType !== "bulk_order" ? (
-              <ReceptionistManager />
+              <ReceptionistManager forWho={forWho} />
             ) : (
               <CustomFormField
                 control={form.control}

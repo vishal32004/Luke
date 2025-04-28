@@ -295,7 +295,7 @@ export default function PointsReports({
                 >
                   {channelData.map((entry, index) => (
                     <Cell
-                      key={`cell-${index}`}
+                      key={`cell-${entry.name}`}
                       fill={COLORS[index % COLORS.length]}
                     />
                   ))}

@@ -77,6 +77,7 @@ export default function ReportsDashboard() {
           <DatePickerWithRange
             className="w-full md:w-auto"
             date={dateRange}
+            //@ts-ignore
             setDate={setDateRange}
           />
           <Button variant="outline" size="icon" onClick={handleRefresh}>

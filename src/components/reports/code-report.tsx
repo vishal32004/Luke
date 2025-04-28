@@ -290,9 +290,9 @@ export default function CodesReports({
                   fill="#8884d8"
                   dataKey="value"
                 >
-                  {typeData.map((entry, index) => (
+                  {typeData.map((entry,index) => (
                     <Cell
-                      key={`cell-${index}`}
+                      key={`cell-${entry.name}`}
                       fill={COLORS[index % COLORS.length]}
                     />
                   ))}

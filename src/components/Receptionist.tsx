@@ -43,7 +43,11 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import AddAReceptionist from "./Form/AddAReceptionist";
+import ExternalClient from "./Form/ExternalClient";
+import AutoDealersForm from "./Form/AutoDealers";
+import ChannelPartnerForm from "./Form/ChannelPartner";
+import InternalEmployees from "./Form/InternalEmployees";
+import { ScrollArea } from "./ui/scroll-area";
 
 // Sample data for demonstration
 const sampleReceptionists = [
@@ -89,7 +93,7 @@ const clients = [
   "Tech Solutions",
 ];
 
-export default function ReceptionistManager() {
+export default function ReceptionistManager({ forWho }: { forWho: string }) {
   const [receptionists, setReceptionists] = useState(sampleReceptionists);
   const [selectedTeam, setSelectedTeam] = useState("All Teams");
   const [selectedClient, setSelectedClient] = useState("All Clients");
@@ -234,107 +238,129 @@ export default function ReceptionistManager() {
               <DialogHeader>
                 <DialogTitle>Add Receptionist</DialogTitle>
               </DialogHeader>
-              <Tabs defaultValue="individual">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="individual">Individual</TabsTrigger>
-                  <TabsTrigger value="bulk">Bulk Upload</TabsTrigger>
-                </TabsList>
-                <TabsContent value="individual">
-                  <AddAReceptionist teams={teams} clients={clients} />
-                </TabsContent>
-                <TabsContent value="bulk">
-                  <div className="space-y-4 py-4">
-                    {!showBulkPreview ? (
-                      <div className="flex flex-col items-center justify-center space-y-4 rounded-md border border-dashed p-10">
-                        <FileSpreadsheet className="h-10 w-10 text-muted-foreground" />
-                        <div className="space-y-2 text-center">
-                          <h3 className="text-lg font-semibold">
-                            Upload Excel File
-                          </h3>
-                          <p className="text-sm text-muted-foreground">
-                            Upload an Excel file with receptionist details
-                          </p>
-                        </div>
-                        <div className="flex flex-col space-y-2">
-                          <Label htmlFor="file-upload" className="sr-only">
-                            Choose file
-                          </Label>
-                          <Input
-                            id="file-upload"
-                            type="file"
-                            accept=".xlsx,.xls"
-                            onChange={handleFileUpload}
-                            className="cursor-pointer"
-                          />
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="mt-2"
-                            onClick={handleDownloadTemplate}
-                          >
-                            <Download className="mr-2 h-4 w-4" />
-                            Download Template
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <h3 className="text-lg font-semibold">
-                            Preview Data
-                          </h3>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              setBulkData([]);
-                              setShowBulkPreview(false);
-                            }}
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        </div>
-                        <div className="rounded-md border">
-                          <Table>
-                            <TableHeader>
-                              <TableRow>
-                                <TableHead>Name</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead>Phone</TableHead>
-                                <TableHead>Team</TableHead>
-                                <TableHead>Client</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {bulkData.map((item, index) => (
-                                <TableRow key={index} className="w-full">
-                                  <TableCell>{item.name}</TableCell>
-                                  <TableCell>{item.email}</TableCell>
-                                  <TableCell>{item.phone}</TableCell>
-                                  <TableCell>{item.team}</TableCell>
-                                  <TableCell>{item.client}</TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </div>
-                        <div className="flex justify-end space-x-2">
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() => setAddDialogOpen(false)}
-                          >
-                            Cancel
-                          </Button>
-                          <Button onClick={handleBulkAdd}>
-                            Add {bulkData.length} Receptionists
-                          </Button>
-                        </div>
-                      </div>
+
+              <ScrollArea className="h-125">
+                <Tabs defaultValue="individual">
+                  <TabsList className="grid w-full grid-cols-2">
+                    <TabsTrigger value="individual">Individual</TabsTrigger>
+                    <TabsTrigger value="bulk">Bulk Upload</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="individual">
+                    {forWho === "internal_team" && (
+                      <InternalEmployees
+                        onSubmit={() => console.log("external")}
+                      />
                     )}
-                  </div>
-                </TabsContent>
-              </Tabs>
+                    {forWho === "external_client" && (
+                      <ExternalClient
+                        onSubmit={() => console.log("external")}
+                      />
+                    )}
+                    {forWho === "channel_partners" && (
+                      <ChannelPartnerForm
+                        onSubmit={() => console.log("external")}
+                      />
+                    )}
+                    {forWho === "others" && (
+                      <AutoDealersForm
+                        onSubmit={() => console.log("external")}
+                      />
+                    )}
+                  </TabsContent>
+                  <TabsContent value="bulk">
+                    <div className="space-y-4 py-4">
+                      {!showBulkPreview ? (
+                        <div className="flex flex-col items-center justify-center space-y-4 rounded-md border border-dashed p-10">
+                          <FileSpreadsheet className="h-10 w-10 text-muted-foreground" />
+                          <div className="space-y-2 text-center">
+                            <h3 className="text-lg font-semibold">
+                              Upload Excel File
+                            </h3>
+                            <p className="text-sm text-muted-foreground">
+                              Upload an Excel file with receptionist details
+                            </p>
+                          </div>
+                          <div className="flex flex-col space-y-2">
+                            <Label htmlFor="file-upload" className="sr-only">
+                              Choose file
+                            </Label>
+                            <Input
+                              id="file-upload"
+                              type="file"
+                              accept=".xlsx,.xls"
+                              onChange={handleFileUpload}
+                              className="cursor-pointer"
+                            />
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="mt-2"
+                              onClick={handleDownloadTemplate}
+                            >
+                              <Download className="mr-2 h-4 w-4" />
+                              Download Template
+                            </Button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="space-y-4">
+                          <div className="flex items-center justify-between">
+                            <h3 className="text-lg font-semibold">
+                              Preview Data
+                            </h3>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => {
+                                setBulkData([]);
+                                setShowBulkPreview(false);
+                              }}
+                            >
+                              <X className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <div className="rounded-md border">
+                            <Table>
+                              <TableHeader>
+                                <TableRow>
+                                  <TableHead>Name</TableHead>
+                                  <TableHead>Email</TableHead>
+                                  <TableHead>Phone</TableHead>
+                                  <TableHead>Team</TableHead>
+                                  <TableHead>Client</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                {bulkData.map((item, index) => (
+                                  <TableRow key={index} className="w-full">
+                                    <TableCell>{item.name}</TableCell>
+                                    <TableCell>{item.email}</TableCell>
+                                    <TableCell>{item.phone}</TableCell>
+                                    <TableCell>{item.team}</TableCell>
+                                    <TableCell>{item.client}</TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </div>
+                          <div className="flex justify-end space-x-2">
+                            <Button
+                              type="button"
+                              variant="outline"
+                              onClick={() => setAddDialogOpen(false)}
+                            >
+                              Cancel
+                            </Button>
+                            <Button onClick={handleBulkAdd}>
+                              Add {bulkData.length} Receptionists
+                            </Button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </TabsContent>
+                </Tabs>
+              </ScrollArea>
             </DialogContent>
           </Dialog>
         </CardHeader>
