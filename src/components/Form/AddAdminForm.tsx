@@ -32,6 +32,7 @@ const AddAdminForm = ({ isOpen, onClose }: AddAdminFormProps) => {
       department: "",
       status: "Active",
       password: "",
+      giveAccessTo: "",
       confirmPassword: "",
     },
   });
@@ -79,6 +80,24 @@ const AddAdminForm = ({ isOpen, onClose }: AddAdminFormProps) => {
               <SelectItem value={"sales"}>Sales</SelectItem>
               <SelectItem value={"Marketing"}>Marketing</SelectItem>
               <SelectItem value={"it"}>IT</SelectItem>
+            </CustomFormField>
+            <CustomFormField
+              control={form.control}
+              fieldType={FormFieldType.SELECT}
+              name="giveAccessTo"
+              label="Give Access To"
+              placeholder="Give Access To"
+            >
+              <SelectItem value={"Internal Employees"}>
+                Internal Employees
+              </SelectItem>
+              <SelectItem value={"External Clients"}>
+                External Clients
+              </SelectItem>
+              <SelectItem value={"Channel Partner"}>Channel Partner</SelectItem>
+              <SelectItem value={"Dealers & Distributors"}>
+                Dealers & Distributors
+              </SelectItem>
             </CustomFormField>
             <CustomFormField
               control={form.control}

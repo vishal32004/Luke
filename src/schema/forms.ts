@@ -120,6 +120,7 @@ export const adminFormSchema = z
         status: z.enum(["Active", "Inactive"]),
         password: z.string().min(8, "Password must be at least 8 characters"),
         confirmPassword: z.string(),
+        giveAccessTo: z.string()
     })
     .refine((data) => data.password === data.confirmPassword, {
         message: "Passwords don't match",
