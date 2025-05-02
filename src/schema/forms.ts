@@ -72,6 +72,8 @@ export const formSchema = z
         datesAfter: z.string(),
         emailTemplate: z.string(),
         landingPageTemplate: z.string(),
+        selectedReceptionists: z.number().array().nonempty(),
+        catalogSelectionData: z.string()
     })
     .refine(
         (data) => {

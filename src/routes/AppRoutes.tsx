@@ -1,4 +1,3 @@
-// import NotFound from "@/pages/404";
 import Dashboard from "@/pages/Dashboard";
 import CreateNewCampaign from "@/pages/Campaign/CreateNewCampaign";
 import ViewCampaign from "@/pages/Campaign/ViewCampaign";

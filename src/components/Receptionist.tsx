@@ -7,8 +7,6 @@ import {
   Plus,
   Search,
   X,
-  Check,
-  ChevronDown,
   SlidersHorizontal,
 } from "lucide-react";
 
@@ -41,13 +39,6 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Sheet,
@@ -304,8 +295,10 @@ const sampleImportList = [
 
 export default function ReceptionistManager({
   forWho = "internal_team",
+  onChange,
 }: {
   forWho?: string;
+  onChange?: (selectedIds: number[]) => void;
 }) {
   // State for main receptionist list
   const [receptionists, setReceptionists] = useState(sampleReceptionists);
@@ -416,25 +409,37 @@ export default function ReceptionistManager({
           (receptionist) => receptionist.id
         );
         setSelectedReceptionists(allVisibleIds);
+        // Call onChange with all visible IDs
+        if (onChange) onChange(allVisibleIds);
       } else {
         setSelectedReceptionists([]);
+        // Call onChange with empty array
+        if (onChange) onChange([]);
       }
     },
-    [filteredReceptionists]
+    [filteredReceptionists, onChange]
   );
 
   // Handler for selecting a single receptionist
   const handleSelectReceptionist = useCallback(
     (id: number, checked: boolean) => {
       if (checked) {
-        setSelectedReceptionists((prev) => [...prev, id]);
+        setSelectedReceptionists((prev) => {
+          const newSelected = [...prev, id];
+          // Call onChange with the updated selection
+          if (onChange) onChange(newSelected);
+          return newSelected;
+        });
       } else {
-        setSelectedReceptionists((prev) =>
-          prev.filter((recId) => recId !== id)
-        );
+        setSelectedReceptionists((prev) => {
+          const newSelected = prev.filter((recId) => recId !== id);
+          // Call onChange with the updated selection
+          if (onChange) onChange(newSelected);
+          return newSelected;
+        });
       }
     },
-    []
+    [onChange]
   );
 
   // Handler for file upload
@@ -1254,38 +1259,6 @@ export default function ReceptionistManager({
             Showing {filteredReceptionists.length} of {receptionists.length}
             receptionists
           </div>
-          {selectedReceptionists.length > 0 && (
-            <div className="flex items-center gap-2 mt-2 sm:mt-0">
-              <Badge
-                variant="secondary"
-                className="flex items-center gap-1 bg-slate-100"
-              >
-                <Check className="h-3 w-3 mr-1" />
-                {selectedReceptionists.length} selected
-                <X
-                  className="h-3 w-3 cursor-pointer ml-1"
-                  onClick={() => setSelectedReceptionists([])}
-                />
-              </Badge>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" size="sm" className="h-8">
-                    Actions
-                    <ChevronDown className="ml-2 h-3 w-3" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Assign to team</DropdownMenuItem>
-                  <DropdownMenuItem>Change status</DropdownMenuItem>
-                  <DropdownMenuItem>Export selected</DropdownMenuItem>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem className="text-red-600">
-                    Delete selected
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          )}
         </div>
       </Card>
     </div>

@@ -1,3 +1,5 @@
+"use client";
+
 import { useForm } from "react-hook-form";
 import { WizardForm } from "@/components/Form/wizard-form";
 import { WizardStep } from "@/components/ui/wizard";
@@ -32,7 +34,7 @@ import {
   Users,
 } from "lucide-react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import type { z } from "zod";
 import { calculateTotal } from "@/lib/helper";
 import { CatalogSection } from "@/components/ProductFilter";
 import Payment from "@/components/Payment";
@@ -48,7 +50,6 @@ const defaultValues = {
   event: "",
   customEvent: "",
   distributionType: "",
-  recipients: "",
   bulkBuyingQty: "",
   rewardType: "",
   points: "",
@@ -64,6 +65,8 @@ const defaultValues = {
   endDate: new Date(),
   sendReminderAfterInitialGift: false,
   sendReminderBeforeExpiration: false,
+  selectedReceptionists: [] as number[],
+  catalogSelectionData: "",
 };
 
 const CreateNewCampaign = () => {
@@ -91,7 +94,22 @@ const CreateNewCampaign = () => {
   ]);
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    console.log(data, "testing data");
+    let catalogData = {};
+    try {
+      if (data.catalogSelectionData) {
+        catalogData = JSON.parse(data.catalogSelectionData);
+      }
+    } catch (e) {
+      console.error("Error parsing catalog data:", e);
+    }
+    const finalData = {
+      ...data,
+      catalogData,
+    };
+
+    console.log(finalData, "Complete form data with catalog selections");
+    console.log("Selected Receptionists:", data.selectedReceptionists);
+    console.log("Catalog Selection:", catalogData);
   };
 
   const validateStep = async (stepFields: string[]) => {
@@ -107,8 +125,13 @@ const CreateNewCampaign = () => {
     2: ["EventMainCategory"],
     3: ["event"],
     4: ["distributionType"],
-    5: [distributionType === "bulk_order" ? "bulkBuyingQty" : "recipients"],
+    5: [
+      distributionType === "bulk_order"
+        ? "bulkBuyingQty"
+        : "selectedReceptionists",
+    ],
     6: [] as string[],
+    7: ["catalogSelectionData"],
     9: ["emailTemplate"],
     11: [
       "startDate",
@@ -134,7 +157,7 @@ const CreateNewCampaign = () => {
   })();
 
   return (
-    <section className="flex justify-center my-7 flex-col gap-y-5 items-center ">
+    <section className="flex justify-center my-7 flex-col gap-y-5 items-center">
       <div className="md:max-w-[80%] w-full">
         <h1 className="text-3xl text-center">Create New Campaign</h1>
       </div>
@@ -390,7 +413,26 @@ const CreateNewCampaign = () => {
         >
           <div className="space-y-6">
             {distributionType !== "bulk_order" ? (
-              <ReceptionistManager forWho={forWho} />
+              <>
+                <ReceptionistManager
+                  forWho={forWho}
+                  onChange={(selectedIds) => {
+                    form.setValue(
+                      "selectedReceptionists",
+                      selectedIds as [number, ...number[]]
+                    );
+                  }}
+                />
+                <CustomFormField
+                  control={form.control}
+                  name="selectedReceptionists"
+                  fieldType={FormFieldType.INPUT}
+                  label=""
+                  placeholder=""
+                  inputType="hidden"
+                  classNames="invisible"
+                />
+              </>
             ) : (
               <CustomFormField
                 control={form.control}
@@ -528,9 +570,24 @@ const CreateNewCampaign = () => {
 
         {distributionType !== "bulk_order" && (
           <>
-            <WizardStep step={7}>
+            <WizardStep
+              step={7}
+              validator={() => validateStep(stepFields[7])}
+              fieldNames={stepFields[7]}
+            >
               <div className="space-y-6">
-                <CatalogSection />
+                <CatalogSection
+                  onChange={(data) => {
+                    form.setValue("catalogSelectionData", data);
+                  }}
+                />
+                <CustomFormField
+                  control={form.control}
+                  name="catalogSelectionData"
+                  fieldType={FormFieldType.INPUT}
+                  inputType="hidden"
+                  classNames="hidden"
+                />
               </div>
             </WizardStep>
 

@@ -80,7 +80,7 @@ const data = {
     },
     {
       title: "Reports",
-      Icon: BarChart2, // Changed to BarChart2 icon
+      Icon: BarChart2,
       url: "#",
       items: [
         {
@@ -114,7 +114,7 @@ const data = {
     },
     {
       title: "Payment",
-      Icon: DollarSign, // Changed to DollarSign icon
+      Icon: DollarSign,
       url: "#",
       items: [
         {
@@ -129,7 +129,7 @@ const data = {
     },
     {
       title: "Admins",
-      Icon: Users, // Changed to Users icon
+      Icon: Users,
       url: "/admins",
       items: [
         {
@@ -148,7 +148,7 @@ const data = {
     },
     {
       title: "Templates",
-      Icon: Settings, // Changed to Settings icon
+      Icon: Settings,
       url: "#",
       items: [
         {
