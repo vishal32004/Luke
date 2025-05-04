@@ -29,9 +29,7 @@ export const formSchema = z
         campaignName: z.string().min(2, {
             message: "Campaign name is required",
         }),
-        description: z.string().min(2, {
-            message: "Description must be at least 2 characters.",
-        }),
+        description: z.string(),
         forWho: z.string().min(2, { message: "Please Select at least one Option" }),
         EventMainCategory: z
             .string()
@@ -73,7 +71,13 @@ export const formSchema = z
         emailTemplate: z.string(),
         landingPageTemplate: z.string(),
         selectedReceptionists: z.number().array().nonempty(),
-        catalogSelectionData: z.string()
+        catalogSelectedProducts: z.array(z.string()),
+        catalogFilters: z.object({
+            category: z.string(),
+            minPrice: z.number(),
+            maxPrice: z.number(),
+            sortBy: z.enum(["priceLowToHigh", "priceHighToLow", "popularity"]),
+        }),
     })
     .refine(
         (data) => {

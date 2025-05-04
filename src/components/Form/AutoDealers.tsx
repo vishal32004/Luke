@@ -29,6 +29,10 @@ const customerFormSchema = z.object({
   dateOfPurchase: z.date().optional(),
   serviceDueDate: z.date().optional(),
   insuranceDueDate: z.date().optional(),
+  // New fields
+  occupation: z.enum(["Service", "Business"]),
+  annualIncomeLevel: z.enum(["Below 5L", "5L-10L", "10L-20L", "20L-50L", "Above 50L"]),
+  requirement: z.enum(["Immediately", "Within 3 months", "After 3 months"]),
 });
 
 type CustomerFormValues = z.infer<typeof customerFormSchema>;
@@ -58,6 +62,9 @@ const AutoDealersForm = ({ onSubmit, defaultValues }: CustomerFormProps) => {
       storeVisit: "Pending",
       testDrive: "Pending",
       purchase: "Pending",
+      occupation: "Service", // Default value for new field
+      annualIncomeLevel: "5L-10L", // Default value for new field
+      requirement: "Within 3 months", // Default value for new field
       ...defaultValues,
     },
   });
@@ -102,6 +109,44 @@ const AutoDealersForm = ({ onSubmit, defaultValues }: CustomerFormProps) => {
             label="Company Name"
             placeholder="Enter Company Name"
           />
+
+          {/* New Fields */}
+          <CustomFormField
+            control={form.control}
+            name="occupation"
+            fieldType={FormFieldType.SELECT}
+            label="Occupation"
+            placeholder="Select Occupation"
+          >
+            <SelectItem value="Service">Service</SelectItem>
+            <SelectItem value="Business">Business</SelectItem>
+          </CustomFormField>
+
+          <CustomFormField
+            control={form.control}
+            name="annualIncomeLevel"
+            fieldType={FormFieldType.SELECT}
+            label="Annual Income Level"
+            placeholder="Select Annual Income Level"
+          >
+            <SelectItem value="Below 5L">Below 5L</SelectItem>
+            <SelectItem value="5L-10L">5L-10L</SelectItem>
+            <SelectItem value="10L-20L">10L-20L</SelectItem>
+            <SelectItem value="20L-50L">20L-50L</SelectItem>
+            <SelectItem value="Above 50L">Above 50L</SelectItem>
+          </CustomFormField>
+
+          <CustomFormField
+            control={form.control}
+            name="requirement"
+            fieldType={FormFieldType.SELECT}
+            label="Requirement"
+            placeholder="Select Requirement Timeline"
+          >
+            <SelectItem value="Immediately">Immediately</SelectItem>
+            <SelectItem value="Within 3 months">Within 3 months</SelectItem>
+            <SelectItem value="After 3 months">After 3 months</SelectItem>
+          </CustomFormField>
 
           {/* Professional Details */}
           <CustomFormField

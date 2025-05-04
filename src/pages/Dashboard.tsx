@@ -42,6 +42,11 @@ const Dashboard = () => {
       link: "#",
       icon: Settings,
     },
+    {
+      title: "Reports",
+      link: "#",
+      icon: Settings,
+    },
   ];
   return (
     <div className="mx-6">

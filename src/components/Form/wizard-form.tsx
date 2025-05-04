@@ -53,48 +53,51 @@ function WizardFormContent<T extends FieldValues>({
 }: WizardFormContentProps<T>) {
   const { setSubmittedData } = useWizard();
 
-  const handleComplete = (visibleSteps: number[]) => {
-    const fieldsToValidate = visibleSteps.flatMap(
-      (step) => stepFields[step] || []
-    );
+  const handleComplete = React.useCallback(
+    (visibleSteps: number[]) => {
+      const fieldsToValidate = visibleSteps.flatMap(
+        (step) => stepFields[step] || []
+      );
 
-    const customSubmit = async () => {
-      try {
-        console.log("Submitting form with visible steps:", visibleSteps);
-        console.log("Fields to validate:", fieldsToValidate);
+      const customSubmit = async () => {
+        try {
+          console.log("Submitting form with visible steps:", visibleSteps);
+          console.log("Fields to validate:", fieldsToValidate);
 
-        if (fieldsToValidate.length > 0) {
-          const isValid = await form.trigger(fieldsToValidate as Path<T>[]);
-          console.log("Validation result:", isValid);
+          if (fieldsToValidate.length > 0) {
+            const isValid = await form.trigger(fieldsToValidate as Path<T>[]);
+            console.log("Validation result:", isValid);
 
-          if (!isValid) {
-            toast("Validation Error", {
-              description: "Please check your inputs and try again.",
-            });
-            return;
+            if (!isValid) {
+              toast("Validation Error", {
+                description: "Please check your inputs and try again.",
+              });
+              return;
+            }
           }
+
+          const values = form.getValues();
+          console.log("Form values:", values);
+
+          setSubmittedData(values);
+
+          onSubmit(values);
+
+          toast("Form submitted!", {
+            description: "Thank you for completing the wizard form.",
+          });
+        } catch (error) {
+          console.error("Form submission error:", error);
+          toast("Error", {
+            description: "There was a problem submitting the form.",
+          });
         }
+      };
 
-        const values = form.getValues();
-        console.log("Form values:", values);
-
-        setSubmittedData(values);
-
-        onSubmit(values);
-
-        toast("Form submitted!", {
-          description: "Thank you for completing the wizard form.",
-        });
-      } catch (error) {
-        console.error("Form submission error:", error);
-        toast("Error", {
-          description: "There was a problem submitting the form.",
-        });
-      }
-    };
-
-    customSubmit();
-  };
+      customSubmit();
+    },
+    [form, setSubmittedData, onSubmit]
+  );
 
   return (
     <>

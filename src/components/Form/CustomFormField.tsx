@@ -39,7 +39,7 @@ import { FormFieldType } from "@/types/form";
 export type RadioOptionType = {
   label: string;
   value: string;
-  icon: LucideIcon;
+  icon?: LucideIcon;
 };
 
 export type ComboboxOptionType = {
@@ -241,7 +241,7 @@ const RadioField = memo(
               <RadioGroupItem value={option.value} className="hidden" />
             </FormControl>
             <FormLabel className="font-normal text-center text-md h-full p-4 border rounded-lg cursor-pointer hover:bg-gray-100 flex flex-col items-center justify-center w-full">
-              <option.icon />
+              {option.icon && <option.icon />}
               {option.label}
             </FormLabel>
           </FormItem>
