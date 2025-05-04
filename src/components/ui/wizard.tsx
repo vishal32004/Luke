@@ -202,7 +202,7 @@ function WizardStep({
   fieldNames = [],
 }: WizardStepProps) {
   const { currentStep, registerStep, setStepValidator } = useWizard();
-  const isVisible = shouldShow();
+  const isVisible = React.useMemo(() => shouldShow(), [shouldShow]);
 
   React.useEffect(() => {
     registerStep(step, isVisible);
@@ -232,7 +232,10 @@ interface WizardNavigationProps {
 
 function WizardNavigation({ className }: WizardNavigationProps) {
   const { currentStep, visibleSteps, goToStep } = useWizard();
-
+  const getStepClickHandler = React.useCallback(
+    (step: number) => () => goToStep(step),
+    [goToStep]
+  );
   return (
     <div
       className={cn(
@@ -244,7 +247,7 @@ function WizardNavigation({ className }: WizardNavigationProps) {
         <button
           key={step}
           type="button"
-          onClick={() => goToStep(step)}
+          onClick={getStepClickHandler(step)}
           className={cn(
             "h-2.5 w-2.5 rounded-full transition-colors",
             currentStep === step ? "bg-primary" : "bg-muted",
@@ -289,11 +292,8 @@ function WizardButtons({
     try {
       if (isLastStep) {
         const isValid = await validateStep(currentStep);
-        console.log(currentStep, "dsdsfsdf");
-        console.log("Last step validation result:", isValid);
 
         if (isValid && onComplete) {
-          console.log("Calling onComplete with visible steps:", visibleSteps);
           onComplete(visibleSteps);
           setComplete(true);
         } else {

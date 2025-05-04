@@ -25,19 +25,18 @@ export function WizardForm<T extends z.ZodType>({
     <Form {...form}>
       <form onSubmit={(e) => e.preventDefault()} className={className}>
         <Wizard totalSteps={React.Children.count(children)}>
-          <WizardFormContent
+          <MemoizedWizardFormContent
             onSubmit={onSubmit}
             form={form}
             stepFields={stepFields}
           >
             {children}
-          </WizardFormContent>
+          </MemoizedWizardFormContent>
         </Wizard>
       </form>
     </Form>
   );
 }
-
 interface WizardFormContentProps<T extends FieldValues> {
   onSubmit: (values: T) => void;
   form: UseFormReturn<T>;
@@ -45,12 +44,9 @@ interface WizardFormContentProps<T extends FieldValues> {
   children: React.ReactNode;
 }
 
-function WizardFormContent<T extends FieldValues>({
-  onSubmit,
-  form,
-  stepFields,
-  children,
-}: WizardFormContentProps<T>) {
+const MemoizedWizardFormContent = React.memo(function WizardFormContent<
+  T extends FieldValues
+>({ onSubmit, form, stepFields, children }: WizardFormContentProps<T>) {
   const { setSubmittedData } = useWizard();
 
   const handleComplete = React.useCallback(
@@ -63,15 +59,12 @@ function WizardFormContent<T extends FieldValues>({
         try {
           console.log("Submitting form with visible steps:", visibleSteps);
           console.log("Fields to validate:", fieldsToValidate);
-
           if (fieldsToValidate.length > 0) {
             const isValid = await form.trigger(fieldsToValidate as Path<T>[]);
             console.log("Validation result:", isValid);
 
             if (!isValid) {
-              toast("Validation Error", {
-                description: "Please check your inputs and try again.",
-              });
+              console.log("validation error");
               return;
             }
           }
@@ -96,7 +89,7 @@ function WizardFormContent<T extends FieldValues>({
 
       customSubmit();
     },
-    [form, setSubmittedData, onSubmit]
+    [form, setSubmittedData, onSubmit, stepFields]
   );
 
   return (
@@ -105,4 +98,4 @@ function WizardFormContent<T extends FieldValues>({
       <WizardButtons onComplete={handleComplete} />
     </>
   );
-}
+});
