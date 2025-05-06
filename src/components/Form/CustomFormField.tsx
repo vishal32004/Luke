@@ -38,7 +38,7 @@ import { FormFieldType } from "@/types/form";
 
 export type RadioOptionType = {
   label: string;
-  value: string;
+  value: string | number;
   icon?: LucideIcon;
 };
 
@@ -74,6 +74,7 @@ interface DatePickerFieldProps extends BaseFieldProps {
 interface CheckboxFieldProps extends BaseFieldProps {
   name: string;
   label?: string;
+  checkboxValue?: number;
 }
 
 interface TextareaFieldProps extends BaseFieldProps {
@@ -120,6 +121,7 @@ export interface CustomFormFieldProps<T extends FieldValues> {
   inputType?: string;
   classNames?: string;
   radioCardoptions?: RadioCardOptionType[];
+  checkboxValue?: number;
 }
 interface RenderFieldProps<T extends FieldValues> {
   field: ControllerRenderProps<T, Path<T>>;
@@ -140,6 +142,7 @@ const InputField = memo(
           {...field}
           className="shad-input border-0"
           type={inputType || "text"}
+
         />
       </FormControl>
     </div>
@@ -193,23 +196,41 @@ const DatePickerField = memo(
   )
 );
 
-const CheckboxField = memo(({ field, name, label }: CheckboxFieldProps) => (
-  <FormControl>
-    <div className="flex items-center gap-4">
-      <Checkbox
-        id={name}
-        checked={field.value}
-        onCheckedChange={field.onChange}
-      />
-      <label
-        htmlFor={name}
-        className="md:leading-none cursor-pointer text-sm font-medium text-dark-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-      >
-        {label}
-      </label>
-    </div>
-  </FormControl>
-));
+const CheckboxField = memo(
+  ({ field, name, label, checkboxValue }: CheckboxFieldProps) => (
+    <FormControl>
+      <div className="flex items-center gap-4">
+        <Checkbox
+          id={`${name}-${checkboxValue}`}
+          checked={
+            checkboxValue ? field.value?.includes(checkboxValue) : field.value
+          }
+          onCheckedChange={(checked) => {
+            if (checkboxValue !== undefined) {
+              if (checked) {
+                field.onChange([...(field.value || []), checkboxValue]);
+              } else {
+                field.onChange(
+                  field.value?.filter((v: number) => v !== checkboxValue) || []
+                );
+              }
+            } else {
+              field.onChange(checked);
+            }
+          }}
+        />
+        {label && (
+          <label
+            htmlFor={`${name}-${checkboxValue}`}
+            className="md:leading-none cursor-pointer text-sm font-medium text-dark-700 peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            {label}
+          </label>
+        )}
+      </div>
+    </FormControl>
+  )
+);
 
 const TextareaField = memo(
   ({ field, placeholder, disabled }: TextareaFieldProps) => (
@@ -238,7 +259,7 @@ const RadioField = memo(
             key={option.value}
           >
             <FormControl>
-              <RadioGroupItem value={option.value} className="hidden" />
+              <RadioGroupItem value={option.value as string} className="hidden" />
             </FormControl>
             <FormLabel className="font-normal text-center text-md h-full p-4 border rounded-lg cursor-pointer hover:bg-gray-100 flex flex-col items-center justify-center w-full">
               {option.icon && <option.icon />}

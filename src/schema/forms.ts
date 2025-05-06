@@ -30,7 +30,7 @@ export const formSchema = z
             message: "Campaign name is required",
         }),
         description: z.string(),
-        forWho: z.string().min(2, { message: "Please Select at least one Option" }),
+        forWho: z.number(),
         EventMainCategory: z
             .string()
             .min(2, { message: "Please Select at least one Option" }),
@@ -78,6 +78,7 @@ export const formSchema = z
             maxPrice: z.number(),
             sortBy: z.enum(["priceLowToHigh", "priceHighToLow", "popularity"]),
         }),
+        searchRecipients: z.string()
     })
     .refine(
         (data) => {

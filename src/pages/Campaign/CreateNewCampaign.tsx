@@ -9,9 +9,8 @@ import type { z } from "zod";
 import { calculateTotal } from "@/lib/helper";
 import Payment from "@/components/Payment";
 import { templates } from "@/data/email-templates";
-import ReceptionistManager from "@/components/Receptionist";
 import { formSchema } from "@/schema/forms";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useCampaignFormStore } from "@/store/store";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,6 +22,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { useDebounce } from "@/hooks/use-debouse";
+import ReceptionistDialog from "@/components/Receptionist/receptioinst-dialog";
+import { useQuery } from "@tanstack/react-query";
 
 interface Product {
   id: string;
@@ -115,10 +117,49 @@ const products: Product[] = [
   },
 ];
 
+type Recipient = {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  department: string;
+};
+
+const recipients: Recipient[] = [
+  {
+    id: 1,
+    name: "John Doe",
+    email: "john@example.com",
+    phone: "1234567890",
+    department: "Marketing",
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    email: "jane@example.com",
+    phone: "9876543210",
+    department: "Sales",
+  },
+  {
+    id: 3,
+    name: "Robert Johnson",
+    email: "robert@example.com",
+    phone: "5551234567",
+    department: "IT",
+  },
+  {
+    id: 4,
+    name: "Emily Davis",
+    email: "emily@example.com",
+    phone: "4445556666",
+    department: "HR",
+  },
+];
+
 const defaultValues = {
   campaignName: "",
   description: "",
-  forWho: "",
+  forWho: 0,
   EventMainCategory: "",
   event: "",
   customEvent: "",
@@ -141,6 +182,7 @@ const defaultValues = {
   selectedReceptionists: [] as number[],
   catalogSelectionData: "",
   catalogSelectedProducts: [] as string[],
+  searchRecipients: "",
   catalogFilters: {
     category: "",
     minPrice: 0,
@@ -153,8 +195,7 @@ const defaultValues = {
 };
 
 const CreateNewCampaign = () => {
-  const { loadEvents, events, subEvents, loadSubEvents } =
-    useCampaignFormStore();
+  const { loadEvents, events } = useCampaignFormStore();
 
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
@@ -172,7 +213,7 @@ const CreateNewCampaign = () => {
     "sendReminderAfterInitialGift",
     "sendReminderBeforeExpiration",
     "forWho",
-    "EventMainCategory",
+    "searchRecipients",
   ]);
   const [
     distributionType,
@@ -182,7 +223,7 @@ const CreateNewCampaign = () => {
     sendReminderAfterInitialGift,
     sendReminderBeforeExpiration,
     forWho,
-    EventMainCategory,
+    searchRecipients,
   ] = watchedValues;
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
@@ -250,14 +291,13 @@ const CreateNewCampaign = () => {
       0: ["campaignName"],
       1: ["forWho"],
       2: ["EventMainCategory"],
-      3: ["event"],
-      4: ["distributionType"],
-      5: [
+      3: ["distributionType"],
+      4: [
         distributionType === "bulk_order"
           ? "bulkBuyingQty"
           : "selectedReceptionists",
       ],
-      6: (() => {
+      5: (() => {
         const fields = [];
         if (distributionType === "bulk_order") {
           return ["eventAddress", "eventDate"];
@@ -267,8 +307,8 @@ const CreateNewCampaign = () => {
         if (rewardType === "value_of_code") fields.push("valueCodes");
         return fields;
       })(),
-      9: ["emailTemplate"],
-      11: [
+      8: ["emailTemplate"],
+      10: [
         "startDate",
         "endDate",
         "sendReminderAfterInitialGift",
@@ -278,24 +318,32 @@ const CreateNewCampaign = () => {
     [distributionType, rewardType]
   );
 
-  useEffect(() => {
-    if (forWho) {
-      loadEvents(forWho);
-    }
-  }, [forWho, loadEvents]);
+  const debouncedSearchTerm = useDebounce(searchRecipients, 300);
 
-  // Load sub-events when main event category changes
-  useEffect(() => {
-    if (EventMainCategory) {
-      loadSubEvents(EventMainCategory);
-    }
-  }, [EventMainCategory, loadSubEvents]);
+  const filteredRecipients = useMemo(() => {
+    const term = debouncedSearchTerm.trim().toLowerCase();
+    if (!term) return recipients;
+
+    return recipients.filter((r) => {
+      return (
+        r.name.toLowerCase().includes(term) ||
+        r.email.toLowerCase().includes(term) ||
+        r.phone.includes(term) ||
+        r.department.toLowerCase().includes(term)
+      );
+    });
+  }, [debouncedSearchTerm]);
+
+  const { isLoading, isError } = useQuery({
+    queryKey: ["events", forWho],
+    queryFn: () => loadEvents(forWho),
+    enabled: !!forWho,
+    staleTime: 5 * 60 * 1000,
+  });
 
   return (
     <section className="flex justify-center my-7 flex-col gap-y-5 items-center">
-      <div className="md:max-w-[80%] w-full">
-        <h1 className="text-3xl text-center">Create New Campaign</h1>
-      </div>
+      <div className="md:max-w-[80%] w-full"></div>
       <WizardForm
         onSubmit={onSubmit}
         className="md:max-w-[90%] w-full bg-white py-10 px-5 rounded-2xl shadow-1"
@@ -307,6 +355,7 @@ const CreateNewCampaign = () => {
           validator={() => validateStep(stepFields[0])}
           fieldNames={stepFields[0]}
         >
+          <h2 className="my-4 text-center text-3xl">Create New Campaign</h2>
           <div className="space-y-6">
             <CustomFormField
               control={form.control}
@@ -330,6 +379,8 @@ const CreateNewCampaign = () => {
           validator={() => validateStep(stepFields[1])}
           fieldNames={stepFields[1]}
         >
+          <h2 className="my-4 text-center text-3xl">Select Recipient Type</h2>
+
           <div className="space-y-6">
             <CustomFormField
               control={form.control}
@@ -340,23 +391,19 @@ const CreateNewCampaign = () => {
               radioOptions={[
                 {
                   label: "Internal Team",
-                  value: "internal_team",
-                  // icon: UserCircle,
+                  value: 1,
                 },
                 {
                   label: "External Client",
-                  value: "external_client",
-                  // icon: Briefcase,
+                  value: 2,
                 },
                 {
                   label: "Channel Partners",
-                  value: "channel_partners",
-                  // icon: Handshake,
+                  value: 3,
                 },
                 {
                   label: "Others",
                   value: "others",
-                  // icon: Plus,
                 },
               ]}
             />
@@ -368,16 +415,24 @@ const CreateNewCampaign = () => {
           validator={() => validateStep(stepFields[2])}
           fieldNames={stepFields[2]}
         >
-          <div className="space-y-6">
-            <CustomFormField
-              control={form.control}
-              name="EventMainCategory"
-              fieldType={FormFieldType.RADIO}
-              label="Event Type"
-              radioGridClass="grid-cols-3"
-              radioOptions={events}
-            />
-          </div>
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : (
+            <>
+              <h2 className="my-4 text-center text-3xl">Select Event Type</h2>
+
+              <div className="space-y-6">
+                <CustomFormField
+                  control={form.control}
+                  name="EventMainCategory"
+                  fieldType={FormFieldType.RADIO}
+                  label="Event Type"
+                  radioGridClass="grid-cols-3"
+                  radioOptions={events}
+                />
+              </div>
+            </>
+          )}
         </WizardStep>
 
         <WizardStep
@@ -385,32 +440,10 @@ const CreateNewCampaign = () => {
           validator={() => validateStep(stepFields[3])}
           fieldNames={stepFields[3]}
         >
-          <div className="space-y-6">
-            <CustomFormField
-              control={form.control}
-              name="event"
-              fieldType={FormFieldType.RADIO}
-              label="Event"
-              radioGridClass="grid-cols-3"
-              radioOptions={subEvents}
-            />
-            {form.watch("event") === "other" && (
-              <CustomFormField
-                control={form.control}
-                name="customEvent"
-                fieldType={FormFieldType.INPUT}
-                label="Custom Event Name"
-                placeholder="Enter your custom event name"
-              />
-            )}
-          </div>
-        </WizardStep>
+          <h2 className="my-4 text-center text-3xl">
+            Select Distribution Type
+          </h2>
 
-        <WizardStep
-          step={4}
-          validator={() => validateStep(stepFields[4])}
-          fieldNames={stepFields[4]}
-        >
           <div className="space-y-6">
             <CustomFormField
               control={form.control}
@@ -435,31 +468,87 @@ const CreateNewCampaign = () => {
         </WizardStep>
 
         <WizardStep
-          step={5}
-          validator={() => validateStep(stepFields[5])}
-          fieldNames={stepFields[5]}
+          step={4}
+          validator={() => validateStep(stepFields[4])}
+          fieldNames={stepFields[4]}
         >
+          <h2 className="my-4 text-center text-3xl">Add the Recipients</h2>
           <div className="space-y-6">
             {distributionType !== "bulk_order" ? (
               <>
-                <ReceptionistManager
-                  forWho={forWho}
-                  onChange={(selectedIds) => {
-                    form.setValue(
-                      "selectedReceptionists",
-                      selectedIds as [number, ...number[]]
-                    );
-                  }}
-                />
-                <CustomFormField
-                  control={form.control}
-                  name="selectedReceptionists"
-                  fieldType={FormFieldType.INPUT}
-                  label=""
-                  placeholder=""
-                  inputType="hidden"
-                  classNames="invisible"
-                />
+                <div className="flex flex-col gap-4">
+                  <CustomFormField
+                    control={form.control}
+                    name="searchRecipients"
+                    fieldType={FormFieldType.INPUT}
+                    label="Search Recipients"
+                    placeholder="Search by name, email, phone or department"
+                  />
+
+                  {/* Recipients Table */}
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Select
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Name
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Email
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Phone
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Department
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {filteredRecipients.length > 0 ? (
+                          filteredRecipients.map((person) => (
+                            <tr key={person.id}>
+                              <td className="px-6 py-4 whitespace-nowrap">
+                                <CustomFormField
+                                  control={form.control}
+                                  name="selectedReceptionists"
+                                  fieldType={FormFieldType.CHECKBOX}
+                                  checkboxValue={person.id}
+                                  label={person.name}
+                                />
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                {person.name}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {person.email}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {person.phone}
+                              </td>
+                              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {person.department}
+                              </td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td
+                              colSpan={5}
+                              className="px-6 py-4 text-center text-sm text-gray-500"
+                            >
+                              No recipients found matching your search
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                <ReceptionistDialog forWho={forWho} />
               </>
             ) : (
               <CustomFormField
@@ -474,10 +563,12 @@ const CreateNewCampaign = () => {
         </WizardStep>
 
         <WizardStep
-          step={6}
-          validator={() => validateStep(stepFields[6])}
-          fieldNames={stepFields[6]}
+          step={5}
+          validator={() => validateStep(stepFields[5])}
+          fieldNames={stepFields[5]}
         >
+          <h2 className="my-4 text-center text-3xl">Select Reward Type</h2>
+
           <div className="space-y-6">
             {distributionType !== "bulk_order" ? (
               <>
@@ -598,10 +689,10 @@ const CreateNewCampaign = () => {
 
         {distributionType !== "bulk_order" && (
           <>
-            <WizardStep step={7}>
-              <div className="space-y-6">
-                <h2 className="text-2xl font-bold">Catalog</h2>
+            <WizardStep step={6}>
+              <h2 className="my-4 text-center text-3xl">Customize Catalogue</h2>
 
+              <div className="space-y-6">
                 <div className="grid grid-cols-5 gap-3">
                   <Select
                     value={form.watch("catalogFilters.category")}
@@ -750,9 +841,12 @@ const CreateNewCampaign = () => {
               </div>
             </WizardStep>
 
-            <WizardStep step={8}>
+            <WizardStep step={7}>
+              <h2 className="my-4 text-center text-3xl">
+                Select Landing Page Template
+              </h2>
+
               <div className="space-y-6">
-                <h2 className="font-bold">Landing Page</h2>
                 <CustomFormField
                   control={form.control}
                   name="landingPageTemplate"
@@ -781,10 +875,11 @@ const CreateNewCampaign = () => {
               </div>
             </WizardStep>
 
-            <WizardStep step={9} validator={() => validateStep(stepFields[9])}>
+            <WizardStep step={8} validator={() => validateStep(stepFields[8])}>
+              <h2 className="my-4 text-center text-3xl">
+                Select Email Template
+              </h2>
               <div className="space-y-6">
-                <h2 className="font-bold">Email Customization</h2>
-
                 <CustomFormField
                   control={form.control}
                   name="emailTemplate"
@@ -813,9 +908,9 @@ const CreateNewCampaign = () => {
               </div>
             </WizardStep>
 
-            <WizardStep step={10}>
+            <WizardStep step={9}>
+              <h2 className="my-4 text-center text-3xl">Enter SMS Content</h2>
               <div className="space-y-6">
-                <h2 className="font-bold">SMS Content Customization</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="col-span-2 space-y-4">
                     <CustomFormField
@@ -837,9 +932,11 @@ const CreateNewCampaign = () => {
               </div>
             </WizardStep>
 
-            <WizardStep step={11}>
+            <WizardStep step={10}>
+              <h2 className="my-4 text-center text-3xl">
+                Schedule Communication
+              </h2>
               <div className="space-y-6">
-                <h2 className="text-xl font-semibold">Schedule & Funds</h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <CustomFormField
                     control={form.control}
@@ -892,7 +989,7 @@ const CreateNewCampaign = () => {
                 </div>
               </div>
             </WizardStep>
-            <WizardStep step={12}>
+            <WizardStep step={11}>
               <Payment />
             </WizardStep>
           </>
