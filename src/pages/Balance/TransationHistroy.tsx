@@ -194,7 +194,6 @@ export default function TransactionHistory() {
   const [tempColumns, setTempColumns] =
     useState<Record<ColumnKey, boolean>>(visibleColumns);
 
-
   // Filter transactions based on time filter
   const filteredTransactions = transactions.filter((transaction) => {
     const now = new Date();
