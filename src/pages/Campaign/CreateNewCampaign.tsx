@@ -402,8 +402,12 @@ const CreateNewCampaign = () => {
                   value: 3,
                 },
                 {
-                  label: "Others",
-                  value: "others",
+                  label: "Auto Dealers",
+                  value: 4,
+                },
+                {
+                  label: "Real Estate",
+                  value: 5,
                 },
               ]}
             />
@@ -420,7 +424,6 @@ const CreateNewCampaign = () => {
           ) : (
             <>
               <h2 className="my-4 text-center text-3xl">Select Event Type</h2>
-
               <div className="space-y-6">
                 <CustomFormField
                   control={form.control}
@@ -429,6 +432,15 @@ const CreateNewCampaign = () => {
                   label="Event Type"
                   radioGridClass="grid-cols-3"
                   radioOptions={events}
+                />
+              </div>
+              <div className="mt-5">
+                <CustomFormField
+                  control={form.control}
+                  name="otherEvent"
+                  fieldType={FormFieldType.INPUT}
+                  label="Other Event"
+                  placeholder="Enter campaign name"
                 />
               </div>
             </>
@@ -952,18 +964,17 @@ const CreateNewCampaign = () => {
                     label="End Date"
                     placeholder="Select end date"
                   />
-
-                  <CustomFormField
-                    control={form.control}
-                    name="sendReminderAfterInitialGift"
-                    fieldType={FormFieldType.CHECKBOX}
-                    label="Send a Reminder After Initial Gift Invite"
-                  />
                   <CustomFormField
                     control={form.control}
                     name="sendReminderBeforeExpiration"
                     fieldType={FormFieldType.CHECKBOX}
                     label="Send a Reminder Before Expiration"
+                  />
+                  <CustomFormField
+                    control={form.control}
+                    name="sendReminderAfterInitialGift"
+                    fieldType={FormFieldType.CHECKBOX}
+                    label="Send a Reminder After Initial Gift Invite"
                   />
 
                   {sendReminderBeforeExpiration && (
@@ -972,7 +983,7 @@ const CreateNewCampaign = () => {
                       name="datesInitial"
                       fieldType={FormFieldType.DATE_PICKER}
                       label="Start Date"
-                      placeholder="Select start date"
+                      placeholder="Select start dates"
                       multipleDates={true}
                     />
                   )}
@@ -981,8 +992,8 @@ const CreateNewCampaign = () => {
                       control={form.control}
                       name="datesAfter"
                       fieldType={FormFieldType.DATE_PICKER}
-                      label="Start Date"
-                      placeholder="Select start date"
+                      label="End Date"
+                      placeholder="Select After dates"
                       multipleDates={true}
                     />
                   )}

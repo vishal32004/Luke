@@ -13,7 +13,6 @@ export function formatDate(dateString: string): string {
 }
 
 export function formatTime(timeString: string): string {
-    // Handle simple time strings like "10:00"
     if (timeString.includes(":")) {
         const [hours, minutes] = timeString.split(":").map(Number)
         const period = hours >= 12 ? "PM" : "AM"

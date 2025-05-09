@@ -3,7 +3,7 @@ import { StateCreator } from "zustand";
 import axios from "axios";
 export interface CampaignFormStore {
     events: Array<{ label: string; value: string; }>;
-    subEvents: Array<{ label: string; value: string; }>;
+    recipient: string[]
     emailTemplates: Template[];
     landingPageTemplates: LandingPageTemplate[];
     loadEvents: (category: number) => Promise<boolean>;
@@ -11,9 +11,9 @@ export interface CampaignFormStore {
     loadLandingPageTemplate: (category: string) => boolean
 }
 
-const initialState: Omit<CampaignFormStore, 'loadEvents' | 'loadSubEvents' | 'loadEmailTemplate' | 'loadLandingPageTemplate'> = {
+const initialState: Omit<CampaignFormStore, 'loadEvents' | 'loadEmailTemplate' | 'loadLandingPageTemplate'> = {
     events: [],
-    subEvents: [],
+    recipient: [],
     emailTemplates: [],
     landingPageTemplates: []
 };
@@ -29,14 +29,11 @@ export const createCampaignFormSlice: StateCreator<CampaignFormStore> = (set) =>
             });
 
             const data = response.data;
-
+            console.log(data, "Data")
             const events = data.map((event: any) => ({
                 label: event.name,
-                value: event.id,
+                value: event.name,
             }));
-
-            console.log(events,'events')
-
             set({ events });
             return true;
         } catch (error) {
@@ -44,6 +41,8 @@ export const createCampaignFormSlice: StateCreator<CampaignFormStore> = (set) =>
             return false;
         }
     },
+
+    
 
     loadEmailTemplate: (category: string) => {
         console.log(category)

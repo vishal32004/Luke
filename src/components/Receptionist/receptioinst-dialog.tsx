@@ -72,7 +72,7 @@ const ReceptionistDialog = ({ forWho }: { forWho: number }) => {
               {forWho === "channel_partners" && (
                 <MemoizedChannelPartnerForm onSubmit={handleFormSubmit} />
               )}
-              {forWho === "others" && (
+              {forWho === "Auto" && (
                 <MemoizedAutoDealersForm onSubmit={handleFormSubmit} />
               )}
             </TabsContent>

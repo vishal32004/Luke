@@ -31,6 +31,7 @@ export const formSchema = z
         }),
         description: z.string(),
         forWho: z.number(),
+        otherEvent: z.string(),
         EventMainCategory: z
             .string()
             .min(2, { message: "Please Select at least one Option" }),
